@@ -66,7 +66,6 @@ source ~/.config/themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh
 alias e='cd /mnt/sata'
 alias d='cd /mnt/nvme'
 alias zz='z ~'
-alias hm='cd ~'
 alias ls='eza --icons --color=always --group-directories-first' 
 alias ll='eza -lh -a --no-filesize --icons --color=always --git --group-directories-first' 
 alias la='eza -a --icons --git' 

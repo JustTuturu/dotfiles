@@ -11,3 +11,6 @@ config/tmux/.config/tmux/plugins/
 *.backup.*
 *.log
 .DS_Store
+
+# Secret
+.env

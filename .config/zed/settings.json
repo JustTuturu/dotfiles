@@ -4,6 +4,7 @@
 // documentation: https://zed.dev/docs/configuring-zed
 //
 // Note: keep secrets out of dotfiles. Add API keys locally after stowing.
+
 {
   "context_servers": {
     "mcp-server-playwright": {
@@ -39,12 +40,6 @@
   "disable_ai": false,
   "agent_servers": {
     "gemini": {
-      "type": "registry"
-    },
-    "qwen-code": {
-      "type": "registry"
-    },
-    "kimi": {
       "type": "registry"
     },
     "opencode": {
