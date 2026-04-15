@@ -1,0 +1,124 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "ssh_connections": [
+    {
+      "host": "sv",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/home/suzu"
+          ]
+        },
+        {
+          "paths": [
+            "/home/suzu/.hermes"
+          ]
+        }
+      ]
+    },
+    {
+      "host": "sv",
+      "args": [],
+      "projects": []
+    }
+  ],
+  "language_models": {
+    "opencode": {
+      "show_zen_models": true
+    },
+    "openai_compatible": {
+      "GLM 5.1": {
+        "api_url": "https://opencode.ai/zen/go/v1",
+        "available_models": [
+          {
+            "name": "glm-5.1",
+            "max_tokens": 200000,
+            "max_output_tokens": 128000,
+            "max_completion_tokens": 200000,
+            "capabilities": {
+              "tools": true,
+              "images": false,
+              "parallel_tool_calls": true,
+              "prompt_cache_key": true,
+              "chat_completions": true,
+              "interleaved_reasoning": false,
+            },
+          },
+        ],
+      },
+      "Kimi K2.6": {
+        "api_url": "https://opencode.ai/zen/go/v1",
+        "available_models": [
+          {
+            "name": "kimi-k2.6",
+            "max_tokens": 200000,
+            "max_output_tokens": 32000,
+            "max_completion_tokens": 200000,
+            "capabilities": {
+              "tools": true,
+              "images": true,
+              "parallel_tool_calls": true,
+              "prompt_cache_key": true,
+              "chat_completions": true,
+              "interleaved_reasoning": false,
+            },
+          },
+        ],
+      },
+    },
+  },
+  "agent_servers": {
+    "opencode": {
+      "type": "registry"
+    },
+    "hermes": {
+      "type": "custom",
+      "command": "hermes",
+      "args": ["acp"],
+    },
+    "codex-acp": {
+      "type": "registry",
+    },
+  },
+  "agent": {
+    "default_model": {
+      "provider": "GLM 5.1",
+      "model": "glm-5.1",
+      "enable_thinking": false,
+    },
+    "dock": "right",
+    "sidebar_side": "right",
+    "favorite_models": [],
+    "model_parameters": [],
+  },
+  "cli_default_open_behavior": "existing_window",
+  "project_panel": {
+    "dock": "left",
+  },
+  "autosave": "on_focus_change",
+  "icon_theme": "Catppuccin Mocha",
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "file_types": {
+    "INI": ["config.ghostty"],
+    "JavaScript": ["*.qml"],
+    "JSON": ["*.jsonc", "*.json.mustache"],
+    "Shell Script": ["*.conf", ".zshrc", "*.zsh.mustache"],
+    "TOML": ["*.toml.mustache"],
+    "XML": ["*.tmTheme.mustache", "fonts.conf"],
+    "YAML": ["*.yml.mustache"],
+  },
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "Catppuccin Mocha",
+  },
+}

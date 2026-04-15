@@ -1,0 +1,269 @@
+# Noctalia v5 config
+# Lives in ~/.config/noctalia/config.toml (stowed via dotfiles)
+# Load order: defaults -> this file -> ~/.local/state/noctalia/settings.toml (GUI, wins)
+
+# ---------------------------------------------------------------------------
+# Global shell appearance
+# ---------------------------------------------------------------------------
+[shell]
+corner_radius_scale = 1.0
+button_borders      = true
+input_borders       = true
+popup_borders       = true
+card_borders        = true
+popup_shadows       = true
+
+# Native polkit agent — lets Noctalia approve greeter-sync (and other admin)
+# requests from the desktop instead of relying on the broken hyprpolkitagent
+polkit_agent = true
+
+font_family = "Noto Sans"
+time_format = "{:%H:%M}"
+date_format = "%A, %x"
+
+avatar_path = "/home/suzu/dotfiles/wallpapers/Chisa.jpg"
+
+# Clipboard via cliphist
+clipboard_enabled        = true
+clipboard_keep_from_closed_apps = true
+clipboard_auto_paste     = "auto"
+
+[shell.shadow]
+direction = "down_right"
+alpha     = 0.55
+
+[shell.animation]
+enabled = true
+speed   = 1.0
+
+# ---------------------------------------------------------------------------
+# Panels — keep Control Center floating so it renders opaque over the
+# transparent bar; attached panels inherit bar background_opacity (0.0).
+# ---------------------------------------------------------------------------
+[shell.panel]
+transparency_mode          = "glass"
+control_center_placement   = "floating"
+control_center_position    = "auto"
+launcher_placement         = "floating"
+
+# ---------------------------------------------------------------------------
+# Noctalia Greeter — keep the login screen synced (wallpaper, palette, font)
+# ---------------------------------------------------------------------------
+[shell.greeter_sync]
+auto_sync = true
+
+# ---------------------------------------------------------------------------
+# Theme / palette
+# ---------------------------------------------------------------------------
+[theme]
+mode             = "dark"
+source           = "wallpaper"
+wallpaper_scheme = "m3-tonal-spot"
+pure_black_dark  = false
+
+# ---------------------------------------------------------------------------
+# Location & weather
+# ---------------------------------------------------------------------------
+[location]
+auto_locate = true
+
+[weather]
+enabled  = true
+effects  = true
+unit     = "metric"
+
+# ---------------------------------------------------------------------------
+# Wallpaper
+# ---------------------------------------------------------------------------
+[wallpaper]
+enabled             = true
+directory           = "/home/suzu/dotfiles/wallpapers"
+fill_mode           = "crop"
+transition_duration = 1500
+transition_on_startup = false
+
+[wallpaper.monitors.DP-2]
+path = "/home/suzu/dotfiles/wallpapers/Chisa.jpg"
+
+[wallpaper.monitors.HDMI-A-1]
+path = "/home/suzu/dotfiles/wallpapers/Chisa.jpg"
+
+# ---------------------------------------------------------------------------
+# Bars
+# ---------------------------------------------------------------------------
+[bar]
+order = ["main"]
+
+[bar.main]
+position           = "top"
+enabled            = true
+auto_hide          = false
+show_on_workspace_switch = true
+reserve_space      = true
+layer              = "top"
+
+thickness          = 28
+
+background_opacity = 0.0
+border             = "outline"
+border_width       = 0.0
+shadow             = false
+radius             = 12
+
+margin_ends        = 10
+margin_edge        = 4
+padding            = 4
+widget_spacing     = 6
+
+font_weight        = 500
+scale              = 1.0
+hover_highlight    = true
+
+capsule           = true
+capsule_fill      = "surface_variant"
+capsule_thickness = 0.76
+capsule_radius    = 8.0
+capsule_opacity   = 0.4
+
+# Widget lanes
+
+start  = ["launcher", "clock", "sysmon", "active_window", "audio_visualizer"]
+center = ["workspaces"]
+end    = ["tray", "notifications", "volume", "network", "status"]
+
+# ---------------------------------------------------------------------------
+# Widget definitions
+# ---------------------------------------------------------------------------
+[widget.launcher]
+type = "launcher"
+
+[widget.clock]
+type           = "clock"
+format         = "{:%H:%M} {:%a}, {:%b} {:%d}"   # v4: HH:mm ddd, MMM dd
+tooltip_format = "{:%A, %B %d, %Y}"
+
+[widget.sysmon]
+type             = "sysmon"
+stat             = "cpu_usage"
+visualization    = "none"
+show_value       = true
+show_glyph       = true
+label_show_units = true
+
+[widget.active_window]
+type       = "active_window"
+show_icon  = true
+show_text  = true
+max_width  = 145
+
+[widget.media]
+type               = "media"
+show_album_art     = true
+show_artist_first  = true
+show_progress_ring = true
+
+[widget.audio_visualizer]
+type = "audio_visualizer"
+
+[widget.workspaces]
+type                      = "workspaces"
+style                     = "regular"
+show_labels               = true
+label_source              = "name"
+max_label_chars           = 3
+labels_only_when_occupied = true
+focused_color             = "primary"
+occupied_color            = "secondary"
+empty_color               = "surface_variant"
+urgent_color              = "error"
+change_color_on_hover     = true
+active_pill_size          = 2.2
+inactive_pill_size        = 1.0
+
+[widget.tray]
+type           = "tray"
+drawer_enabled = true
+pinned         = ["Unikey", "Keyboard - English (US)", "steam", "Discord"]
+
+[widget.notifications]
+type              = "notifications"
+show_unread_badge = true
+
+[widget.battery]
+type         = "battery"
+display_mode = "graphic-clean"
+
+[widget.volume]
+type         = "volume"
+display_mode = "onhover"
+
+[widget.brightness]
+type         = "brightness"
+display_mode = "onhover"
+
+[widget.control-center]
+type = "control-center"
+icon = "noctalia"
+
+[widget.network]
+type = "network"
+
+# ---------------------------------------------------------------------------
+# Dock -v5
+# ---------------------------------------------------------------------------
+[dock]
+enabled             = false
+position            = "bottom"
+show_running        = true
+magnification       = true
+magnification_scale = 1.45
+background_opacity  = 0.88
+radius              = 16
+border              = "outline"
+border_width        = 0.0
+shadow              = true
+auto_hide           = false
+smart_auto_hide     = false
+reserve_space       = true
+active_opacity      = 1.0
+inactive_opacity    = 0.85
+active_scale        = 1.0
+inactive_scale      = 0.85
+icon_size           = 48
+
+# ---------------------------------------------------------------------------
+# Notifications & OSD — v5
+# ---------------------------------------------------------------------------
+[notification]
+background_opacity = 1.0
+position           = "top_right"
+monitors           = ["DP-2"]
+
+[osd]
+enabled            = true
+position           = "top_right"
+monitors           = ["DP-2"]
+
+# ---------------------------------------------------------------------------
+# Noctalia native idle & lockscreen — DISABLED on purpose.
+# We use hypridle + hyprlock (handled by hypridle.conf). Keep these off so
+# Noctalia's own idle/lock don't run alongside hypridle.
+# ---------------------------------------------------------------------------
+[idle]
+pre_action_fade_seconds = 2.0
+
+    [idle.behavior.lock]
+    action  = "lock"
+    enabled = false
+    timeout = 600.0
+
+    [idle.behavior.screen-off]
+    action  = "screen_off"
+    enabled = false
+
+    [idle.behavior.lock-and-suspend]
+    action  = "lock_and_suspend"
+    enabled = false
+
+[lockscreen]
+enabled = false

@@ -1,0 +1,25 @@
+cliphist
+grimblast
+
+hyprcursor
+hypridle
+hyprland
+hyprland-qt-support
+hyprlock
+hyprpaper
+hyprpicker
+hyprpolkitagent
+hyprqt6engine
+hyprland-guiutils
+
+# Notification + network + clipboard
+dbus-tools
+network-manager-applet
+wl-clipboard
+
+wlr-randr
+xdg-desktop-portal-hyprland
+
+# Noctalia v5 (stable, Fedora default repos) + greeter login
+noctalia
+noctalia-greeter

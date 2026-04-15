@@ -1,0 +1,10 @@
+# Generated matugen output (regenerated at runtime)
+.config/matugen/generated/
+
+# Stow metadata
+.stow-local-ignore
+
+# Misc
+*.backup.*
+*.log
+.DS_Store

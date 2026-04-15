@@ -1,0 +1,6 @@
+# UV config file
+python-preference = "managed"
+python-downloads = "automatic"
+
+compile-bytecode = true
+link-mode = "clone"

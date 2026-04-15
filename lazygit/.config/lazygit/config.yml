@@ -1,0 +1,58 @@
+# ─── Lazygit Config ──────────────────────────────────────────────
+# Minimal lazygit configuration
+
+gui:
+  theme:
+    activeBorderColor:
+      - "#c6a0f6"
+      - "bold"
+    inactiveBorderColor:
+      - "#595959"
+    optionsTextColor:
+      - "#8aadf4"
+    selectedLineBgColor:
+      - "#363a4f"
+    selectedRangeBgColor:
+      - "#363a4f"
+    cherryPickedCommitBgColor:
+      - "#494d64"
+    cherryPickedCommitFgColor:
+      - "#c6a0f6"
+    unstagedChangesColor:
+      - "#ed8796"
+    defaultFgColor:
+      - "#cad3f5"
+  showIcons: true
+  nerdFontsVersion: "3"
+
+keybinding:
+  universal:
+    quit: q
+    quit-alt1: <c-c>
+    return: <esc>
+    quitWithoutChangingDirectory: Q
+    togglePanel: <tab>
+    prevItem: <up>
+    nextItem: <down>
+    prevPage: <left>
+    nextPage: <right>
+    gotoTop: g
+    gotoBottom: G
+    toggleCaption: <c-k>
+    nextTab: ]
+    prevTab: [
+    nextScreenMode: <c-s>
+    prevScreenMode: <c-s>
+    undo: z
+    redo: <c-z>
+    filteringMenu: <c-f>
+    diffingMenu: W
+    copyToClipboard: <c-o>
+    openRecentRepos: <c-r>
+    submitEditorText: <enter>
+    appendNewline: <a-enter>
+    extrasMenu: <c-e>
+    toggleWhitespaceInDiffView: <c-w>
+    increaseContextInDiffView: }
+    decreaseContextInDiffView: {
+

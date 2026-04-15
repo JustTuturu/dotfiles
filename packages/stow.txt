@@ -1,0 +1,14 @@
+bat
+fastfetch
+fcitx5
+fontconfig
+ghostty
+gtk
+hypr
+lazygit
+matugen
+noctalia
+uv
+yazi
+zed
+zsh

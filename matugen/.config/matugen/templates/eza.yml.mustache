@@ -1,0 +1,101 @@
+colourful: true
+
+filekinds:
+  normal: {foreground: "{{colors.on_surface.default.hex}}", is_bold: true}
+  directory: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  symlink: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  pipe: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  block_device: {foreground: "{{colors.error.default.hex}}", is_bold: true}
+  char_device: {foreground: "{{colors.error.default.hex}}", is_bold: true}
+  socket: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  special: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  executable: {foreground: "{{colors.tertiary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  mount_point: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true, is_underline: true}
+
+perms:
+  user_read: {foreground: "{{colors.on_surface.default.hex}}", is_bold: true}
+  user_write: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  user_execute_file: {foreground: "{{colors.tertiary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  user_execute_other: {foreground: "{{colors.tertiary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  group_read: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  group_write: {foreground: "{{colors.primary_fixed_dim.default.hex}}", is_underline: true}
+  group_execute: {foreground: "{{colors.tertiary_fixed_dim.default.hex}}", is_underline: true}
+  other_read: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  other_write: {foreground: "{{colors.primary_fixed_dim.default.hex}}", is_underline: true}
+  other_execute: {foreground: "{{colors.tertiary_fixed_dim.default.hex}}", is_underline: true}
+  special_user_file: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  special_other: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  attribute: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+
+size:
+  major: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+  minor: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+  number_byte: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  number_kilo: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  number_mega: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+  number_giga: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true}
+  number_huge: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  unit_byte: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  unit_kilo: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  unit_mega: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+  unit_giga: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true}
+  unit_huge: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+
+users:
+  user_you: {foreground: "{{colors.on_surface.default.hex}}", is_bold: true}
+  user_root: {foreground: "{{colors.error.default.hex}}", is_bold: true}
+  user_other: {foreground: "{{colors.error.default.hex}}", is_bold: true}
+  group_yours: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  group_other: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  group_root: {foreground: "{{colors.error.default.hex}}", is_bold: true}
+
+links:
+  normal: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+  multi_link_file: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+
+git:
+  new: {foreground: "{{colors.tertiary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  modified: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  deleted: {foreground: "{{colors.error.default.hex}}", is_bold: true, is_underline: true}
+  renamed: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  typechange: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  ignored: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  conflicted: {foreground: "{{colors.error.default.hex}}", is_bold: true, is_underline: true}
+
+git_repo:
+  branch_main: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  branch_other: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  git_clean: {foreground: "{{colors.tertiary_fixed.default.hex}}", is_bold: true}
+  git_dirty: {foreground: "{{colors.error.default.hex}}", is_bold: true}
+
+security_context:
+  colon: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  user: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  role: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  typ: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  range: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+
+file_type:
+  image: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  video: {foreground: "{{colors.error.default.hex}}", is_bold: true, is_underline: true}
+  music: {foreground: "{{colors.tertiary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  lossless: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+  crypto: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+  document: {foreground: "{{colors.on_surface.default.hex}}", is_bold: true}
+  compressed: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+  temp: {foreground: "{{colors.error.default.hex}}", is_bold: true, is_underline: true}
+  compiled: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+  source: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true, is_underline: true}
+
+punctuation: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+date: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+inode: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+blocks: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}
+header: {foreground: "{{colors.on_surface.default.hex}}", is_bold: true, is_underline: true}
+octal: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+flags: {foreground: "{{colors.primary_fixed.default.hex}}", is_bold: true, is_underline: true}
+
+symlink_path: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true, is_underline: true}
+control_char: {foreground: "{{colors.secondary_fixed.default.hex}}", is_bold: true}
+broken_symlink: {foreground: "{{colors.error.default.hex}}", is_bold: true, is_underline: true}
+broken_path_overlay: {foreground: "{{colors.on_surface_variant.default.hex}}", is_bold: true}

@@ -1,0 +1,90 @@
+# Matugen-generated Starship config — DO NOT EDIT
+# Optimized for blur terminal contrast
+
+"$schema" = 'https://starship.rs/config-schema.json'
+add_newline = true
+scan_timeout = 100
+command_timeout = 1000
+
+format = """
+$directory\\
+$git_branch\\
+$git_status\\
+$nodejs\\
+$python\\
+$rust\\
+$docker_context\\
+$cmd_duration\\
+$line_break\\
+$character"""
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+read_only = " 󰌾"
+read_only_style = "bold fg:{{colors.error.default.hex}}"
+style = "bold fg:{{colors.on_surface.default.hex}}"
+format = "[$path]($style)[$read_only]($read_only_style) "
+
+[character]
+success_symbol = "[❯](bold fg:{{colors.tertiary_fixed.default.hex}}) "
+error_symbol = "[❯](bold fg:{{colors.error.default.hex}}) "
+vimcmd_symbol = "[❮](bold fg:{{colors.secondary_fixed.default.hex}}) "
+
+[git_branch]
+symbol = " "
+style = "bold fg:{{colors.primary_fixed.default.hex}}"
+format = "on [$symbol$branch]($style) "
+
+[git_status]
+style = "bold fg:{{colors.on_surface_variant.default.hex}}"
+format = '($all_status$ahead_behind)'
+conflicted = '[\[😡${count}\]](bold fg:{{colors.error.default.hex}}) '
+ahead = '[\[⇡${count}\]](bold fg:{{colors.primary_fixed.default.hex}}) '
+behind = '[\[⇣${count}\]](bold fg:{{colors.secondary_fixed.default.hex}}) '
+diverged = '[\[⇕${ahead_count}⇡${behind_count}\]](bold fg:{{colors.error.default.hex}}) '
+up_to_date = ""
+untracked = '[\[?${count}\]](bold fg:{{colors.secondary_fixed.default.hex}}) '
+stashed = '[\[$${count}\]](bold fg:{{colors.tertiary_fixed.default.hex}}) '
+modified = '[\[!${count}\]](bold fg:{{colors.primary_fixed.default.hex}}) '
+staged = '[\[+${count}\]](bold fg:{{colors.tertiary_fixed.default.hex}}) '
+renamed = '[\[»${count}\]](bold fg:{{colors.secondary_fixed.default.hex}}) '
+deleted = '[\[✘${count}\]](bold fg:{{colors.error.default.hex}}) '
+
+[nodejs]
+disabled = false
+symbol = "󰎙 "
+style = "bold fg:{{colors.inverse_surface.default.hex}}"
+format = "via [$symbol$version]($style) "
+
+[python]
+disabled = false
+symbol = "󰌠 "
+style = "bold fg:{{colors.primary_fixed.default.hex}}"
+format = "via [$symbol$pyenv_prefix$version( $virtualenv)]($style) "
+
+[rust]
+disabled = false
+symbol = "󱘗 "
+style = "bold fg:{{colors.secondary_fixed.default.hex}}"
+format = "via [$symbol$version]($style) "
+
+[docker_context]
+disabled = false
+symbol = "󰡨 "
+style = "bold fg:{{colors.secondary_fixed.default.hex}}"
+format = "via [$symbol$context]($style) "
+
+[cmd_duration]
+min_time = 1000
+style = "bold fg:{{colors.on_surface_variant.default.hex}}"
+format = "took [$duration]($style) "
+
+[line_break]
+disabled = false
+
+[ruby]
+disabled = true
+
+[java]
+disabled = true
