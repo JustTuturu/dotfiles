@@ -1,0 +1,13 @@
+# Generated matugen output (regenerated at runtime)
+.config/matugen/generated/
+
+# Stow metadata
+.stow-local-ignore
+
+# TPM and other vendored plugins
+config/tmux/.config/tmux/plugins/
+
+# Misc
+*.backup.*
+*.log
+.DS_Store

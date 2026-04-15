@@ -1,0 +1,23 @@
+# Include matugen-generated colors
+#config-file = ~/.config/matugen/generated/ghostty-colors.conf
+
+# ─── Theme ───────────────────────────────────
+theme = "Catppuccin Macchiato"  
+font-family = "JetBrainsMono Nerd Font"
+font-size = 12
+cursor-style = block
+
+# ─── Window Size ─────────────────────────────
+# Window size in character cells (not pixels)
+# This sets startup window to 120 columns × 35 rows
+window-width = 120
+window-height = 35
+background-opacity = 0.5
+background-blur = true
+window-decoration = none
+
+# ─── Keybinds  ─────────────────────────
+keybind = ctrl+shift+v=ignore
+keybind = performable:ctrl+v=paste_from_clipboard
+keybind = ctrl+shift+c=ignore
+keybind = performable:ctrl+c=copy_to_clipboard

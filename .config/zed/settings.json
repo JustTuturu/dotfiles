@@ -1,0 +1,113 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// Note: keep secrets out of dotfiles. Add API keys locally after stowing.
+{
+  "context_servers": {
+    "mcp-server-playwright": {
+      "enabled": false,
+      "remote": false,
+      "settings": {}
+    },
+    "mcp-server-firecrawl": {
+      "enabled": true,
+      "remote": false,
+      "settings": {
+        "firecrawl_api_key": "FIRE_CRAWL_API"
+      }
+    },
+    "mcp-server-brave-search": {
+      "enabled": true,
+      "remote": false,
+      "settings": {
+        "brave_api_key": "BRAVE_SEARCH_API"
+      }
+    }
+  },
+  "edit_predictions": {
+    "open_ai_compatible_api": {
+      "api_url": "https://opencode.ai/zen/go/v1",
+      "model": "opencode-go/kimi-k2.5"
+    },
+    "ollama": {
+      "max_output_tokens": 64
+    },
+    "provider": "zed"
+  },
+  "disable_ai": false,
+  "agent_servers": {
+    "gemini": {
+      "type": "registry"
+    },
+    "qwen-code": {
+      "type": "registry"
+    },
+    "kimi": {
+      "type": "registry"
+    },
+    "opencode": {
+      "type": "registry"
+    },
+    "codex-acp": {
+      "type": "registry"
+    }
+  },
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Zed (Default)",
+    "dark": "Catppuccin Mocha"
+  },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "terminal": {
+    "font_family": "JetBrainsMono Nerd Font Mono",
+    "line_height": {
+      "custom": 1.1
+    }
+  },
+  "agent": {
+    "tool_permissions": {
+      "tools": {
+        "terminal": {
+          "default": "allow"
+        }
+      }
+    },
+    "default_model": {
+      "provider": "ollama",
+      "model": "glm-5.1:cloud",
+      "enable_thinking": true
+    },
+    "play_sound_when_agent_done": true,
+    "single_file_review": true,
+    "enabled": true,
+    "button": true,
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "minimap": {
+    "show": "never"
+  },
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 1000
+    }
+  },
+  "base_keymap": "VSCode",
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "Catppuccin Mocha - No Italics"
+  },
+  "file_types": {
+    "C++": ["c"],
+    "Shell Script": ["conf", "rasi", "Catppuccin Macchiato", "ghostty"],
+    "Dockerfile": ["Dockerfile*"]
+  }
+}

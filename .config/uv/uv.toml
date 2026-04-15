@@ -1,0 +1,10 @@
+[cache]
+dir = "~/.cache/uv"
+
+[python]
+preference = "managed"
+downloads = "auto"
+
+[install]
+compile-bytecode = true
+link-mode = "clone"

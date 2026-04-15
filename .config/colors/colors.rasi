@@ -1,0 +1,13 @@
+/* Catppuccin Macchiato colors for rofi */
+* {
+    background:       #24273a;
+    background-alt:   #1e2030;
+    foreground:       #cad3f5;
+    selected:         #8aadf4;
+    active:           #a6da95;
+    urgent:           #ed8796;
+    bordercolor:      #5b6078;
+    selected-bg:      #363a4f;
+    hover-bg:         #494d64;
+    text-selected-bg: #8aadf4;
+}

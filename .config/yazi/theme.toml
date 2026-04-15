@@ -1,0 +1,88 @@
+# Catppuccin Macchiato theme for yazi
+[manager]
+cwd = { fg = "#8aadf4" }
+
+hovered         = { fg = "#24273a", bg = "#8aadf4" }
+preview_hovered = { underline = true }
+
+find_keyword  = { fg = "#eed49f", bold = true, italic = true, underline = true }
+find_position = { fg = "#ed8796", bg = "reset", bold = true, italic = true }
+
+marker_copied = { fg = "#a6da95", bg = "#a6da95" }
+marker_cut    = { fg = "#ed8796", bg = "#ed8796" }
+marker_marked = { fg = "#c6a0f6", bg = "#c6a0f6" }
+marker_selected = { fg = "#8aadf4", bg = "#8aadf4" }
+
+tab_active   = { fg = "#24273a", bg = "#8aadf4" }
+tab_inactive = { fg = "#cad3f5", bg = "#363a4f" }
+tab_width    = 1
+
+border_symbol = "│"
+border_style  = { fg = "#5b6078" }
+
+[status]
+separator_open  = ""
+separator_close = ""
+separator_style = { fg = "#5b6078", bg = "#363a4f" }
+
+mode_normal = { fg = "#24273a", bg = "#8aadf4", bold = true }
+mode_select = { fg = "#24273a", bg = "#a6da95", bold = true }
+mode_unset  = { fg = "#24273a", bg = "#ee99a0", bold = true }
+
+progress_label  = { bold = true }
+progress_normal = { fg = "#8aadf4", bg = "#363a4f" }
+progress_error  = { fg = "#ed8796", bg = "#363a4f" }
+
+permissions_t = { fg = "#8aadf4" }
+permissions_r = { fg = "#eed49f" }
+permissions_w = { fg = "#ed8796" }
+permissions_x = { fg = "#a6da95" }
+permissions_s = { fg = "#5b6078" }
+
+[input]
+border   = { fg = "#8aadf4" }
+title    = { fg = "#8aadf4" }
+value    = { fg = "#cad3f5" }
+selected = { reversed = true }
+
+[completion]
+border   = { fg = "#8aadf4" }
+active   = { bg = "#363a4f" }
+inactive = { }
+
+[tasks]
+border  = { fg = "#8aadf4" }
+title   = { }
+hovered = { underline = true }
+
+[which]
+mask            = { bg = "#24273a" }
+cand            = { fg = "#8aadf4" }
+rest            = { fg = "#5b6078" }
+desc            = { fg = "#c6a0f6" }
+separator       = "  "
+separator_style = { fg = "#5b6078" }
+
+[filetype]
+rules = [
+    # Images
+    { mime = "image/*", fg = "#91d7e3" },
+    # Videos
+    { mime = "video/*", fg = "#c6a0f6" },
+    # Audio
+    { mime = "audio/*", fg = "#ed8796" },
+    # Archives
+    { mime = "application/zip",  fg = "#eed49f" },
+    { mime = "application/gzip", fg = "#eed49f" },
+    { mime = "application/tar",  fg = "#eed49f" },
+    # Docs
+    { mime = "application/pdf",  fg = "#ed8796" },
+    # Executables
+    { name = "*.sh",  fg = "#a6da95" },
+    # Fallback
+    { name = "*", fg = "#cad3f5" },
+]
+
+[flavor]
+dark  = "noctalia"
+light = "noctalia"

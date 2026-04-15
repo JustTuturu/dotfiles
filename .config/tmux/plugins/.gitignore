@@ -1,0 +1,5 @@
+# Ignore all vendored plugins — TPM installs these at runtime
+*
+!tpm/
+!tpm/.git*
+!.gitignore

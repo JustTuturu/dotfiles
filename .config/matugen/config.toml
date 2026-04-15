@@ -1,0 +1,26 @@
+[config]
+reload_apps = false  # We handle reloading manually via post_hook for full control
+
+[templates.hyprland]
+input_path  = "~/.config/matugen/templates/hyprland.conf.mustache"
+output_path = "~/.config/matugen/generated/hyprland-colors.conf"
+
+[templates.waybar]
+input_path  = "~/.config/matugen/templates/waybar.css.mustache"
+output_path = "~/.config/matugen/generated/waybar-colors.css"
+
+[templates.ghostty]
+input_path  = "~/.config/matugen/templates/ghostty.conf.mustache"
+output_path = "~/.config/matugen/generated/ghostty-colors.conf"
+
+[templates.rofi]
+input_path  = "~/.config/matugen/templates/rofi.rasi.mustache"
+output_path = "~/.config/matugen/generated/rofi-colors.rasi"
+
+[templates.starship]
+input_path  = "~/.config/matugen/templates/starship.toml.mustache"
+output_path = "~/.config/matugen/generated/starship-colors.toml"
+
+[templates.quickshell]
+input_path  = "~/.config/matugen/templates/quickshell-colors.json.mustache"
+output_path = "/tmp/qs_colors.json"

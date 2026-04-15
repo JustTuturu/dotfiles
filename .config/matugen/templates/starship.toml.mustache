@@ -1,0 +1,37 @@
+# Matugen-generated Starship config — DO NOT EDIT
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$nodejs\
+$python\
+$rust\
+$docker_context\
+$character"""
+
+[directory]
+style = "fg:{{colors.on_surface.default.hex}}"
+
+[git_branch]
+symbol = "󰘬 "
+style = "fg:{{colors.primary.default.hex}}"
+
+[git_status]
+style = "fg:{{colors.on_surface_variant.default.hex}}"
+
+[character]
+success_symbol = "[❯](bold fg:{{colors.tertiary.default.hex}})"
+error_symbol = "[❯](bold fg:{{colors.error.default.hex}})"
+
+[nodejs]
+symbol = "󰎙 "
+style = "fg:{{colors.inverse_surface.default.hex}}"
+
+[python]
+symbol = "󰌠 "
+style = "fg:{{colors.primary_container.default.hex}}"
+
+[rust]
+symbol = "󱘗 "
+style = "fg:{{colors.secondary.default.hex}}"
