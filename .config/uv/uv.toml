@@ -1,4 +1,4 @@
-[cache]
+warp[cache]
 dir = "~/.cache/uv"
 
 [python]
