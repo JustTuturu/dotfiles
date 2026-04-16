@@ -50,20 +50,23 @@ run_deps() {
         pipewire pipewire-utils wireplumber \
         qt6-qtwayland qt5-qtwayland xdg-utils \
         bluez bluez-libs \
-        nemo ripgrep bat fzf tmux eza zoxide fastfetch gh vlc gimp obs-studio
+        nemo ripgrep bat fzf tmux eza zoxide fastfetch gh vlc gimp obs-studio fastfetch --setopt=install_weak_deps=False
 
     # Lazy git
     sudo dnf copr enable -y dejan/lazygit
-    sudo dnf install -y lazygit
+    sudo dnf install -y lazygit --setopt=install_weak_deps=False
 
     # Starship
     sudo dnf copr enable -y atim/starship
-    sudo dnf install -y starship
+    sudo dnf install -y starship --setopt=install_weak_deps=False
 
     # Ghostty
     sudo dnf copr enable -y scottames/ghostty
-    sudo dnf install -y ghostty
-
+    sudo dnf install -y ghostty --setopt=install_weak_deps=False
+    
+    # Yazi
+    sudo dnf copr enable -y lihaohong/yazi
+    sudo dnf install -y yazi --setopt=install_weak_deps=False
     # Fonts
     local font_script="$REPO_ROOT/scripts/install-fonts.sh"
     if [ -x "$font_script" ]; then
@@ -88,20 +91,18 @@ run_files() {
 
     # ===== LIST PACKAGES HERE =====
     local config_packages=(
-        "colors"
         "eza"
         "fontconfig"
         "ghostty"
         "hypr"
         "matugen"
-        "rofi"
         "starship"
         "tmux"
         "uv"
-        "waybar"
         "wlogout"
         "yazi"
         "zed"
+        "fastfetch"
     )
     # ===============================
 
@@ -188,7 +189,7 @@ run_hypr() {
     sudo dnf install --nogpgcheck \
         --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
 
-    # Install packages (removed conflicting -git versions)
+    # Install packages
     sudo dnf install -y \
         awww \
         aquamarine \
@@ -208,6 +209,7 @@ run_hypr() {
         hyprlauncher \
         hyprpwcenter \
         hyprlock \
+        hypridle \
         hyprpaper \
         hyprpicker \
         hyprpolkitagent \

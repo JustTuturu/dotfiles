@@ -62,6 +62,27 @@ eval "$(starship init zsh)"
 # Syntax Highlighting Theme
 source ~/.config/themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh 
 
+# FZF
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Unikey
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export SDL_IM_MODULE=fcitx
+
+# Cargo
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Yazi
+# Shell wrapper
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
 # ─── Aliases ─────────────────────────────────────────────────────
 alias e='cd /mnt/sata'
 alias d='cd /mnt/nvme'
@@ -73,18 +94,4 @@ alias lt='eza --tree --icons'
 alias zconfig='ag ~/.zshrc'
 alias sconfig='ag ~/.config/starship/starship.toml'
 alias bat='cat'
-
-# FZF
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Unikey
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS=@im=fcitx
-export SDL_IM_MODULE=fcitx
-
-# Cargo
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# Zed
-
+alias yz='yazi'
