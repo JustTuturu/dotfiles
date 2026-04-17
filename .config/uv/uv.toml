@@ -1,10 +1,6 @@
-warp[cache]
-dir = "~/.cache/uv"
+# UV config file
+python-preference = "managed"
+python-downloads = "automatic"
 
-[python]
-preference = "managed"
-downloads = "auto"
-
-[install]
 compile-bytecode = true
 link-mode = "clone"

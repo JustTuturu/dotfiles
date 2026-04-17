@@ -85,9 +85,4 @@
     "Shell Script": ["conf", "rasi", "noctalia", "ghostty","mustache"],
     "Dockerfile": ["Dockerfile*"]
   },
-  "active_pane_modifiers": {
-    "border_size": 0.0,
-    "inactive_opacity": 1.0,
-  },
-  "bottom_dock_layout": "contained",
 }
