@@ -31,6 +31,8 @@ zinit snippet OMZP::git
 zinit snippet OMZP::cp
 
 # ─── Environment Variables ───────────────────────────────────────
+export EDITOR="zed --wait"
+export VISUAL="zed --wait"
 export STARSHIP_CONFIG="$HOME/.config/starship.toml" 
 export EZA_CONFIG_DIR="$HOME/.config/eza" 
 export NVM_DIR="$HOME/.nvm" 
@@ -95,3 +97,5 @@ alias zconfig='ag ~/.zshrc'
 alias sconfig='ag ~/.config/starship/starship.toml'
 alias bat='cat'
 alias yz='yazi'
+alias s='sudo'
+alias se='sudoedit'
