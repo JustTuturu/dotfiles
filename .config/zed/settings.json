@@ -44,6 +44,11 @@
     }
   },
   "agent": {
+    "inline_assistant_model": {
+      "provider": "zed.dev",
+      "model": "claude-sonnet-4-6",
+      "enable_thinking": false
+    },
     "tool_permissions": {
       "tools": {
         "terminal": {
