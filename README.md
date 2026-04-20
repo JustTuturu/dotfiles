@@ -1,14 +1,14 @@
-# [ Tuturu's dotfiles ]
+# Tuturu's dotfiles
 
 <p align="center">
-  <a href="https://github.com/Tut-Tut-Tut/dotfiles/commits">
-    <img src="https://img.shields.io/github/last-commit/Tut-Tut-Tut/dotfiles?style=for-the-badge&labelColor=0C0D11&color=A8AEFF&logo=git&logoColor=FFFFFF&label=commit" alt="Last commit" />
+  <a href="https://github.com/JustTuturu/dotfiles/commits">
+    <img src="https://img.shields.io/github/last-commit/JustTuturu/dotfiles?style=for-the-badge&labelColor=0C0D11&color=A8AEFF&logo=git&logoColor=FFFFFF&label=commit" alt="Last commit" />
   </a>
-  <a href="https://github.com/Tut-Tut-Tut/dotfiles/stargazers">
-    <img src="https://img.shields.io/github/stars/Tut-Tut-Tut/dotfiles?style=for-the-badge&labelColor=0C0D11&color=A8AEFF&logo=github&logoColor=FFFFFF" alt="GitHub stars" />
+  <a href="https://github.com/JustTuturu/dotfiles/stargazers">
+    <img src="https://img.shields.io/github/stars/JustTuturu/dotfiles?style=for-the-badge&labelColor=0C0D11&color=A8AEFF&logo=github&logoColor=FFFFFF" alt="GitHub stars" />
   </a>
-  <a href="https://github.com/Tut-Tut-Tut/dotfiles">
-    <img src="https://img.shields.io/github/repo-size/Tut-Tut-Tut/dotfiles?style=for-the-badge&labelColor=0C0D11&color=A8AEFF&logo=github&logoColor=FFFFFF&label=size" alt="Repo size" />
+  <a href="https://github.com/JustTuturu/dotfiles">
+    <img src="https://img.shields.io/github/repo-size/JustTuturu/dotfiles?style=for-the-badge&labelColor=0C0D11&color=A8AEFF&logo=github&logoColor=FFFFFF&label=size" alt="Repo size" />
   </a>
   <a href="https://discord.gg/KZpH6GCfQF">
     <img src="https://img.shields.io/badge/discord-A8AEFF?style=for-the-badge&labelColor=0C0D11&logo=discord&logoColor=FFFFFF" alt="Discord" />
@@ -17,94 +17,93 @@
 
 <p><br/></p>
 
-## 📁 Cấu trúc thư mục
+## Directory Structure
 
 ```
 ~/dotfiles/
-├── config/
-│   ├── hypr/.config/hypr/         → ~/.config/hypr
-│   ├── quickshell/.config/quickshell/  → ~/.config/quickshell
-│   ├── rofi/.config/rofi/         → ~/.config/rofi
-│   └── ... (các config khác)
-└── scripts/
+├── .config/
+│   ├── eza/             → ~/.config/eza
+│   ├── fastfetch/       → ~/.config/fastfetch
+│   ├── fontconfig/      → ~/.config/fontconfig
+│   ├── ghostty/         → ~/.config/ghostty
+│   ├── hypr/            → ~/.config/hypr
+│   ├── matugen/         → ~/.config/matugen
+│   ├── starship/        → ~/.config/starship
+│   ├── themes/          → ~/.config/themes
+│   ├── tmux/            → ~/.config/tmux
+│   ├── uv/              → ~/.config/uv
+│   ├── wlogout/         → ~/.config/wlogout
+│   ├── yazi/            → ~/.config/yazi
+│   └── zed/             → ~/.config/zed
+├── scripts/
+│   ├── setup.sh
+│   └── install-fonts.sh
 └── zsh/
+    └── .zshrc           → ~/.zshrc
 ```
 
-## 🚀 Cách sử dụng Stow
+## Usage (GNU Stow)
 
-### Stow toàn bộ configs
+### Stow all configs
 
 ```bash
-cd ~/dotfiles/config
-stow -t ~ */        # Stow tất cả
+cd ~/dotfiles
+stow -t ~ .config
+stow -t ~ zsh
 ```
 
-### Stow từng config riêng lẻ
+### Stow individual configs
 
 ```bash
-cd ~/dotfiles/config
+cd ~/dotfiles
 
-# Stow một config
-stow -t ~ hypr
-stow -t ~ quickshell
-stow -t ~ rofi
+# Stow a config
+stow -t ~ -d .config hypr
+stow -t ~ -d .config ghostty
+stow -t ~ -d .config yazi
 
-# Unstow (gỡ symlink)
-stow -t ~ -D hypr
+# Stow zsh
+stow -t ~ zsh
 
-# Restow (gỡ rồi tạo lại)
-stow -t ~ -R hypr
+# Unstow (remove symlink)
+stow -t ~ -d .config -D hypr
+
+# Restow (remove then recreate)
+stow -t ~ -d .config -R hypr
 ```
 
-## ✅ Danh sách configs đã stow
+## Config List
 
-| Config | Trạng thái |
-|--------|-----------|
-| colors | ✅ |
-| eza | ✅ |
-| fontconfig | ✅ |
-| ghostty | ✅ |
-| hypr | ✅ |
-| matugen | ✅ |
-| quickshell | ✅ |
-| rofi | ✅ |
-| starship | ✅ |
-| themes | ✅ |
-| tmux | ✅ |
-| uv | ✅ |
-| waybar | ✅ |
-| wlogout | ✅ |
-| yazi | ✅ |
+| Config | Description |
+|--------|-------------|
+| eza | File listing theme |
+| fastfetch | System info fetcher |
+| fontconfig | Font configuration |
+| ghostty | Terminal emulator |
+| hypr | Hyprland window manager (hyprland, hypridle, hyprlock) |
+| matugen | Material you color generator |
+| starship | Shell prompt |
+| themes | Zsh syntax highlighting theme |
+| tmux | Terminal multiplexer |
+| uv | Python package manager |
+| wlogout | Logout menu |
+| yazi | Terminal file manager |
+| zed | Code editor |
 
-## 🔍 Kiểm tra
+## Verify Symlinks
 
 ```bash
-# Xem tất cả symlinks trong ~/.config
+# List all symlinks in ~/.config
 ls -la ~/.config/ | grep "^l"
 
-# Kiểm tra 1 config cụ thể
+# Check a specific config
 ls -la ~/.config/hypr
 file ~/.config/hypr
 ```
 
-## ⚠️ Lưu ý
+## Notes
 
-- Luôn `cd ~/dotfiles/config` trước khi stow
-- Dùng `-t ~` để target đúng vào home directory
-- Nếu có conflicts, backup file cũ trước khi stow
-
-## 📝 Script tự động
-
-```bash
-#!/bin/bash
-# stow-all.sh - Stow tất cả configs
-
-cd ~/dotfiles/config || exit 1
-
-for dir in */; do
-    echo "Stowing $dir..."
-    stow -t ~ "$dir"
-done
-
-echo "Done!"
-```
+- Always `cd ~/dotfiles` before running stow
+- Use `-t ~` to target your home directory
+- If there are conflicts, back up the existing file before stowing
+- The `quickshell` and `rofi` symlinks in ~/.config point outside this repo
