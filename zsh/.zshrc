@@ -98,4 +98,4 @@ alias sconfig='ag ~/.config/starship/starship.toml'
 alias bat='cat'
 alias yz='yazi'
 alias s='sudo'
-alias se='sudoedit'
+alias se='sudoedit'export PATH="$HOME/.hermes/node/bin:$PATH"

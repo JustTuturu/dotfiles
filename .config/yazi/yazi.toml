@@ -1,4 +1,4 @@
-[manager]
+[mgr]
 ratio          = [1, 4, 3]
 sort_by        = "natural"
 sort_sensitive = false
@@ -14,17 +14,17 @@ max_height = 900
 
 [opener]
 edit = [
-    { run = '${EDITOR:-nvim} "$@"', block = true },
+    { run = '${EDITOR:-zed} "$@"', block = true, for = "linux" },
 ]
 open = [
-    { run = 'xdg-open "$@"' },
+    { run = 'xdg-open "$1"', desc = "Open", for = "linux" },
 ]
 
 [open]
 rules = [
-    { mime = "text/*",        use = "edit" },
-    { mime = "image/*",       use = "open" },
-    { mime = "video/*",       use = "open" },
+    { mime = "text/*",          use = "edit" },
+    { mime = "image/*",         use = "open" },
+    { mime = "video/*",         use = "open" },
     { mime = "application/pdf", use = "open" },
-    { mime = "*",             use = "open" },
+    { mime = "*",               use = "open" },
 ]
