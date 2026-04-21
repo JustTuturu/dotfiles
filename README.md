@@ -37,7 +37,7 @@
 │   └── zed/             → ~/.config/zed
 ├── scripts/
 │   ├── setup.sh
-│   └── install-fonts.sh
+│   └── install-assets.sh
 └── zsh/
     └── .zshrc           → ~/.zshrc
 ```

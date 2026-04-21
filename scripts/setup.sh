@@ -39,40 +39,132 @@ sudo_init_keepalive() {
     fi
 }
 
+# ========================== PACKAGE LISTS ====================================
+COPR_REPOS=(
+    atim/starship
+    dejan/lazygit
+    lihaohong/yazi
+    lionheartp/Hyprland
+    scottames/ghostty
+    che/zed
+)
+
+BASE_DEPS=(
+    gcc gcc-c++ make cmake
+    python3-pip python3-devel nodejs npm
+    git stow xdg-user-dirs
+    pipewire pipewire-utils wireplumber
+    qt6-qtwayland qt5-qtwayland xdg-utils
+    bluez bluez-libs
+    ripgrep bat fzf tmux eza zoxide
+    fastfetch gh
+)
+
+OPTIONAL_DEPS=(
+    nodejs npm
+    vlc
+    obs-studio
+    blender
+    btop
+)
+
+COPR_DEPS=(
+    starship
+    lazygit
+    ghostty
+    yazi
+    zed
+)
+
+HYPR_DEPS=(
+    hyprland
+    uwsm
+    hypridle
+    hyprlock
+    hyprpaper
+    hyprpicker
+    hyprshot
+    hyprcursor
+    hyprpolkitagent
+    xdg-desktop-portal-hyprland
+    hyprland-qt-support
+    cliphist
+    wlr-randr
+    nwg-look
+    qt6ct
+    quickshell
+    matugen
+    noctalia-shell
+    gpu-screen-recorder
+)
+
+STOW_PACKAGES=(
+    eza
+    fontconfig
+    ghostty
+    gtk-3.0
+    hypr
+    matugen
+    noctalia
+    starship
+    tmux
+    uv
+    wlogout
+    yazi
+    zed
+    fastfetch
+)
+
+# ========================== MODULE: COPR REPOS ================================
+run_copr() {
+    info "Enabling COPR repositories"
+    for repo in "${COPR_REPOS[@]}"; do
+        sudo dnf copr enable -y "$repo"
+    done
+}
+
 # ========================== MODULE: BASE DEPS ================================
 run_deps() {
     info "Installing base dependencies"
     sudo dnf upgrade --refresh -y
-    sudo dnf install -y \
-        gcc gcc-c++ make cmake \
-        python3-pip python3-devel nodejs npm \
-        git stow xdg-user-dirs \
-        pipewire pipewire-utils wireplumber \
-        qt6-qtwayland qt5-qtwayland xdg-utils \
-        bluez bluez-libs \
-        nemo ripgrep bat fzf tmux eza zoxide fastfetch gh vlc gimp obs-studio fastfetch --setopt=install_weak_deps=False
+    sudo dnf install -y --setopt=install_weak_deps=False "${BASE_DEPS[@]}"
+    sudo dnf install -y --setopt=install_weak_deps=False "${COPR_DEPS[@]}"
 
-    # Lazy git
-    sudo dnf copr enable -y dejan/lazygit
-    sudo dnf install -y lazygit --setopt=install_weak_deps=False
+    local assets_script="$REPO_ROOT/scripts/install-assets.sh"
+    if [ -x "$assets_script" ]; then
+        "$assets_script"
+    fi
+}
 
-    # Starship
-    sudo dnf copr enable -y atim/starship
-    sudo dnf install -y starship --setopt=install_weak_deps=False
+# ========================== MODULE: BRAVE ====================================
+run_brave() {
+    info "Installing Brave Browser (Nightly)"
 
-    # Ghostty
-    sudo dnf copr enable -y scottames/ghostty
-    sudo dnf install -y ghostty --setopt=install_weak_deps=False
-    
-    # Yazi
-    sudo dnf copr enable -y lihaohong/yazi
-    sudo dnf install -y yazi --setopt=install_weak_deps=False
-    # Fonts
-    local font_script="$REPO_ROOT/scripts/install-fonts.sh"
-    if [ -x "$font_script" ]; then
-        if "$font_script" >/dev/null 2>&1; then
-            ok "Fonts checked/installed"
-        fi
+    sudo dnf install -y dnf-plugins-core
+    sudo dnf config-manager addrepo \
+        --from-repofile=https://brave-browser-rpm-nightly.s3.brave.com/brave-browser-nightly.repo
+    sudo dnf install -y brave-browser-nightly
+
+    ok "Brave Nightly installed"
+}
+
+# ========================== MODULE: OPTIONAL =================================
+run_optional() {
+    info "Optional packages available"
+
+    local to_install=()
+
+    for pkg in "${OPTIONAL_DEPS[@]}"; do
+        echo -ne "  Install ${BOLD}${pkg}${RESET}? [y/N] "
+        read -r reply
+        [[ "${reply}" =~ ^[Yy]$ ]] && to_install+=("${pkg}")
+    done
+
+    if [ ${#to_install[@]} -gt 0 ]; then
+        sudo dnf install --setopt=install_weak_deps=False "${to_install[@]}"
+        ok "Optional packages installed"
+    else
+        info "No optional packages selected"
     fi
 }
 
@@ -85,61 +177,34 @@ run_files() {
     fi
 
     local config_target="$HOME/.config"
-    local home_target="$HOME"
     local dotconfig="$REPO_ROOT/.config"
     local count=0
 
-    # ===== LIST PACKAGES HERE =====
-    local config_packages=(
-        "eza"
-        "fontconfig"
-        "ghostty"
-        "hypr"
-        "matugen"
-        "starship"
-        "tmux"
-        "uv"
-        "wlogout"
-        "yazi"
-        "zed"
-        "fastfetch"
-    )
-    # ===============================
-
-    for pkg in "${config_packages[@]}"; do
+    for pkg in "${STOW_PACKAGES[@]}"; do
         local package_target="$config_target/$pkg"
-        if [ -L "$package_target" ]; then
-            rm "$package_target"
-            echo "  Removed old symlink: $pkg"
-        fi
+
+        [ -L "$package_target" ] && rm "$package_target" && echo "  Removed old symlink: $pkg"
 
         if [ -d "$dotconfig/$pkg" ]; then
             mkdir -p "$package_target"
+            local stow_opts=()
+            [ -n "${FORCE:-}" ] && stow_opts+=(--restow)
 
-            if [ -n "${FORCE:-}" ]; then
-                stow -t "$package_target" -d "$dotconfig" --restow "$pkg" 2>/dev/null \
-                    && ok "$pkg" && ((count++)) \
-                    || warn "$pkg failed"
-            else
-                stow -t "$package_target" -d "$dotconfig" "$pkg" 2>/dev/null \
-                    && ok "$pkg" && ((count++)) \
-                    || warn "$pkg failed"
-            fi
+            stow -t "$package_target" -d "$dotconfig" "${stow_opts[@]}" "$pkg" 2>/dev/null \
+                && ok "$pkg" && ((count++)) \
+                || warn "$pkg failed"
         else
             warn "$pkg not found in dotfiles"
         fi
     done
 
-    # Stow zsh to HOME (not .config)
-    if [ -n "${FORCE:-}" ]; then
-        stow -t "$home_target" -d "$REPO_ROOT" --restow zsh 2>/dev/null \
-            && ok "zsh" && ((count++)) || warn "zsh failed"
-    else
-        stow -t "$home_target" -d "$REPO_ROOT" zsh 2>/dev/null \
-            && ok "zsh" && ((count++)) || warn "zsh failed"
-    fi
+    # Stow zsh to HOME
+    local stow_opts=()
+    [ -n "${FORCE:-}" ] && stow_opts+=(--restow)
+    stow -t "$HOME" -d "$REPO_ROOT" "${stow_opts[@]}" zsh 2>/dev/null \
+        && ok "zsh" && ((count++)) || warn "zsh failed"
 
-    # Noctalia Shell — link quickshell config to system noctalia
+    # Noctalia Shell
     if cmd_exists noctalia-shell || [ -d /etc/xdg/quickshell/noctalia-shell ]; then
         mkdir -p ~/.config/quickshell
         if [ -L ~/.config/quickshell ] && [ ! -d ~/.config/quickshell ]; then
@@ -152,6 +217,15 @@ run_files() {
     fi
 
     info "Stowed $count packages"
+
+    # Generate initial matugen colors
+    if cmd_exists matugen && [ -f "$HOME/Pictures/Wallpapers/wallpaper.jpg" ]; then
+        info "Generating initial matugen colors..."
+        matugen image "$HOME/Pictures/Wallpapers/wallpaper.jpg" && ok "matugen colors generated" \
+            || warn "matugen failed — run manually after setting wallpaper"
+    else
+        warn "matugen: run manually after setting wallpaper"
+    fi
 }
 
 # ========================== MODULE: SHELL ====================================
@@ -178,65 +252,11 @@ run_shell() {
 run_hypr() {
     info "Installing Hyprland ecosystem..."
 
-    # Enable COPR
-    # Hyprland
-    sudo dnf copr enable lionheartp/Hyprland -y || {
-        fail "Failed to enable COPR"
-        return 1
-    }
-
-    # Noctalia shell
-    sudo dnf install --nogpgcheck \
+    sudo dnf install -y --nogpgcheck \
         --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
 
-    # Install packages
-    sudo dnf install -y \
-        awww \
-        aquamarine \
-        cliphist \
-        glaze \
-        gpu-screen-recorder \
-        hyprcursor \
-        hyprgraphics \
-        hypridle \
-        hyprland \
-        hyprland-contrib \
-        hyprland-guiutils \
-        hyprland-plugins \
-        hyprland-protocols \
-        hyprland-qt-support \
-        hyprlang \
-        hyprlauncher \
-        hyprpwcenter \
-        hyprlock \
-        hypridle \
-        hyprpaper \
-        hyprpicker \
-        hyprpolkitagent \
-        hyprqt6engine \
-        hyprshot \
-        hyprwire \
-        hyprtoolkit \
-        hyprsunset \
-        hyprutils \
-        hyprwayland-scanner \
-        hyprshutdown\
-        python-imageio-ffmpeg \
-        matugen \
-        nwg-look \
-        python-screeninfo \
-        qt6ct \
-        quickshell \
-        uwsm \
-        waypaper \
-        xcur2png \
-        xdg-desktop-portal-hyprland \
-        grimblast \
-        wlr-randr
-    # Install Noctalia shell
-    sudo dnf install -y noctalia-shell
+    sudo dnf install -y "${HYPR_DEPS[@]}"
 
-    # Enable services
     systemctl --user enable --now pipewire.service wireplumber.service 2>/dev/null || true
 
     echo ""
@@ -269,48 +289,28 @@ prevent_root
 
 case "${1:-help}" in
     install)
-        # Full install: base deps + dotfiles + shell + hyprland
         sudo_init_keepalive
         trap sudo_stop_keepalive EXIT
-
         echo -e "${GREEN}${BOLD}=== Installing Dotfiles + Hyprland ===${RESET}\n"
-        run_deps
-        run_files
-        run_shell
-        run_hypr
-
-        echo ""
-        echo -e "${GREEN}${BOLD}=== Complete! ===${RESET}"
+        run_copr && run_deps && run_brave && run_optional && run_files && run_shell && run_hypr
+        echo -e "\n${GREEN}${BOLD}=== Complete! ===${RESET}"
         echo -e "  Log out and select 'Hyprland (UWSM)' at login"
         ;;
-
     install-base)
-        # Base install: deps + dotfiles + shell (no hyprland)
         sudo_init_keepalive
         trap sudo_stop_keepalive EXIT
-
         echo -e "${GREEN}${BOLD}=== Installing Dotfiles Only ===${RESET}\n"
-        run_deps
-        run_files
-        run_shell
-
-        echo ""
-        echo -e "${GREEN}${BOLD}=== Complete! ===${RESET}"
+        run_copr && run_deps && run_brave && run_optional && run_files && run_shell
+        echo -e "\n${GREEN}${BOLD}=== Complete! ===${RESET}"
         echo -e "  Restart your terminal or run: exec zsh"
         ;;
-
     install-hypr)
-        # Hyprland only (for existing dotfiles)
         sudo_init_keepalive
         trap sudo_stop_keepalive EXIT
-
         echo -e "${GREEN}${BOLD}=== Installing Hyprland ===${RESET}\n"
-        run_hypr
-
-        echo ""
-        echo -e "${GREEN}${BOLD}=== Complete! ===${RESET}"
+        run_copr && run_hypr
+        echo -e "\n${GREEN}${BOLD}=== Complete! ===${RESET}"
         ;;
-
     help|--help|-h|"")
         showhelp
         ;;
