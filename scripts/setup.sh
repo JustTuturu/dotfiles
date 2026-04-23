@@ -177,45 +177,47 @@ run_files() {
     fi
 
     local count=0
-    local stow_opts=(-t "$HOME" -d "$REPO_ROOT")
-    [ -n "${FORCE:-}" ] && stow_opts+=(--restow) || stow_opts+=(--stow)
+    local failed=0
 
     for pkg in "${STOW_PACKAGES[@]}"; do
-        if [ -d "$REPO_ROOT/$pkg" ]; then
-            # Remove conflicting real files/dirs that block stow
-            case "$pkg" in
-                zsh)
-                    [ -f "$HOME/.zshrc" ] && [ ! -L "$HOME/.zshrc" ] && rm "$HOME/.zshrc"
-                    ;;
-                tmux)
-                    [ -f "$HOME/.tmux.conf" ] && [ ! -L "$HOME/.tmux.conf" ] && rm "$HOME/.tmux.conf"
-                    ;;
-                *)
-                    # Remove regular files that conflict with stow symlinks
-                    if [ -d "$REPO_ROOT/$pkg/.config" ]; then
-                        while IFS= read -r f; do
-                            target="$HOME/$f"
-                            if [ -e "$target" ] && [ ! -L "$target" ]; then
-                                rm -f "$target"
-                            fi
-                        done < <(cd "$REPO_ROOT/$pkg" && find . -type f -not -path './.git/*')
-                    fi
-                    # Also handle top-level files (like .zshrc, .tmux.conf)
-                    while IFS= read -r f; do
-                        target="$HOME/$f"
-                        if [ -e "$target" ] && [ ! -L "$target" ]; then
-                            rm -f "$target"
-                        fi
-                    done < <(cd "$REPO_ROOT/$pkg" && find . -maxdepth 1 -type f)
-                    ;;
-            esac
-
-            stow "${stow_opts[@]}" "$pkg" 2>/dev/null \
-                && ok "$pkg" && ((count++)) \
-                || warn "$pkg — stow conflict, try: stow -R -d $REPO_ROOT -t $HOME $pkg"
-        else
+        if [ ! -d "$REPO_ROOT/$pkg" ]; then
             warn "$pkg not found in dotfiles"
+            ((failed++))
+            continue
         fi
+
+        # Pre-create subdirectories so stow creates file-level symlinks
+        # instead of directory-level symlinks (which break nested conf dirs)
+        while IFS= read -r d; do
+            mkdir -p "$HOME/$d"
+        done < <(cd "$REPO_ROOT/$pkg" && find . -type d -not -path './.git*')
+
+        # First try: normal stow
+        if stow -t "$HOME" -d "$REPO_ROOT" -S "$pkg" 2>/dev/null; then
+            ok "$pkg"
+            ((count++))
+            continue
+        fi
+
+        # Second try: --adopt moves conflicting real files into the package,
+        # preserving user customizations, then creates symlinks
+        if stow -t "$HOME" -d "$REPO_ROOT" --adopt -S "$pkg" 2>/dev/null; then
+            ok "$pkg (adopted existing files)"
+            ((count++))
+            continue
+        fi
+
+        # Last resort: FORCE — restow (unstow + restow)
+        if [ -n "${FORCE:-}" ]; then
+            if stow -t "$HOME" -d "$REPO_ROOT" -R "$pkg" 2>/dev/null; then
+                ok "$pkg (force restowed)"
+                ((count++))
+                continue
+            fi
+        fi
+
+        fail "$pkg — could not stow. Try: stow -t $HOME -d $REPO_ROOT --adopt -S $pkg"
+        ((failed++))
     done
 
     # Noctalia Shell
@@ -231,6 +233,7 @@ run_files() {
     fi
 
     info "Stowed $count packages"
+    [ "$failed" -gt 0 ] && warn "$failed packages failed to stow"
 
     # Generate initial matugen colors
     if cmd_exists matugen && [ -f "$HOME/Pictures/Wallpapers/wallpaper.jpg" ]; then

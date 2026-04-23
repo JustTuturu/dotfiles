@@ -69,6 +69,7 @@ eval "$(starship init zsh)"
 
 # FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='find . -maxdepth 2 -not -path "*/.*"'
 
 # Unikey
 export QT_IM_MODULE=fcitx

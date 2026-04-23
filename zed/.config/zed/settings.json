@@ -6,21 +6,48 @@
 // Note: keep secrets out of dotfiles. Add API keys locally after stowing.
 
 {
+  "debugger": {
+    "dock": "bottom"
+  },
+  "scrollbar": {
+    "selected_symbol": true,
+    "show": "never",
+    "cursors": true
+  },
   "cli_default_open_behavior": "new_window",
   "project_panel": {
+    "sticky_scroll": true,
+    "auto_reveal_entries": true,
+    "starts_open": true,
+    "auto_fold_dirs": true,
+    "scrollbar": {
+      "horizontal_scroll": false,
+      "show": "never"
+    },
+    "folder_icons": true,
     "dock": "left"
   },
   "outline_panel": {
+    "file_icons": true,
+    "button": false,
     "dock": "right"
   },
   "collaboration_panel": {
+    "button": false,
     "dock": "left"
   },
   "git_panel": {
+    "file_icons": false,
+    "tree_view": false,
+    "scrollbar": {
+      "show": "never"
+    },
+    "button": true,
     "dock": "right"
   },
   "context_servers": {},
   "edit_predictions": {
+    "mode": "eager",
     "open_ai_compatible_api": {
       "api_url": "https://opencode.ai/zen/go/v1",
       "model": "opencode-go/kimi-k2.5",
@@ -49,6 +76,7 @@
     "metrics": false,
   },
   "terminal": {
+    "flexible": false,
     "font_family": "JetBrainsMono Nerd Font Mono",
     "line_height": {
       "custom": 1.1,

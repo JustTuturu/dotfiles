@@ -298,7 +298,7 @@
     },
     "colorSchemes": {
         "darkMode": true,
-        "generationMethod": "content",
+        "generationMethod": "tonal-spot",
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
         "monitorForColors": "DP-2",
@@ -756,11 +756,11 @@
                 "appearance": "dark",
                 "colorScheme": "Catppuccin",
                 "darkMode": true,
-                "generationMethod": "content",
+                "generationMethod": "tonal-spot",
                 "paletteColors": [
-                    "#bfc2fd",
-                    "#c5c4de",
-                    "#f2b3e0",
+                    "#bfc2ff",
+                    "#c5c4dd",
+                    "#e8b9d4",
                     "#ffb4ab"
                 ],
                 "path": "/home/suzu/Pictures/Wallpapers/wallpaper.jpg",
