@@ -1,43 +1,83 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "type": "kitty", // Hoặc "iterm", "sixel" tùy terminal bạn dùng
+    "source": "~/.config/fastfetch/logo.png",
+    "width": 28,
+    "height": 12,
+    "padding": {
+      "top": 2,
+      "left": 2
+    }
+  },
+  "display": {
+    "separator": " ➜  ",
+    "color": {
+      "keys": "magenta"
+    }
+  },
   "modules": [
     "title",
-    "separator",
-    "os",
-    "host",
-    "kernel",
-    "uptime",
-    "packages",
-    "shell",
-    "display",
-    "de",
-    "wm",
-    "wmtheme",
-    "theme",
-    "icons",
-    "font",
-    "cursor",
-    "terminal",
-    "terminalfont",
-    "cpu",
-    "gpu",
-    "memory",
-    "swap",
-    "disk",
-    "localip",
-    "battery",
-    "poweradapter",
-    "locale",
+    {
+      "type": "separator",
+      "string": "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    },
+    {
+      "type": "os",
+      "key": "󰣇 OS", // Thêm icon Nerd Fonts
+      "format": "{3} {12}" // Chỉ hiện Name + Architecture
+    },
+    {
+      "type": "kernel",
+      "key": "󰒋 Kernel"
+    },
+    {
+      "type": "uptime",
+      "key": "󱎫 Uptime"
+    },
+    {
+      "type": "packages",
+      "key": "󰏖 Packages"
+    },
+    {
+      "type": "shell",
+      "key": "󱆃 Shell"
+    },
     "break",
-    "colors"
-  ],
-  "logo": {
-    "type": "auto",    
-    "source": "~/.config/fastfetch/logo.png",
-    "padding": {
-            "top": 6,
-            "left": 1,
-            "right": 1
+    {
+      "type": "wm",
+      "key": "󱂬 WM"
+    },
+    {
+      "type": "cursor",
+      "key": "󰇀 Cursor"
+    },
+    {
+      "type": "terminal",
+      "key": "󰆍 Terminal"
+    },
+    {
+      "type": "font",
+      "key": "󰛖 Font"
+    },
+    "break",
+    {
+      "type": "cpu",
+      "key": "󰻠 CPU",
+      "showPeCoreCount": true
+    },
+    {
+      "type": "gpu",
+      "key": "󰢮 GPU"
+    },
+    {
+      "type": "memory",
+      "key": "󰍛 Memory"
+    },
+    "break",
+    {
+        "type": "colors",
+        "symbol": "circle"
     }
-  }
+  ]
 }

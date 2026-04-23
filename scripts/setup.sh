@@ -109,7 +109,6 @@ STOW_PACKAGES=(
     starship
     tmux
     uv
-    wlogout
     yazi
     zed
     fastfetch

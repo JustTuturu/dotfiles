@@ -6,6 +6,19 @@
 // Note: keep secrets out of dotfiles. Add API keys locally after stowing.
 
 {
+  "cli_default_open_behavior": "new_window",
+  "project_panel": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "right"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "right"
+  },
   "context_servers": {},
   "edit_predictions": {
     "open_ai_compatible_api": {
@@ -42,6 +55,8 @@
     },
   },
   "agent": {
+    "sidebar_side": "right",
+    "dock": "right",
     "inline_assistant_model": {
       "provider": "zed.dev",
       "model": "claude-sonnet-4-6",

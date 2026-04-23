@@ -1,0 +1,33 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+add_newline = true
+scan_timeout = 100
+command_timeout = 1000
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+style = "bold aqua"
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+
+[git_status]
+style = "red"
+format = '([\[$all_status$ahead_behind\]]($style) )'
+
+[package]
+disabled = true
+
+[nodejs]
+disabled = false
+format = "via [node $version](bold green) "
+
+[ruby]
+disabled = true
+[java]
+disabled = true

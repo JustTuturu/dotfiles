@@ -152,6 +152,16 @@ set_defaults() {
 }
 
 # ========================== MAIN =============================================
+# ========================== MAIN =============================================
 install_fonts
-install_cursor
-set_defaults "${cursor_name:-ChisaBLZ}"
+
+# Cài đặt Hyprcursor
+HYPR_URL="https://github.com/JustTuturu/TuturuCursor/releases/latest/download/ChisaBLZ.tar.gz"
+install_cursor "ChisaBLZ" "${HYPR_URL}"
+
+# Cài đặt XCursor (Dùng cho các app cũ/XWayland)
+XCUR_URL="https://github.com/JustTuturu/TuturuCursor/releases/latest/download/XChisaBLZ.tar.gz"
+install_cursor "XChisaBLZ" "${XCUR_URL}"
+
+# Thiết lập mặc định (Ưu tiên Hyprcursor cho Hyprland)
+set_defaults "ChisaBLZ" "XChisaBLZ"
