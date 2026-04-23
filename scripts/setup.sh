@@ -100,9 +100,10 @@ HYPR_DEPS=(
 
 STOW_PACKAGES=(
     eza
+    fastfetch
     fontconfig
     ghostty
-    gtk-3.0
+    gtk
     hypr
     matugen
     noctalia
@@ -111,7 +112,7 @@ STOW_PACKAGES=(
     uv
     yazi
     zed
-    fastfetch
+    zsh
 )
 
 # ========================== MODULE: COPR REPOS ================================
@@ -175,33 +176,47 @@ run_files() {
         sudo dnf install -y stow || { fail "Could not install stow"; return 1; }
     fi
 
-    local config_target="$HOME/.config"
-    local dotconfig="$REPO_ROOT/.config"
     local count=0
+    local stow_opts=(-t "$HOME" -d "$REPO_ROOT")
+    [ -n "${FORCE:-}" ] && stow_opts+=(--restow) || stow_opts+=(--stow)
 
     for pkg in "${STOW_PACKAGES[@]}"; do
-        local package_target="$config_target/$pkg"
+        if [ -d "$REPO_ROOT/$pkg" ]; then
+            # Remove conflicting real files/dirs that block stow
+            case "$pkg" in
+                zsh)
+                    [ -f "$HOME/.zshrc" ] && [ ! -L "$HOME/.zshrc" ] && rm "$HOME/.zshrc"
+                    ;;
+                tmux)
+                    [ -f "$HOME/.tmux.conf" ] && [ ! -L "$HOME/.tmux.conf" ] && rm "$HOME/.tmux.conf"
+                    ;;
+                *)
+                    # Remove regular files that conflict with stow symlinks
+                    if [ -d "$REPO_ROOT/$pkg/.config" ]; then
+                        while IFS= read -r f; do
+                            target="$HOME/$f"
+                            if [ -e "$target" ] && [ ! -L "$target" ]; then
+                                rm -f "$target"
+                            fi
+                        done < <(cd "$REPO_ROOT/$pkg" && find . -type f -not -path './.git/*')
+                    fi
+                    # Also handle top-level files (like .zshrc, .tmux.conf)
+                    while IFS= read -r f; do
+                        target="$HOME/$f"
+                        if [ -e "$target" ] && [ ! -L "$target" ]; then
+                            rm -f "$target"
+                        fi
+                    done < <(cd "$REPO_ROOT/$pkg" && find . -maxdepth 1 -type f)
+                    ;;
+            esac
 
-        [ -L "$package_target" ] && rm "$package_target" && echo "  Removed old symlink: $pkg"
-
-        if [ -d "$dotconfig/$pkg" ]; then
-            mkdir -p "$package_target"
-            local stow_opts=()
-            [ -n "${FORCE:-}" ] && stow_opts+=(--restow)
-
-            stow -t "$package_target" -d "$dotconfig" "${stow_opts[@]}" "$pkg" 2>/dev/null \
+            stow "${stow_opts[@]}" "$pkg" 2>/dev/null \
                 && ok "$pkg" && ((count++)) \
-                || warn "$pkg failed"
+                || warn "$pkg — stow conflict, try: stow -R -d $REPO_ROOT -t $HOME $pkg"
         else
             warn "$pkg not found in dotfiles"
         fi
     done
-
-    # Stow zsh to HOME
-    local stow_opts=()
-    [ -n "${FORCE:-}" ] && stow_opts+=(--restow)
-    stow -t "$HOME" -d "$REPO_ROOT" "${stow_opts[@]}" zsh 2>/dev/null \
-        && ok "zsh" && ((count++)) || warn "zsh failed"
 
     # Noctalia Shell
     if cmd_exists noctalia-shell || [ -d /etc/xdg/quickshell/noctalia-shell ]; then
@@ -220,8 +235,8 @@ run_files() {
     # Generate initial matugen colors
     if cmd_exists matugen && [ -f "$HOME/Pictures/Wallpapers/wallpaper.jpg" ]; then
         info "Generating initial matugen colors..."
-        matugen image "$HOME/Pictures/Wallpapers/wallpaper.jpg" && ok "matugen colors generated" \
-            || warn "matugen failed — run manually after setting wallpaper"
+        matugen image "$HOME/Pictures/Wallpapers/wallpaper.jpg" --prefer darkness && ok "matugen colors generated" \
+            || warn "matugen failed — run manually: matugen image ~/Pictures/Wallpapers/wallpaper.jpg --prefer darkness"
     else
         warn "matugen: run manually after setting wallpaper"
     fi

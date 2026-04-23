@@ -18,13 +18,13 @@
         "ignoreMouseInput": false,
         "overviewLayer": false,
         "pinnedApps": [
-            "discord",
             "brave-browser",
             "steam",
             "dev.zed.Zed",
             "com.mitchellh.ghostty",
             "brave-origin-nightly",
-            "dev.vencord.Vesktop"
+            "dev.vencord.Vesktop",
+            "discord"
         ],
         "position": "center",
         "screenshotAnnotationTool": "",
