@@ -1,167 +1,145 @@
 #!/usr/bin/env bash
-# install-assets.sh — Download fonts + hyprcursor theme
-# Fonts go to ~/.local/share/fonts
-# Hyprcursor themes go to ~/.local/share/icons (per wiki.hypr.land)
+# install-assets.sh — Cài fonts + cursor themes
+# Fonts  → ~/.local/share/fonts
+# Cursor → ~/.local/share/icons
 
 set -euo pipefail
 
-# ========================== COLORS & UTILITIES ===============================
+# ========================== COLORS ===========================================
 RED='\e[31m'; GREEN='\e[32m'; YELLOW='\e[33m'; BLUE='\e[34m'; BOLD='\e[1m'; RESET='\e[0m'
 
-info()  { echo -e "\n  ${BLUE}[i]${RESET} ${BOLD}$*${RESET}"; }
-ok()    { echo -e "  ${GREEN}[✓]${RESET} ${BOLD}$*${RESET}"; }
-warn()  { echo -e "  ${YELLOW}[!]${RESET} ${BOLD}$*${RESET}"; }
-fail()  { echo -e "  ${RED}[✗]${RESET} ${BOLD}$*${RESET}"; }
+info() { echo -e "\n  ${BLUE}[i]${RESET} ${BOLD}$*${RESET}"; }
+ok()   { echo -e "  ${GREEN}[✓]${RESET} ${BOLD}$*${RESET}"; }
+warn() { echo -e "  ${YELLOW}[!]${RESET} ${BOLD}$*${RESET}"; }
+fail() { echo -e "  ${RED}[✗]${RESET} ${BOLD}$*${RESET}"; exit 1; }
 
 TEMP_DIR="$(mktemp -d)"
-cleanup() { rm -rf "${TEMP_DIR}"; }
-trap cleanup EXIT
+trap 'rm -rf "${TEMP_DIR}"' EXIT
+
+# ========================== CONFIG ===========================================
+REPO_OWNER="JustTuturu"
+REPO_NAME="TuturuCursor"
+BASE_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}/releases/latest/download"
+
+HYPR_CURSOR="HChisaBLZ"
+X_CURSOR="XChisaBLZ"
+CURSOR_SIZE=24
+
+ICON_DIR="${HOME}/.local/share/icons"
+FONT_DIR="${HOME}/.local/share/fonts"
+
+# ========================== AUTH =============================================
+get_token() {
+    local token="${GH_TOKEN:-}"
+    if [[ -z "${token}" ]]; then
+        echo -e "\n  ${YELLOW}[!]${RESET} Repo private — cần GitHub token" >&2
+        echo -e "  ${BLUE}[i]${RESET} Tạo tại: https://github.com/settings/tokens (scope: repo)" >&2
+        read -rsp "  Nhập GitHub Token: " token
+        echo >&2
+    fi
+    [[ -z "${token}" ]] && fail "Không có token — huỷ"
+    echo "${token}"
+}
+
+gh_download() {
+    local url="$1" dest="$2" token="$3"
+    curl -fsSL \
+        -H "Authorization: Bearer ${token}" \
+        -L "${url}" -o "${dest}"
+}
 
 # ========================== FONTS ============================================
 install_fonts() {
-    local font_dir="${HOME}/.local/share/fonts"
-    mkdir -p "${font_dir}"
+    mkdir -p "${FONT_DIR}"
 
-    if fc-list | grep -qi "JetBrainsMono.*Nerd Font Mono"; then
-        ok "JetBrains Mono Nerd Font already installed"
-    else
-        info "Downloading JetBrains Mono Nerd Font"
-        local font_url="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz"
-        local archive="${TEMP_DIR}/JetBrainsMono.tar.xz"
-
-        if command -v curl >/dev/null 2>&1; then
-            curl -fsSL "${font_url}" -o "${archive}"
-        elif command -v wget >/dev/null 2>&1; then
-            wget -q "${font_url}" -O "${archive}"
-        else
-            fail "Neither curl nor wget is available"
-            return 1
-        fi
-
-        mkdir -p "${TEMP_DIR}/fonts_extract"
-        tar -xf "${archive}" -C "${TEMP_DIR}/fonts_extract"
-
-        # Only keep NF (terminal) + NFM (IDE), Regular + Bold only
-        find "${TEMP_DIR}/fonts_extract" -type f \( \
-            -name "JetBrainsMonoNerdFont-Regular.ttf" \
-            -o -name "JetBrainsMonoNerdFont-Bold.ttf" \
-            -o -name "JetBrainsMonoNerdFont-BoldItalic.ttf" \
-            -o -name "JetBrainsMonoNerdFontMono-Regular.ttf" \
-            -o -name "JetBrainsMonoNerdFontMono-Bold.ttf" \
-            -o -name "JetBrainsMonoNerdFontMono-BoldItalic.ttf" \
-        \) -exec mv -f {} "${font_dir}/" \;
-
-        fc-cache -f "${font_dir}" >/dev/null 2>&1 || fc-cache -f >/dev/null 2>&1
-        ok "JetBrains Mono NF + NFM installed"
+    if fc-list | grep -qi "JetBrainsMono.*Nerd Font"; then
+        ok "JetBrains Mono Nerd Font đã có sẵn"
+        return
     fi
+
+    info "Tải JetBrains Mono Nerd Font"
+    local archive="${TEMP_DIR}/JetBrainsMono.tar.xz"
+    curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz" \
+        -o "${archive}"
+
+    tar -xf "${archive}" -C "${TEMP_DIR}" --wildcards \
+        "JetBrainsMonoNerdFont-Regular.ttf" \
+        "JetBrainsMonoNerdFont-Bold.ttf" \
+        "JetBrainsMonoNerdFont-BoldItalic.ttf" \
+        "JetBrainsMonoNerdFontMono-Regular.ttf" \
+        "JetBrainsMonoNerdFontMono-Bold.ttf" \
+        "JetBrainsMonoNerdFontMono-BoldItalic.ttf" \
+        2>/dev/null || true
+
+    find "${TEMP_DIR}" -maxdepth 1 -name "*.ttf" -exec mv -f {} "${FONT_DIR}/" \;
+    fc-cache -f "${FONT_DIR}" &>/dev/null
+    ok "JetBrains Mono NF + NFM đã cài"
 }
 
-# ========================== HYPRCURSOR ========================================
+# ========================== CURSORS ==========================================
 install_cursor() {
-    local cursor_name="ChisaBLZ"
-    local cursor_dir="${HOME}/.local/share/icons/${cursor_name}"
+    local name="$1" token="$2"
+    local dest="${ICON_DIR}/${name}"
 
-    # ── CONFIG: Set your GitHub release URL here ──
-    # Supports: .tar.gz, .tar.xz, .zip archives containing the theme folder
-    # Example: https://github.com/YOUR_USER/YOUR_REPO/releases/latest/download/ChisaBLZ.tar.gz
-    local cursor_url="${CURSOR_URL:-}"
-    # ───────────────────────────────────────────────
-
-    if [ -d "${cursor_dir}" ] && [ -f "${cursor_dir}/manifest.hl" ]; then
-        ok "${cursor_name} hyprcursor theme already installed"
-        return 0
+    if [[ -d "${dest}" ]]; then
+        ok "${name} đã có sẵn, bỏ qua"
+        return
     fi
 
-    # If no URL configured, skip with instructions
-    if [ -z "${cursor_url}" ]; then
-        warn "No CURSOR_URL set. Manual install:"
-        warn "  1. Create a GitHub release with your hyprcursor theme"
-        warn "  2. Run: CURSOR_URL=https://github.com/.../ChisaBLZ.tar.gz ./install-assets.sh"
-        warn "  Or copy ${cursor_name}/ to ${cursor_dir}/ manually"
-        return 0
-    fi
+    info "Tải ${name}"
+    local archive="${TEMP_DIR}/${name}.tar.gz"
+    gh_download "${BASE_URL}/${name}.tar.gz" "${archive}" "${token}"
 
-    info "Downloading ${cursor_name} hyprcursor theme"
-    local archive="${TEMP_DIR}/${cursor_name}.tar.gz"
-
-    if command -v curl >/dev/null 2>&1; then
-        curl -fsSL "${cursor_url}" -o "${archive}"
-    elif command -v wget >/dev/null 2>&1; then
-        wget -q "${cursor_url}" -O "${archive}"
-    else
-        fail "Neither curl nor wget is available"
-        return 1
-    fi
-
-    # Extract and find the theme directory containing manifest.hl
-    mkdir -p "${TEMP_DIR}/cursor_extract"
-    tar -xf "${archive}" -C "${TEMP_DIR}/cursor_extract" 2>/dev/null \
-        || unzip -q "${archive}" -d "${TEMP_DIR}/cursor_extract" 2>/dev/null
-
-    local theme_dir
-    theme_dir="$(find "${TEMP_DIR}/cursor_extract" -name "manifest.hl" -printf '%h' | head -1)"
-
-    if [ -z "${theme_dir}" ]; then
-        fail "No manifest.hl found in archive — is this a valid hyprcursor theme?"
-        return 1
-    fi
-
-    mkdir -p "$(dirname "${cursor_dir}")"
-    cp -r "${theme_dir}" "${cursor_dir}"
-    ok "${cursor_name} hyprcursor theme installed to ${cursor_dir}"
+    mkdir -p "${ICON_DIR}"
+    tar -xf "${archive}" -C "${ICON_DIR}"
+    ok "${name} → ${dest}"
 }
 
 # ========================== SET DEFAULTS =====================================
 set_defaults() {
-    local cursor_name="${1:-ChisaBLZ}"
-    local cursor_size=24
+    info "Thiết lập cursor mặc định"
 
-    info "Setting ${cursor_name} as default cursor"
-
-    # hyprctl setcursor — sets cursor for Hyprland + Qt/Electron
-    if command -v hyprctl >/dev/null 2>&1; then
-        hyprctl setcursor "${cursor_name}" "${cursor_size}" 2>/dev/null || true
+    # Hyprland — hyprcursor native
+    if command -v hyprctl &>/dev/null; then
+        hyprctl setcursor "${HYPR_CURSOR}" "${CURSOR_SIZE}" 2>/dev/null || true
+        ok "hyprctl: ${HYPR_CURSOR} (size ${CURSOR_SIZE})"
     fi
 
-    # gsettings — sets cursor for GTK apps
-    if command -v gsettings >/dev/null 2>&1; then
-        gsettings set org.gnome.desktop.interface cursor-theme "${cursor_name}" 2>/dev/null || true
-        gsettings set org.gnome.desktop.interface cursor-size "${cursor_size}" 2>/dev/null || true
+    # GTK — xcursor fallback
+    if command -v gsettings &>/dev/null; then
+        gsettings set org.gnome.desktop.interface cursor-theme "${X_CURSOR}" 2>/dev/null || true
+        gsettings set org.gnome.desktop.interface cursor-size "${CURSOR_SIZE}" 2>/dev/null || true
+        ok "gsettings: ${X_CURSOR}"
     fi
 
-    # XCURSOR_THEME — fallback for X11 / non-hyprcursor apps
-    # Write to .zshenv so it's always available
+    # XCURSOR env cho XWayland
     local zshenv="${HOME}/.zshenv"
-    if [ -f "${zshenv}" ] && ! grep -q "XCURSOR_THEME" "${zshenv}"; then
-        echo -e "\nexport XCURSOR_THEME=${cursor_name}\nexport XCURSOR_SIZE=${cursor_size}" >> "${zshenv}"
-        ok "Added XCURSOR_THEME to ~/.zshenv"
-    elif [ -f "${zshenv}" ] && grep -q "XCURSOR_THEME" "${zshenv}"; then
-        sed -i "s/export XCURSOR_THEME=.*/export XCURSOR_THEME=${cursor_name}/" "${zshenv}"
-        sed -i "s/export XCURSOR_SIZE=.*/export XCURSOR_SIZE=${cursor_size}/" "${zshenv}"
-        ok "Updated XCURSOR_THEME in ~/.zshenv"
+    if [[ -f "${zshenv}" ]] && grep -q "XCURSOR_THEME" "${zshenv}"; then
+        sed -i \
+            -e "s|export XCURSOR_THEME=.*|export XCURSOR_THEME=${X_CURSOR}|" \
+            -e "s|export XCURSOR_SIZE=.*|export XCURSOR_SIZE=${CURSOR_SIZE}|" \
+            "${zshenv}"
+        ok "Cập nhật XCURSOR_* trong ~/.zshenv"
+    else
+        printf "\nexport XCURSOR_THEME=%s\nexport XCURSOR_SIZE=%s\n" \
+            "${X_CURSOR}" "${CURSOR_SIZE}" >> "${zshenv}"
+        ok "Thêm XCURSOR_* vào ~/.zshenv"
     fi
 
-    # Flatpak cursor access
-    if command -v flatpak >/dev/null 2>&1; then
-        flatpak override --filesystem=~/.icons:ro --user 2>/dev/null || true
+    # Flatpak
+    if command -v flatpak &>/dev/null; then
         flatpak override --filesystem=~/.local/share/icons:ro --user 2>/dev/null || true
-        ok "Flatpak cursor access configured"
+        ok "Flatpak: cho phép đọc ~/.local/share/icons"
     fi
-
-    ok "${cursor_name} set as default cursor"
 }
 
 # ========================== MAIN =============================================
-# ========================== MAIN =============================================
 install_fonts
 
-# Cài đặt Hyprcursor
-HYPR_URL="https://github.com/JustTuturu/TuturuCursor/releases/latest/download/ChisaBLZ.tar.gz"
-install_cursor "ChisaBLZ" "${HYPR_URL}"
+TOKEN="$(get_token)"
+install_cursor "${HYPR_CURSOR}" "${TOKEN}"
+install_cursor "${X_CURSOR}" "${TOKEN}"
 
-# Cài đặt XCursor (Dùng cho các app cũ/XWayland)
-XCUR_URL="https://github.com/JustTuturu/TuturuCursor/releases/latest/download/XChisaBLZ.tar.gz"
-install_cursor "XChisaBLZ" "${XCUR_URL}"
+set_defaults
 
-# Thiết lập mặc định (Ưu tiên Hyprcursor cho Hyprland)
-set_defaults "ChisaBLZ" "XChisaBLZ"
+echo -e "\n  ${GREEN}${BOLD}✓ Xong! Đăng xuất và đăng nhập lại để áp dụng cursor.${RESET}\n"
