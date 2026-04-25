@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# install-assets.sh — Cài fonts + cursor themes
+# install-assets.sh — Cài fonts + cursor + icon themes
 # Fonts  → ~/.local/share/fonts
 # Cursor → ~/.local/share/icons
+# Icons  → ~/.local/share/icons
 
 set -euo pipefail
 
@@ -95,9 +96,42 @@ install_cursor() {
     ok "${name} → ${dest}"
 }
 
+# ========================== ICONS ============================================
+install_icons() {
+    local repo="https://github.com/vinceliuice/Tela-icon-theme.git"
+    local clone_dir="${TEMP_DIR}/tela-icons"
+
+    if [[ -d "${ICON_DIR}/Tela-dark" ]]; then
+        ok "Tela icon theme đã có sẵn"
+        return
+    fi
+
+    info "Cài Tela icon theme"
+
+    if ! command -v git &>/dev/null; then
+        fail "git chưa cài — cần để clone Tela icons"
+    fi
+
+    git clone --depth 1 "${repo}" "${clone_dir}" &>/dev/null \
+        || fail "Không thể clone Tela icon theme"
+
+    cd "${clone_dir}"
+
+    # Install all color variants
+    ./install.sh 2>/dev/null \
+        || fail "Cài Tela icon theme thất bại"
+
+    # Verify
+    if [[ -d "${ICON_DIR}/Tela-dark" ]]; then
+        ok "Tela icon theme → ${ICON_DIR}"
+    else
+        fail "Tela install thất bại — không tìm thấy ${ICON_DIR}/Tela-dark"
+    fi
+}
+
 # ========================== SET DEFAULTS =====================================
 set_defaults() {
-    info "Thiết lập cursor mặc định"
+    info "Thiết lập cursor + icon theme mặc định"
 
     # Hyprland — hyprcursor native
     if command -v hyprctl &>/dev/null; then
@@ -105,11 +139,12 @@ set_defaults() {
         ok "hyprctl: ${HYPR_CURSOR} (size ${CURSOR_SIZE})"
     fi
 
-    # GTK — xcursor fallback
+    # GTK — xcursor + icon theme
     if command -v gsettings &>/dev/null; then
         gsettings set org.gnome.desktop.interface cursor-theme "${X_CURSOR}" 2>/dev/null || true
         gsettings set org.gnome.desktop.interface cursor-size "${CURSOR_SIZE}" 2>/dev/null || true
-        ok "gsettings: ${X_CURSOR}"
+        gsettings set org.gnome.desktop.interface icon-theme "Tela-dark" 2>/dev/null || true
+        ok "gsettings: ${X_CURSOR} + Tela-dark"
     fi
 
     # XCURSOR env cho XWayland
@@ -135,11 +170,12 @@ set_defaults() {
 
 # ========================== MAIN =============================================
 install_fonts
+install_icons
 
-TOKEN="$(get_token)"
+TOKEN="***"
 install_cursor "${HYPR_CURSOR}" "${TOKEN}"
 install_cursor "${X_CURSOR}" "${TOKEN}"
 
 set_defaults
 
-echo -e "\n  ${GREEN}${BOLD}✓ Xong! Đăng xuất và đăng nhập lại để áp dụng cursor.${RESET}\n"
+echo -e "\n  ${GREEN}${BOLD}✓ Xong! Đăng xuất và đăng nhập lại để áp dụng cursor + icon theme.${RESET}\n"

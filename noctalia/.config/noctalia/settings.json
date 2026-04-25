@@ -24,7 +24,8 @@
             "com.mitchellh.ghostty",
             "brave-origin-nightly",
             "dev.vencord.Vesktop",
-            "discord"
+            "discord",
+            "com.spotify.Client"
         ],
         "position": "center",
         "screenshotAnnotationTool": "",
@@ -277,7 +278,7 @@
         "backlightDeviceMappings": [
         ],
         "brightnessStep": 5,
-        "enableDdcSupport": false,
+        "enableDdcSupport": true,
         "enforceMinimum": false
     },
     "calendar": {
@@ -670,7 +671,7 @@
         "diskAvailWarningThreshold": 20,
         "diskCriticalThreshold": 90,
         "diskWarningThreshold": 80,
-        "enableDgpuMonitoring": true,
+        "enableDgpuMonitoring": false,
         "externalMonitor": "resources || missioncenter || jdsystemmonitor || corestats || system-monitoring-center || gnome-system-monitor || plasma-systemmonitor || mate-system-monitor || ukui-system-monitor || deepin-system-monitor || pantheon-system-monitor",
         "gpuCriticalThreshold": 90,
         "gpuWarningThreshold": 75,

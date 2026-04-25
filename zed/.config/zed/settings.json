@@ -6,6 +6,28 @@
 // Note: keep secrets out of dotfiles. Add API keys locally after stowing.
 
 {
+  "language_models": {
+    "openai_compatible": {
+      "LocalHost": {
+        "api_url": "http://localhost:20128/v1",
+        "available_models": [
+          {
+            "name": "google/gemma-4-31b-it:free",
+            "max_tokens": 200000,
+            "max_output_tokens": 32000,
+            "max_completion_tokens": 200000,
+            "capabilities": {
+              "tools": true,
+              "images": false,
+              "parallel_tool_calls": false,
+              "prompt_cache_key": false,
+              "chat_completions": true
+            }
+          }
+        ]
+      }
+    }
+  },
   "debugger": {
     "dock": "bottom"
   },
@@ -83,6 +105,7 @@
     },
   },
   "agent": {
+    "default_profile": "write",
     "sidebar_side": "right",
     "dock": "right",
     "inline_assistant_model": {
@@ -99,8 +122,8 @@
     },
     "default_model": {
       "provider": "ollama",
-      "model": "glm-5.1:cloud",
-      "enable_thinking": true,
+      "model": "qwen2.5-coder:7b",
+      "enable_thinking": false,
     },
     "play_sound_when_agent_done": "always",
     "single_file_review": true,

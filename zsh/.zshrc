@@ -89,6 +89,9 @@ function y() {
 	rm -f -- "$tmp"
 }
 
+# Python cache
+export PYTHONPYCACHEPREFIX=~/.cache/pycache
+
 # ─── Aliases ─────────────────────────────────────────────────────
 alias e='cd /mnt/sata'
 alias d='cd /mnt/nvme'
