@@ -33,12 +33,12 @@ FONT_DIR="${HOME}/.local/share/fonts"
 get_token() {
     local token="${GH_TOKEN:-}"
     if [[ -z "${token}" ]]; then
-        echo -e "\n  ${YELLOW}[!]${RESET} Repo private — cần GitHub token" >&2
-        echo -e "  ${BLUE}[i]${RESET} Tạo tại: https://github.com/settings/tokens (scope: repo)" >&2
-        read -rsp "  Nhập GitHub Token: " token
+        echo -e "\n  ${YELLOW}[!]${RESET} Repo is private — GitHub token required" >&2
+        echo -e "  ${BLUE}[i]${RESET} Create at: https://github.com/settings/tokens (scope: repo)" >&2
+        read -rsp "  Enter GitHub Token: " token
         echo >&2
     fi
-    [[ -z "${token}" ]] && fail "Không có token — huỷ"
+    [[ -z "${token}" ]] && fail "No token — canceled"
     echo "${token}"
 }
 
@@ -54,11 +54,11 @@ install_fonts() {
     mkdir -p "${FONT_DIR}"
 
     if fc-list | grep -qi "JetBrainsMono.*Nerd Font"; then
-        ok "JetBrains Mono Nerd Font đã có sẵn"
+        ok "JetBrains Mono Nerd Font is already installed"
         return
     fi
 
-    info "Tải JetBrains Mono Nerd Font"
+    info "Downloading JetBrains Mono Nerd Font"
     local archive="${TEMP_DIR}/JetBrainsMono.tar.xz"
     curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz" \
         -o "${archive}"
@@ -74,7 +74,7 @@ install_fonts() {
 
     find "${TEMP_DIR}" -maxdepth 1 -name "*.ttf" -exec mv -f {} "${FONT_DIR}/" \;
     fc-cache -f "${FONT_DIR}" &>/dev/null
-    ok "JetBrains Mono NF + NFM đã cài"
+    ok "JetBrains Mono NF + NFM installed"
 }
 
 # ========================== CURSORS ==========================================
@@ -83,11 +83,11 @@ install_cursor() {
     local dest="${ICON_DIR}/${name}"
 
     if [[ -d "${dest}" ]]; then
-        ok "${name} đã có sẵn, bỏ qua"
+        ok "${name} is already installed, skipping"
         return
     fi
 
-    info "Tải ${name}"
+    info "Downloading ${name}"
     local archive="${TEMP_DIR}/${name}.tar.gz"
     gh_download "${BASE_URL}/${name}.tar.gz" "${archive}" "${token}"
 
@@ -102,36 +102,36 @@ install_icons() {
     local clone_dir="${TEMP_DIR}/tela-icons"
 
     if [[ -d "${ICON_DIR}/Tela-dark" ]]; then
-        ok "Tela icon theme đã có sẵn"
+        ok "Tela icon theme is already installed"
         return
     fi
 
-    info "Cài Tela icon theme"
+    info "Installing Tela icon theme"
 
     if ! command -v git &>/dev/null; then
-        fail "git chưa cài — cần để clone Tela icons"
+        fail "git is not installed — required to clone Tela icons"
     fi
 
     git clone --depth 1 "${repo}" "${clone_dir}" &>/dev/null \
-        || fail "Không thể clone Tela icon theme"
+        || fail "Cannot clone Tela icon theme"
 
     cd "${clone_dir}"
 
     # Install all color variants
     ./install.sh 2>/dev/null \
-        || fail "Cài Tela icon theme thất bại"
+        || fail "Tela icon theme install failed"
 
     # Verify
     if [[ -d "${ICON_DIR}/Tela-dark" ]]; then
         ok "Tela icon theme → ${ICON_DIR}"
     else
-        fail "Tela install thất bại — không tìm thấy ${ICON_DIR}/Tela-dark"
+        fail "Tela install failed — ${ICON_DIR}/Tela-dark not found"
     fi
 }
 
 # ========================== SET DEFAULTS =====================================
 set_defaults() {
-    info "Thiết lập cursor + icon theme mặc định"
+    info "Setting default cursor and icon theme"
 
     # Hyprland — hyprcursor native
     if command -v hyprctl &>/dev/null; then
@@ -154,17 +154,17 @@ set_defaults() {
             -e "s|export XCURSOR_THEME=.*|export XCURSOR_THEME=${X_CURSOR}|" \
             -e "s|export XCURSOR_SIZE=.*|export XCURSOR_SIZE=${CURSOR_SIZE}|" \
             "${zshenv}"
-        ok "Cập nhật XCURSOR_* trong ~/.zshenv"
+        ok "Updated XCURSOR_* in ~/.zshenv"
     else
         printf "\nexport XCURSOR_THEME=%s\nexport XCURSOR_SIZE=%s\n" \
             "${X_CURSOR}" "${CURSOR_SIZE}" >> "${zshenv}"
-        ok "Thêm XCURSOR_* vào ~/.zshenv"
+        ok "Added XCURSOR_* to ~/.zshenv"
     fi
 
     # Flatpak
     if command -v flatpak &>/dev/null; then
         flatpak override --filesystem=~/.local/share/icons:ro --user 2>/dev/null || true
-        ok "Flatpak: cho phép đọc ~/.local/share/icons"
+        ok "Flatpak: allow read access to ~/.local/share/icons"
     fi
 }
 
@@ -178,4 +178,4 @@ install_cursor "${X_CURSOR}" "${TOKEN}"
 
 set_defaults
 
-echo -e "\n  ${GREEN}${BOLD}✓ Xong! Đăng xuất và đăng nhập lại để áp dụng cursor + icon theme.${RESET}\n"
+echo -e "\n  ${GREEN}${BOLD}✓ Done! Log out and log back in to apply cursor and icon theme.${RESET}\n"
