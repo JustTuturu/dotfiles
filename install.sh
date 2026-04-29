@@ -5,6 +5,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 PKG_DIR="${REPO_ROOT}/packages"
+QUIET="${QUIET:-0}"
 
 # ========================== COLORS & UTILITIES ==============================
 RED='\e[31m'; GREEN='\e[32m'; YELLOW='\e[33m'; BLUE='\e[34m'
@@ -16,6 +17,9 @@ warn()  { echo -e "  ${YELLOW}[!]${RESET} ${BOLD}$*${RESET}"; }
 fail()  { echo -e "  ${RED}[✗]${RESET} ${BOLD}$*${RESET}" && exit 1; }
 
 cmd_exists() { command -v "$1" &>/dev/null; }
+
+# Redirect helpers for quiet mode
+q() { if [[ "${QUIET}" == "1" ]]; then "$@" >/dev/null 2>&1; else "$@" 2>/dev/null; fi }
 
 # Read package list from txt file into array (skip blanks & comments)
 read_packages() {
@@ -42,13 +46,18 @@ prevent_root() {
     fi
 }
 
+SUDO_KEEPALIVE_PID=""
+
 sudo_stop_keepalive() {
     sudo -K
-    kill %1 2>/dev/null || true
+    if [[ -n "${SUDO_KEEPALIVE_PID}" ]] && kill -0 "${SUDO_KEEPALIVE_PID}" 2>/dev/null; then
+        kill "${SUDO_KEEPALIVE_PID}" 2>/dev/null || true
+    fi
 }
 
 sudo_keepalive() {
     (while true; do sudo -n true; sleep 60; kill -0 "$$" 2>/dev/null || exit; done) &
+    SUDO_KEEPALIVE_PID=$!
 }
 
 sudo_init_keepalive() {
@@ -79,31 +88,37 @@ FONT_DIR="${HOME}/.local/share/fonts"
 run_packages() {
     info "Enabling COPR repositories"
     local -a copr_repos
-    read_packages "${PKG_DIR}/copr.txt" copr_repos || true
+    read_packages "${PKG_DIR}/copr.txt" copr_repos || fail "Missing packages/copr.txt"
 
     local -a copr_pkgs=()
     for entry in "${copr_repos[@]}"; do
-        sudo dnf copr enable -y "$entry"
-        # Trailing : means repo-only (no package to install)
+        q sudo dnf copr enable -y "$entry"
         [[ "${entry}" == *: ]] && continue
-        copr_pkgs+=("${entry##*/}")   # take part after last /
+        copr_pkgs+=("${entry##*/}")
     done
 
     info "Installing packages"
     local -a pkgs
-    read_packages "${PKG_DIR}/dnf.txt" pkgs || true
-    sudo dnf upgrade --refresh -y
-    sudo dnf install -y --setopt=install_weak_deps=False "${pkgs[@]}" "${copr_pkgs[@]}"
+    read_packages "${PKG_DIR}/dnf.txt" pkgs || fail "Missing packages/dnf.txt"
+    if [[ "${QUIET}" == "1" ]]; then
+        sudo dnf install -y -q --setopt=install_weak_deps=False "${pkgs[@]}" "${copr_pkgs[@]}" >/dev/null 2>&1
+    else
+        sudo dnf install -y --setopt=install_weak_deps=False "${pkgs[@]}" "${copr_pkgs[@]}"
+    fi
 }
 
 # ========================== MODULE: BRAVE =====================================
 run_brave() {
     info "Installing Brave Browser (Nightly)"
 
-    sudo dnf install -y dnf-plugins-core
+    q sudo dnf install -y dnf-plugins-core
     sudo dnf config-manager addrepo \
         --from-repofile=https://brave-browser-rpm-nightly.s3.brave.com/brave-browser-nightly.repo
-    sudo dnf install -y brave-browser-nightly
+    if [[ "${QUIET}" == "1" ]]; then
+        sudo dnf install -y -q brave-browser-nightly >/dev/null 2>&1
+    else
+        sudo dnf install -y brave-browser-nightly
+    fi
 
     ok "Brave Nightly installed"
 }
@@ -124,7 +139,11 @@ run_optional() {
     done
 
     if [ ${#to_install[@]} -gt 0 ]; then
-        sudo dnf install --setopt=install_weak_deps=False "${to_install[@]}"
+        if [[ "${QUIET}" == "1" ]]; then
+            sudo dnf install -y -q --setopt=install_weak_deps=False "${to_install[@]}" >/dev/null 2>&1
+        else
+            sudo dnf install -y --setopt=install_weak_deps=False "${to_install[@]}"
+        fi
         ok "Optional packages installed"
     else
         info "No optional packages selected"
@@ -145,30 +164,33 @@ install_fonts() {
     curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz" \
         -o "${archive}"
 
-    tar -xf "${archive}" -C "${TEMP_DIR}" --wildcards \
+    q tar -xf "${archive}" -C "${TEMP_DIR}" --wildcards \
         "JetBrainsMonoNerdFont-Regular.ttf" \
         "JetBrainsMonoNerdFont-Bold.ttf" \
         "JetBrainsMonoNerdFont-BoldItalic.ttf" \
         "JetBrainsMonoNerdFontMono-Regular.ttf" \
         "JetBrainsMonoNerdFontMono-Bold.ttf" \
-        "JetBrainsMonoNerdFontMono-BoldItalic.ttf" \
-        2>/dev/null || true
+        "JetBrainsMonoNerdFontMono-BoldItalic.ttf"
 
     find "${TEMP_DIR}" -maxdepth 1 -name "*.ttf" -exec mv -f {} "${FONT_DIR}/" \;
-    fc-cache -f "${FONT_DIR}" &>/dev/null
+    q fc-cache -f "${FONT_DIR}"
     ok "JetBrains Mono NF + NFM installed"
 }
 
 # ========================== MODULE: CURSORS ===================================
 run_cursors() {
-    # Ask for GH token once
-    local token="${GH_TOKEN:-}"
-    if [[ -z "${token}" ]]; then
-        echo -e "\n  ${YELLOW}[!]${RESET} Cursor repo is private — GitHub token required" >&2
-        echo -e "  ${BLUE}[i]${RESET} Create at: https://github.com/settings/tokens (scope: repo)" >&2
-        read -rsp "  Enter GitHub Token: " token
-        echo >&2
+    echo -ne "\n  Install private cursor theme? [y/N] "
+    read -r reply
+    if [[ ! "${reply}" =~ ^[Yy]$ ]]; then
+        info "Skipping cursor install"
+        return
     fi
+
+    echo -e "  ${YELLOW}[!]${RESET} Cursor repo is private — GitHub token required" >&2
+    echo -e "  ${BLUE}[i]${RESET} Create a classic token at https://github.com/settings/tokens (scope: repo)" >&2
+    local token=""
+    read -rsp "  Enter GitHub Token: " token
+    echo >&2
     [[ -z "${token}" ]] && { warn "No token — skipping cursor install"; return; }
 
     for name in "${HYPR_CURSOR}" "${X_CURSOR}"; do
@@ -180,12 +202,15 @@ run_cursors() {
 
         info "Downloading ${name}"
         local archive="${TEMP_DIR}/${name}.tar.gz"
-        curl -fsSL \
+        if ! curl -fsSL \
             -H "Authorization: Bearer ${token}" \
-            -L "${CURSOR_URL}/${name}.tar.gz" -o "${archive}"
+            -L "${CURSOR_URL}/${name}.tar.gz" -o "${archive}"; then
+            warn "Failed to download ${name}"
+            continue
+        fi
 
         mkdir -p "${ICON_DIR}"
-        tar -xf "${archive}" -C "${ICON_DIR}"
+        q tar -xf "${archive}" -C "${ICON_DIR}"
         ok "${name} → ${dest}"
     done
 }
@@ -206,12 +231,10 @@ install_icons() {
         fail "git is not installed — required to clone Tela icons"
     fi
 
-    git clone --depth 1 "${repo}" "${clone_dir}" &>/dev/null \
+    q git clone --depth 1 "${repo}" "${clone_dir}" \
         || fail "Cannot clone Tela icon theme"
 
-    cd "${clone_dir}"
-
-    ./install.sh 2>/dev/null \
+    (cd "${clone_dir}" && q ./install.sh) \
         || fail "Tela icon theme install failed"
 
     if [[ -d "${ICON_DIR}/Tela-dark" ]]; then
@@ -226,14 +249,14 @@ set_defaults() {
     info "Setting default cursor and icon theme"
 
     if cmd_exists hyprctl; then
-        hyprctl setcursor "${HYPR_CURSOR}" "${CURSOR_SIZE}" 2>/dev/null || true
+        q hyprctl setcursor "${HYPR_CURSOR}" "${CURSOR_SIZE}"
         ok "hyprctl: ${HYPR_CURSOR} (size ${CURSOR_SIZE})"
     fi
 
     if cmd_exists gsettings; then
-        gsettings set org.gnome.desktop.interface cursor-theme "${X_CURSOR}" 2>/dev/null || true
-        gsettings set org.gnome.desktop.interface cursor-size "${CURSOR_SIZE}" 2>/dev/null || true
-        gsettings set org.gnome.desktop.interface icon-theme "Tela-dark" 2>/dev/null || true
+        q gsettings set org.gnome.desktop.interface cursor-theme "${X_CURSOR}"
+        q gsettings set org.gnome.desktop.interface cursor-size "${CURSOR_SIZE}"
+        q gsettings set org.gnome.desktop.interface icon-theme "Tela-dark"
         ok "gsettings: ${X_CURSOR} + Tela-dark"
     fi
 
@@ -245,13 +268,15 @@ set_defaults() {
             "${zshenv}"
         ok "Updated XCURSOR_* in ~/.zshenv"
     else
-        printf "\nexport XCURSOR_THEME=%s\nexport XCURSOR_SIZE=%s\n" \
-            "${X_CURSOR}" "${CURSOR_SIZE}" >> "${zshenv}"
+        if ! grep -q "export XCURSOR_THEME=${X_CURSOR}" "${zshenv}" 2>/dev/null; then
+            printf "\nexport XCURSOR_THEME=%s\nexport XCURSOR_SIZE=%s\n" \
+                "${X_CURSOR}" "${CURSOR_SIZE}" >> "${zshenv}"
+        fi
         ok "Added XCURSOR_* to ~/.zshenv"
     fi
 
     if cmd_exists flatpak; then
-        flatpak override --filesystem=~/.local/share/icons:ro --user 2>/dev/null || true
+        q flatpak override --filesystem=~/.local/share/icons:ro --user
         ok "Flatpak: allow read access to ~/.local/share/icons"
     fi
 }
@@ -269,11 +294,15 @@ run_files() {
     info "Stowing dotfiles..."
 
     if ! cmd_exists stow; then
-        sudo dnf install -y stow || { fail "Could not install stow"; return 1; }
+        if [[ "${QUIET}" == "1" ]]; then
+            sudo dnf install -y -q stow >/dev/null 2>&1 || { fail "Could not install stow"; return 1; }
+        else
+            sudo dnf install -y stow || { fail "Could not install stow"; return 1; }
+        fi
     fi
 
     local -a stow_packages
-    read_packages "${PKG_DIR}/stow.txt" stow_packages || return 0
+    read_packages "${PKG_DIR}/stow.txt" stow_packages || fail "Missing packages/stow.txt"
 
     local count=0
     local failed=0
@@ -281,32 +310,26 @@ run_files() {
     for pkg in "${stow_packages[@]}"; do
         if [ ! -d "$REPO_ROOT/$pkg" ]; then
             warn "$pkg not found in dotfiles"
-            ((failed++))
+            failed=$((failed + 1))
             continue
         fi
 
         if stow -t "$HOME" -d "$REPO_ROOT" --no-folding -S "$pkg" 2>/dev/null; then
             ok "$pkg"
-            ((count++))
-            continue
-        fi
-
-        if stow -t "$HOME" -d "$REPO_ROOT" --no-folding --adopt -S "$pkg" 2>/dev/null; then
-            ok "$pkg (adopted existing files)"
-            ((count++))
+            count=$((count + 1))
             continue
         fi
 
         if [ -n "${FORCE:-}" ]; then
             if stow -t "$HOME" -d "$REPO_ROOT" --no-folding -R "$pkg" 2>/dev/null; then
                 ok "$pkg (force restowed)"
-                ((count++))
+                count=$((count + 1))
                 continue
             fi
         fi
 
-        fail "$pkg — could not stow. Try: stow -t $HOME -d $REPO_ROOT --adopt -S $pkg"
-        ((failed++))
+        warn "$pkg — could not stow"
+        failed=$((failed + 1))
     done
 
     # Noctalia Shell
@@ -327,8 +350,8 @@ run_files() {
     # Generate initial matugen colors
     if cmd_exists matugen && [ -f "$HOME/Pictures/Wallpapers/wallpaper.jpg" ]; then
         info "Generating initial matugen colors..."
-        matugen image "$HOME/Pictures/Wallpapers/wallpaper.jpg" --prefer darkness && ok "matugen colors generated" \
-            || warn "matugen failed — run manually: matugen image ~/Pictures/Wallpapers/wallpaper.jpg --prefer darkness"
+        q matugen image "$HOME/Pictures/Wallpapers/wallpaper.jpg" --prefer darkness && ok "matugen colors generated" \
+            || warn "matugen failed — run manually"
     else
         warn "matugen: run manually after setting wallpaper"
     fi
@@ -339,7 +362,11 @@ run_shell() {
     info "Setting up Zsh..."
 
     if ! cmd_exists zsh; then
-        sudo dnf install -y zsh || { fail "Could not install zsh"; return 1; }
+        if [[ "${QUIET}" == "1" ]]; then
+            sudo dnf install -y -q zsh >/dev/null 2>&1 || { fail "Could not install zsh"; return 1; }
+        else
+            sudo dnf install -y zsh || { fail "Could not install zsh"; return 1; }
+        fi
     fi
 
     if ! grep -q "$(which zsh)" /etc/shells 2>/dev/null; then
@@ -358,19 +385,27 @@ run_shell() {
 run_hypr() {
     info "Installing Hyprland ecosystem..."
 
-    sudo dnf install -y --nogpgcheck \
-        --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+    if [[ "${QUIET}" == "1" ]]; then
+        sudo dnf install -y -q --nogpgcheck \
+            --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release >/dev/null 2>&1
+    else
+        sudo dnf install -y --nogpgcheck \
+            --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+    fi
 
     local -a hypr_deps
-    read_packages "${PKG_DIR}/hypr.txt" hypr_deps || return 0
-    [ ${#hypr_deps[@]} -gt 0 ] && sudo dnf install -y "${hypr_deps[@]}"
+    read_packages "${PKG_DIR}/hypr.txt" hypr_deps || fail "Missing packages/hypr.txt"
+    if [ ${#hypr_deps[@]} -gt 0 ]; then
+        if [[ "${QUIET}" == "1" ]]; then
+            sudo dnf install -y -q "${hypr_deps[@]}" >/dev/null 2>&1
+        else
+            sudo dnf install -y "${hypr_deps[@]}"
+        fi
+    fi
 
-    systemctl --user enable --now pipewire.service wireplumber.service 2>/dev/null || true
+    q systemctl --user enable --now pipewire.service wireplumber.service
 
-    echo ""
-    echo -e "  ${CYAN}Add to ~/.config/hypr/hyprland.conf:${RESET}"
-    echo -e "  ${YELLOW}exec-once = systemctl --user start hyprpolkitagent${RESET}"
-    echo ""
+    ok "Hyprland ecosystem installed"
 }
 
 # ========================== MAIN ==============================================
@@ -382,14 +417,12 @@ showhelp() {
   Usage: ./install.sh <command>
 
   Commands:
-    install         Install dotfiles + Hyprland (full setup)
-    install-base    Install dotfiles only (no Hyprland)
-    install-hypr    Install Hyprland only (assumes dotfiles exist)
-    install-assets  Install fonts, cursors, and icon themes only
+    install-full    Full system setup (packages, fonts, icons, cursors, dotfiles, shell, Hyprland)
+    install         Stow dotfiles only (re-run after pulling updates)
 
   Options:
     FORCE=1         Overwrite existing configs during stow
-    GH_TOKEN=...    GitHub token for private cursor repo
+    QUIET=1         Suppress command output, show only status messages
 
 EOF
 }
@@ -398,34 +431,18 @@ clear
 prevent_root
 
 case "${1:-help}" in
-    install)
+    install-full)
         sudo_init_keepalive
         trap sudo_stop_keepalive EXIT
-        echo -e "${GREEN}${BOLD}=== Installing Dotfiles + Hyprland ===${RESET}\n"
+        echo -e "${GREEN}${BOLD}=== Full System Setup ===${RESET}\n"
         run_packages && run_brave && run_optional && run_assets && run_files && run_shell && run_hypr
         echo -e "\n${GREEN}${BOLD}=== Complete! ===${RESET}"
         echo -e "  Log out and select 'Hyprland (UWSM)' at login"
         ;;
-    install-base)
-        sudo_init_keepalive
-        trap sudo_stop_keepalive EXIT
-        echo -e "${GREEN}${BOLD}=== Installing Dotfiles Only ===${RESET}\n"
-        run_packages && run_brave && run_optional && run_assets && run_files && run_shell
-        echo -e "\n${GREEN}${BOLD}=== Complete! ===${RESET}"
-        echo -e "  Restart your terminal or run: exec zsh"
-        ;;
-    install-hypr)
-        sudo_init_keepalive
-        trap sudo_stop_keepalive EXIT
-        echo -e "${GREEN}${BOLD}=== Installing Hyprland ===${RESET}\n"
-        run_packages && run_hypr
-        echo -e "\n${GREEN}${BOLD}=== Complete! ===${RESET}"
-        ;;
-    install-assets)
-        echo -e "${GREEN}${BOLD}=== Installing Assets (Fonts, Cursors, Icons) ===${RESET}\n"
-        run_assets
-        echo -e "\n${GREEN}${BOLD}=== Complete! ===${RESET}"
-        echo -e "  Log out and log back in to apply cursor and icon theme."
+    install)
+        info "Stowing dotfiles..."
+        run_files
+        ok "Dotfiles stowed"
         ;;
     help|--help|-h|"")
         showhelp

@@ -7,7 +7,6 @@ gtk
 hypr
 matugen
 noctalia
-starship
 tmux
 uv
 yazi
