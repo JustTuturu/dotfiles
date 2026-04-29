@@ -5,7 +5,6 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 PKG_DIR="${REPO_ROOT}/packages"
-QUIET="${QUIET:-0}"
 
 # ========================== COLORS & UTILITIES ==============================
 RED='\e[31m'; GREEN='\e[32m'; YELLOW='\e[33m'; BLUE='\e[34m'
@@ -17,9 +16,6 @@ warn()  { echo -e "  ${YELLOW}[!]${RESET} ${BOLD}$*${RESET}"; }
 fail()  { echo -e "  ${RED}[✗]${RESET} ${BOLD}$*${RESET}" && exit 1; }
 
 cmd_exists() { command -v "$1" &>/dev/null; }
-
-# Redirect helpers for quiet mode
-q() { if [[ "${QUIET}" == "1" ]]; then "$@" >/dev/null 2>&1; else "$@" 2>/dev/null; fi }
 
 # Read package list from txt file into array (skip blanks & comments)
 read_packages() {
@@ -92,7 +88,7 @@ run_packages() {
 
     local -a copr_pkgs=()
     for entry in "${copr_repos[@]}"; do
-        q sudo dnf copr enable -y "$entry"
+        sudo dnf copr enable -y "$entry" 2>/dev/null
         [[ "${entry}" == *: ]] && continue
         copr_pkgs+=("${entry##*/}")
     done
@@ -100,25 +96,17 @@ run_packages() {
     info "Installing packages"
     local -a pkgs
     read_packages "${PKG_DIR}/dnf.txt" pkgs || fail "Missing packages/dnf.txt"
-    if [[ "${QUIET}" == "1" ]]; then
-        sudo dnf install -y -q --setopt=install_weak_deps=False "${pkgs[@]}" "${copr_pkgs[@]}" >/dev/null 2>&1
-    else
-        sudo dnf install -y --setopt=install_weak_deps=False "${pkgs[@]}" "${copr_pkgs[@]}"
-    fi
+    sudo dnf install -y --setopt=install_weak_deps=False "${pkgs[@]}" "${copr_pkgs[@]}"
 }
 
 # ========================== MODULE: BRAVE =====================================
 run_brave() {
     info "Installing Brave Browser (Nightly)"
 
-    q sudo dnf install -y dnf-plugins-core
+    sudo dnf install -y dnf-plugins-core
     sudo dnf config-manager addrepo \
         --from-repofile=https://brave-browser-rpm-nightly.s3.brave.com/brave-browser-nightly.repo
-    if [[ "${QUIET}" == "1" ]]; then
-        sudo dnf install -y -q brave-browser-nightly >/dev/null 2>&1
-    else
-        sudo dnf install -y brave-browser-nightly
-    fi
+    sudo dnf install -y brave-browser-nightly
 
     ok "Brave Nightly installed"
 }
@@ -139,11 +127,7 @@ run_optional() {
     done
 
     if [ ${#to_install[@]} -gt 0 ]; then
-        if [[ "${QUIET}" == "1" ]]; then
-            sudo dnf install -y -q --setopt=install_weak_deps=False "${to_install[@]}" >/dev/null 2>&1
-        else
-            sudo dnf install -y --setopt=install_weak_deps=False "${to_install[@]}"
-        fi
+        sudo dnf install -y --setopt=install_weak_deps=False "${to_install[@]}"
         ok "Optional packages installed"
     else
         info "No optional packages selected"
@@ -164,16 +148,17 @@ install_fonts() {
     curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz" \
         -o "${archive}"
 
-    q tar -xf "${archive}" -C "${TEMP_DIR}" --wildcards \
+    tar -xf "${archive}" -C "${TEMP_DIR}" --wildcards \
         "JetBrainsMonoNerdFont-Regular.ttf" \
         "JetBrainsMonoNerdFont-Bold.ttf" \
         "JetBrainsMonoNerdFont-BoldItalic.ttf" \
         "JetBrainsMonoNerdFontMono-Regular.ttf" \
         "JetBrainsMonoNerdFontMono-Bold.ttf" \
-        "JetBrainsMonoNerdFontMono-BoldItalic.ttf"
+        "JetBrainsMonoNerdFontMono-BoldItalic.ttf" 2>/dev/null || true
 
     find "${TEMP_DIR}" -maxdepth 1 -name "*.ttf" -exec mv -f {} "${FONT_DIR}/" \;
-    q fc-cache -f "${FONT_DIR}"
+    fc-cache -f "${FONT_DIR}" 2>/dev/null
+
     ok "JetBrains Mono NF + NFM installed"
 }
 
@@ -210,7 +195,7 @@ run_cursors() {
         fi
 
         mkdir -p "${ICON_DIR}"
-        q tar -xf "${archive}" -C "${ICON_DIR}"
+        tar -xf "${archive}" -C "${ICON_DIR}" 2>/dev/null
         ok "${name} → ${dest}"
     done
 }
@@ -231,10 +216,10 @@ install_icons() {
         fail "git is not installed — required to clone Tela icons"
     fi
 
-    q git clone --depth 1 "${repo}" "${clone_dir}" \
+    git clone --depth 1 "${repo}" "${clone_dir}" &>/dev/null \
         || fail "Cannot clone Tela icon theme"
 
-    (cd "${clone_dir}" && q ./install.sh) \
+    (cd "${clone_dir}" && ./install.sh 2>/dev/null) \
         || fail "Tela icon theme install failed"
 
     if [[ -d "${ICON_DIR}/Tela-dark" ]]; then
@@ -249,14 +234,14 @@ set_defaults() {
     info "Setting default cursor and icon theme"
 
     if cmd_exists hyprctl; then
-        q hyprctl setcursor "${HYPR_CURSOR}" "${CURSOR_SIZE}"
+        hyprctl setcursor "${HYPR_CURSOR}" "${CURSOR_SIZE}" 2>/dev/null || true
         ok "hyprctl: ${HYPR_CURSOR} (size ${CURSOR_SIZE})"
     fi
 
     if cmd_exists gsettings; then
-        q gsettings set org.gnome.desktop.interface cursor-theme "${X_CURSOR}"
-        q gsettings set org.gnome.desktop.interface cursor-size "${CURSOR_SIZE}"
-        q gsettings set org.gnome.desktop.interface icon-theme "Tela-dark"
+        gsettings set org.gnome.desktop.interface cursor-theme "${X_CURSOR}" 2>/dev/null || true
+        gsettings set org.gnome.desktop.interface cursor-size "${CURSOR_SIZE}" 2>/dev/null || true
+        gsettings set org.gnome.desktop.interface icon-theme "Tela-dark" 2>/dev/null || true
         ok "gsettings: ${X_CURSOR} + Tela-dark"
     fi
 
@@ -276,7 +261,7 @@ set_defaults() {
     fi
 
     if cmd_exists flatpak; then
-        q flatpak override --filesystem=~/.local/share/icons:ro --user
+        flatpak override --filesystem=~/.local/share/icons:ro --user 2>/dev/null || true
         ok "Flatpak: allow read access to ~/.local/share/icons"
     fi
 }
@@ -294,11 +279,7 @@ run_files() {
     info "Stowing dotfiles..."
 
     if ! cmd_exists stow; then
-        if [[ "${QUIET}" == "1" ]]; then
-            sudo dnf install -y -q stow >/dev/null 2>&1 || { fail "Could not install stow"; return 1; }
-        else
-            sudo dnf install -y stow || { fail "Could not install stow"; return 1; }
-        fi
+        sudo dnf install -y stow || { fail "Could not install stow"; return 1; }
     fi
 
     local -a stow_packages
@@ -350,7 +331,7 @@ run_files() {
     # Generate initial matugen colors
     if cmd_exists matugen && [ -f "$HOME/Pictures/Wallpapers/wallpaper.jpg" ]; then
         info "Generating initial matugen colors..."
-        q matugen image "$HOME/Pictures/Wallpapers/wallpaper.jpg" --prefer darkness && ok "matugen colors generated" \
+        matugen image "$HOME/Pictures/Wallpapers/wallpaper.jpg" --prefer darkness && ok "matugen colors generated" \
             || warn "matugen failed — run manually"
     else
         warn "matugen: run manually after setting wallpaper"
@@ -362,11 +343,7 @@ run_shell() {
     info "Setting up Zsh..."
 
     if ! cmd_exists zsh; then
-        if [[ "${QUIET}" == "1" ]]; then
-            sudo dnf install -y -q zsh >/dev/null 2>&1 || { fail "Could not install zsh"; return 1; }
-        else
-            sudo dnf install -y zsh || { fail "Could not install zsh"; return 1; }
-        fi
+        sudo dnf install -y zsh || { fail "Could not install zsh"; return 1; }
     fi
 
     if ! grep -q "$(which zsh)" /etc/shells 2>/dev/null; then
@@ -385,25 +362,17 @@ run_shell() {
 run_hypr() {
     info "Installing Hyprland ecosystem..."
 
-    if [[ "${QUIET}" == "1" ]]; then
-        sudo dnf install -y -q --nogpgcheck \
-            --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release >/dev/null 2>&1
-    else
-        sudo dnf install -y --nogpgcheck \
-            --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
-    fi
+    sudo dnf install -y --nogpgcheck \
+        --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
 
     local -a hypr_deps
     read_packages "${PKG_DIR}/hypr.txt" hypr_deps || fail "Missing packages/hypr.txt"
     if [ ${#hypr_deps[@]} -gt 0 ]; then
-        if [[ "${QUIET}" == "1" ]]; then
-            sudo dnf install -y -q "${hypr_deps[@]}" >/dev/null 2>&1
-        else
-            sudo dnf install -y "${hypr_deps[@]}"
-        fi
+        sudo dnf install -y "${hypr_deps[@]}"
     fi
 
-    q systemctl --user enable --now pipewire.service wireplumber.service
+    systemctl --user enable --now pipewire.service wireplumber.service 2>/dev/null || true
+    sudo systemctl enable -q sddm
 
     ok "Hyprland ecosystem installed"
 }
@@ -422,7 +391,6 @@ showhelp() {
 
   Options:
     FORCE=1         Overwrite existing configs during stow
-    QUIET=1         Suppress command output, show only status messages
 
 EOF
 }

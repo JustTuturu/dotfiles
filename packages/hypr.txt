@@ -9,10 +9,10 @@ hyprcursor
 hyprpolkitagent
 xdg-desktop-portal-hyprland
 hyprland-qt-support
-cliphist
 wlr-randr
-qt6ct
+hyprqt6engine
 quickshell
 matugen
 noctalia-shell
 gpu-screen-recorder
+sddm
