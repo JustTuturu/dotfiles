@@ -9,6 +9,7 @@ hyprcursor
 hyprpolkitagent
 xdg-desktop-portal-hyprland
 hyprland-qt-support
+cliphist
 wlr-randr
 hyprqt6engine
 quickshell

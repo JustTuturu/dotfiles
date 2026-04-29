@@ -40,6 +40,18 @@ zinit light zsh-users/zsh-completions
 zinit ice wait'0' lucid
 zinit light Aloxaf/fzf-tab
 
+# ─── fzf-tab style (blur + pink) ─────────────────────────────────
+zstyle ':fzf-tab:*' fzf-flags --height=40% --border=rounded
+zstyle ':fzf-tab:*' switch-group ','',''',''
+
+zstyle ':completion:*:descriptions' format '%F{pink}%B%S ■ %s%b%f'
+zstyle ':fzf-tab:*' preview-window right:50%:border-rounded
+zstyle ':fzf-tab:complete:_zoxide:*' preview-window hidden
+
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --icons --color=always --group-directories-first $realpath'
+zstyle ':fzf-tab:complete:ls:*' fzf-preview 'eza --icons --color=always --group-directories-first $realpath'
+zstyle ':fzf-tab:complete:cat:*' fzf-preview 'bat --color=always --style=numbers --line-range=:500 $realpath 2>/dev/null || eza --icons --color=always $realpath'
+
 zinit ice wait'0' lucid
 zinit snippet OMZ::lib/functions.zsh
 zinit snippet OMZ::lib/directories.zsh
