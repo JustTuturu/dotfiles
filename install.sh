@@ -285,25 +285,20 @@ run_files() {
             continue
         fi
 
-        # Pre-create subdirectories so stow creates file-level symlinks
-        while IFS= read -r d; do
-            mkdir -p "$HOME/$d"
-        done < <(cd "$REPO_ROOT/$pkg" && find . -type d -not -path './.git*')
-
-        if stow -t "$HOME" -d "$REPO_ROOT" -S "$pkg" 2>/dev/null; then
+        if stow -t "$HOME" -d "$REPO_ROOT" --no-folding -S "$pkg" 2>/dev/null; then
             ok "$pkg"
             ((count++))
             continue
         fi
 
-        if stow -t "$HOME" -d "$REPO_ROOT" --adopt -S "$pkg" 2>/dev/null; then
+        if stow -t "$HOME" -d "$REPO_ROOT" --no-folding --adopt -S "$pkg" 2>/dev/null; then
             ok "$pkg (adopted existing files)"
             ((count++))
             continue
         fi
 
         if [ -n "${FORCE:-}" ]; then
-            if stow -t "$HOME" -d "$REPO_ROOT" -R "$pkg" 2>/dev/null; then
+            if stow -t "$HOME" -d "$REPO_ROOT" --no-folding -R "$pkg" 2>/dev/null; then
                 ok "$pkg (force restowed)"
                 ((count++))
                 continue

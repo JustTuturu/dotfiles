@@ -13,10 +13,6 @@ output_path = "~/.config/matugen/generated/ghostty-colors.conf"
 input_path  = "~/.config/matugen/templates/rofi.rasi.mustache"
 output_path = "~/.config/matugen/generated/rofi-colors.rasi"
 
-[templates.starship]
-input_path  = "~/.config/matugen/templates/starship.toml.mustache"
-output_path = "~/.config/matugen/generated/starship-colors.toml"
-
 [templates.quickshell]
 input_path  = "~/.config/matugen/templates/quickshell-colors.json.mustache"
 output_path = "/tmp/qs_colors.json"
@@ -28,3 +24,15 @@ output_path = "~/.config/matugen/generated/zsh-highlight.zsh"
 [templates.zsh-fzf]
 input_path  = "~/.config/matugen/templates/zsh-fzf-colors.zsh.mustache"
 output_path = "~/.config/matugen/generated/zsh-fzf-colors.zsh"
+
+[templates.hyprlock]
+input_path  = "~/.config/matugen/templates/hyprlock.conf.mustache"
+output_path = "~/.config/matugen/generated/hyprlock-colors.conf"
+
+[templates.eza]
+input_path  = "~/.config/matugen/templates/eza.yml.mustache"
+output_path = "~/.config/eza/theme.yml"
+
+[templates.starship]
+input_path  = "~/.config/matugen/templates/starship.toml.mustache"
+output_path = "~/.config/starship.toml"

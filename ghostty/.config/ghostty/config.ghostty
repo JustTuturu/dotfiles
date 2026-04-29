@@ -1,7 +1,8 @@
-# Include matugen-generated colors
-#config-file = ~/.config/matugen/generated/ghostty-colors.conf
+# Include matugen-generated colors (overrides static theme palette when present)
+config-file = ~/.config/matugen/generated/ghostty-colors.conf
 
 # ─── Theme ───────────────────────────────────
+# Fallback theme when matugen has not yet generated colors
 theme = noctalia
 font-family = "JetBrainsMono Nerd Font"
 font-size = 12

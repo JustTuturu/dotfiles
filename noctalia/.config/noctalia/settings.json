@@ -708,10 +708,6 @@
             },
             {
                 "enabled": true,
-                "id": "starship"
-            },
-            {
-                "enabled": true,
                 "id": "steam"
             },
             {

@@ -1,0 +1,6 @@
+# ─── Bat Config ──────────────────────────────────────────────────
+# Static fallback — Bat does not support dynamic Material You theming
+
+--style=numbers,changes,header
+--paging=never
+--theme=base16

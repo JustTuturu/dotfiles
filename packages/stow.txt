@@ -13,3 +13,5 @@ uv
 yazi
 zed
 zsh
+bat
+lazygit
