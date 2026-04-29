@@ -1,0 +1,5 @@
+nodejs npm
+vlc
+obs-studio
+blender
+btop

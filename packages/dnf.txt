@@ -1,0 +1,8 @@
+gcc gcc-c++ make cmake
+python3-pip python3-devel nodejs npm
+git stow xdg-user-dirs
+pipewire pipewire-utils wireplumber
+qt6-qtwayland qt5-qtwayland xdg-utils
+bluez bluez-libs
+ripgrep bat fzf tmux eza zoxide
+fcitx5-unikey fcitx5-gtk fcitx5-qt

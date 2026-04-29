@@ -1,0 +1,8 @@
+# Format: owner/package  (derives 'package' after /)
+# Trailing : means repo-only (enable repo, no package install)
+atim/starship
+dejan/lazygit
+lihaohong/yazi
+lionheartp/Hyprland:
+scottames/ghostty
+che/zed

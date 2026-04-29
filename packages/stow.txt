@@ -1,0 +1,15 @@
+eza
+fastfetch
+fcitx5
+fontconfig
+ghostty
+gtk
+hypr
+matugen
+noctalia
+starship
+tmux
+uv
+yazi
+zed
+zsh

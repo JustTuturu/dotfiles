@@ -21,20 +21,20 @@
               "images": false,
               "parallel_tool_calls": false,
               "prompt_cache_key": false,
-              "chat_completions": true
-            }
-          }
-        ]
-      }
-    }
+              "chat_completions": true,
+            },
+          },
+        ],
+      },
+    },
   },
   "debugger": {
-    "dock": "bottom"
+    "dock": "bottom",
   },
   "scrollbar": {
     "selected_symbol": true,
     "show": "never",
-    "cursors": true
+    "cursors": true,
   },
   "cli_default_open_behavior": "new_window",
   "project_panel": {
@@ -44,28 +44,28 @@
     "auto_fold_dirs": true,
     "scrollbar": {
       "horizontal_scroll": false,
-      "show": "never"
+      "show": "never",
     },
     "folder_icons": true,
-    "dock": "left"
+    "dock": "left",
   },
   "outline_panel": {
     "file_icons": true,
     "button": false,
-    "dock": "right"
+    "dock": "right",
   },
   "collaboration_panel": {
     "button": false,
-    "dock": "left"
+    "dock": "left",
   },
   "git_panel": {
     "file_icons": false,
     "tree_view": false,
     "scrollbar": {
-      "show": "never"
+      "show": "never",
     },
     "button": true,
-    "dock": "right"
+    "dock": "right",
   },
   "context_servers": {},
   "edit_predictions": {
@@ -81,12 +81,22 @@
   },
   "disable_ai": false,
   "agent_servers": {
-    "opencode": {
-      "type": "registry",
-    },
     "codex-acp": {
-      "type": "registry",
+      "type": "registry"
     },
+    "opencode": {
+      "type": "registry"
+    },
+    "hermes-agent": {
+      "type": "custom",
+      "command": "hermes",
+      "args": ["acp"],
+    },
+    "OpenCode": {
+          "type": "custom",
+          "command": "opencode",
+          "args": ["acp"]
+        },
   },
   "icon_theme": {
     "mode": "dark",
@@ -151,8 +161,8 @@
   },
   "file_types": {
     "C++": ["c"],
-    "Shell Script": ["conf", "rasi", "noctalia", "ghostty", "zsh","mustache"],
+    "Shell Script": ["conf", "rasi", "noctalia", "ghostty", "zsh", "mustache"],
     "Dockerfile": ["Dockerfile*"],
-    "TOML":[],
+    "TOML": [],
   },
 }
