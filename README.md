@@ -64,6 +64,7 @@ cd ~/dotfiles
 - Colorscheme: [Matugen](https://github.com/JustTuturu/matugen)
 - Shell: [Zsh](https://www.zsh.org/)
 - Editor: [Zed](https://zed.dev/)
+- Micro: terminal editor — **headless servers only** (`micro/.config/micro` with Matugen transparent theme; not used on the desktop, where Zed is the editor)
 
 ## Theming
 
