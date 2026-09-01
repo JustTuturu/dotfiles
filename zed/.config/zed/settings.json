@@ -5,37 +5,96 @@
 //
 // To see all of Zed's default settings without changing your
 // custom settings, run `zed: open default settings` from the
-// command palette (cmd-shift-p / ctrl-shift-p)
+// command palette (cmd-shift-p / ctrl-shift-p). A clean copy of
+// the 1.17.2 defaults sits alongside this file in default-settings.json.
 {
-  "collaboration_panel": {
+  "debugger": {
+    "dock": "left"
+  },
+  "terminal": {
     "button": false
   },
-  "ssh_connections": [
-    {
-      "host": "sv",
-      "args": [],
-      "projects": [
-        {
-          "paths": [
-            "/home/suzu"
-          ]
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "Catppuccin Mocha",
+  },
+
+  // UI / buffer fonts
+  "icon_theme": "Catppuccin Mocha",
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+
+  // Buffer interaction
+  "autosave": "on_focus_change",
+
+  // Toolbar / panel buttons in the status bar
+  "collaboration_panel": {
+    "button": false,
+  },
+
+  "project_panel": {
+    "dock": "left",
+  },
+
+  // CLI opening behavior
+  "cli_default_open_behavior": "existing_window",
+
+  // Map file extensions to Zed languages
+  "file_types": {
+    "INI": ["config.ghostty"],
+    "JavaScript": ["*.qml"],
+    "JSON": ["*.jsonc", "*.json.mustache"],
+    "Shell Script": ["*.conf", ".zshrc", "*.zsh.mustache"],
+    "TOML": ["*.toml.mustache"],
+    "XML": ["*.tmTheme.mustache", "fonts.conf"],
+    "YAML": ["*.yml.mustache"],
+  },
+
+  // Python language servers
+  "languages": {
+    "Python": {
+      "language_servers": [
+        "basedpyright",
+        "ruff",
+      ],
+      "code_actions_on_format": {
+        "source.organizeImports.ruff": true,
+      },
+      "formatter": {
+        "language_server": {
+          "name": "ruff",
         },
-        {
-          "paths": [
-            "/home/suzu/.hermes"
-          ]
-        }
-      ]
+      },
     },
-    {
-      "host": "sv",
-      "args": [],
-      "projects": []
-    }
-  ],
+  },
+  "lsp": {
+    "basedpyright": {
+      "binary": {
+        "path": "basedpyright-langserver",
+        "arguments": ["--stdio"],
+      },
+      "settings": {
+        "python": {
+          "analysis": {
+            "typeCheckingMode": "standard",
+            "useLibraryCodeForTypes": true,
+          },
+        },
+      },
+    },
+    "ruff": {
+      "binary": {
+        "path": "ruff",
+        "arguments": ["server"],
+      },
+    },
+  },
+
+  // Language models
   "language_models": {
     "opencode": {
-      "show_zen_models": true
+      "show_zen_models": true,
     },
     "openai_compatible": {
       "GLM 5.1": {
@@ -78,9 +137,11 @@
       },
     },
   },
+
+  // Agent
   "agent_servers": {
     "opencode": {
-      "type": "registry"
+      "type": "registry",
     },
     "hermes": {
       "type": "custom",
@@ -91,37 +152,39 @@
       "type": "registry",
     },
   },
+
   "agent": {
+    "dock": "right",
+    "sidebar_side": "right",
+    "favorite_models": [],
+    "model_parameters": [],
     "default_model": {
       "provider": "GLM 5.1",
       "model": "glm-5.1",
       "enable_thinking": false,
     },
-    "dock": "right",
-    "sidebar_side": "right",
-    "favorite_models": [],
-    "model_parameters": [],
   },
-  "cli_default_open_behavior": "existing_window",
-  "project_panel": {
-    "dock": "left",
-  },
-  "autosave": "on_focus_change",
-  "icon_theme": "Catppuccin Mocha",
-  "ui_font_size": 16,
-  "buffer_font_size": 15,
-  "file_types": {
-    "INI": ["config.ghostty"],
-    "JavaScript": ["*.qml"],
-    "JSON": ["*.jsonc", "*.json.mustache"],
-    "Shell Script": ["*.conf", ".zshrc", "*.zsh.mustache"],
-    "TOML": ["*.toml.mustache"],
-    "XML": ["*.tmTheme.mustache", "fonts.conf"],
-    "YAML": ["*.yml.mustache"],
-  },
-  "theme": {
-    "mode": "dark",
-    "light": "One Light",
-    "dark": "Catppuccin Mocha",
-  },
+
+  // Remote connections (~/.ssh + host alias `sv`)
+  "ssh_connections": [
+    {
+      "host": "sv",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/home/suzu"],
+        },
+      ],
+    },
+    {
+      "host": "sv",
+      "args": [],
+      "projects": [],
+    },
+    {
+      "host": "sv",
+      "args": [],
+      "projects": [],
+    },
+  ],
 }
