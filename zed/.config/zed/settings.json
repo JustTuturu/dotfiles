@@ -2,12 +2,17 @@
 //
 // For information on how to configure Zed, see the Zed
 // documentation: https://zed.dev/docs/configuring-zed
-//
-// To see all of Zed's default settings without changing your
-// custom settings, run `zed: open default settings` from the
-// command palette (cmd-shift-p / ctrl-shift-p). A clean copy of
-// the 1.17.2 defaults sits alongside this file in default-settings.json.
+
 {
+  "language_models": {
+    "opencode": {
+      "show_zen_models": true
+    }
+  },
+  "proxy": "",
+  "context_servers": {
+
+  },
   "debugger": {
     "dock": "left"
   },
@@ -27,6 +32,15 @@
 
   // Buffer interaction
   "autosave": "on_focus_change",
+
+  // Inline diagnostics (error lens)
+  "diagnostics": {
+    "inline": {
+      "enabled": true,
+      "max_severity": null,
+    },
+
+  },
 
   // Toolbar / panel buttons in the status bar
   "collaboration_panel": {
@@ -91,62 +105,19 @@
     },
   },
 
-  // Language models
-  "language_models": {
-    "opencode": {
-      "show_zen_models": true,
-    },
-    "openai_compatible": {
-      "GLM 5.1": {
-        "api_url": "https://opencode.ai/zen/go/v1",
-        "available_models": [
-          {
-            "name": "glm-5.1",
-            "max_tokens": 200000,
-            "max_output_tokens": 128000,
-            "max_completion_tokens": 200000,
-            "capabilities": {
-              "tools": true,
-              "images": false,
-              "parallel_tool_calls": true,
-              "prompt_cache_key": true,
-              "chat_completions": true,
-              "interleaved_reasoning": false,
-            },
-          },
-        ],
-      },
-      "Kimi K2.6": {
-        "api_url": "https://opencode.ai/zen/go/v1",
-        "available_models": [
-          {
-            "name": "kimi-k2.6",
-            "max_tokens": 200000,
-            "max_output_tokens": 32000,
-            "max_completion_tokens": 200000,
-            "capabilities": {
-              "tools": true,
-              "images": true,
-              "parallel_tool_calls": true,
-              "prompt_cache_key": true,
-              "chat_completions": true,
-              "interleaved_reasoning": false,
-            },
-          },
-        ],
-      },
-    },
-  },
-
   // Agent
   "agent_servers": {
-    "opencode": {
-      "type": "registry",
+    "kimi": {
+      "type": "registry"
     },
-    "hermes": {
-      "type": "custom",
-      "command": "hermes",
-      "args": ["acp"],
+    "cursor": {
+      "type": "registry"
+    },
+    "opencode": {
+      "default_config_options": {
+        "model": "opencode/x-preview-f-free"
+      },
+      "type": "registry",
     },
     "codex-acp": {
       "type": "registry",
@@ -154,6 +125,10 @@
   },
 
   "agent": {
+    "tool_permissions": {
+      "default": "confirm",
+      "tools": {}
+    },
     "dock": "right",
     "sidebar_side": "right",
     "favorite_models": [],
@@ -175,16 +150,6 @@
           "paths": ["/home/suzu"],
         },
       ],
-    },
-    {
-      "host": "sv",
-      "args": [],
-      "projects": [],
-    },
-    {
-      "host": "sv",
-      "args": [],
-      "projects": [],
     },
   ],
 }

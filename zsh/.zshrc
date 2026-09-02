@@ -88,7 +88,6 @@ export STARSHIP_CONFIG=$HOME/.config/matugen/generated/starship/starship.toml
 export EZA_CONFIG_DIR=$HOME/.config/matugen/generated/eza
 export NVM_DIR=$HOME/.nvm
 export UV_LINK_MODE=copy
-export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.hermes/node/bin:$HOME/.cargo/bin:/usr/local/bin:$PATH"
 export PNPM_HOME="/home/suzu/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME/bin:"*) ;;
