@@ -7,3 +7,4 @@ obs-studio
 blender
 btop
 qt6ct
+discord
