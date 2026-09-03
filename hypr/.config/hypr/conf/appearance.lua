@@ -1,4 +1,7 @@
-local colors = require("conf.colors")
+local colors_ok, colors = pcall(require, "generated.colors")
+if not colors_ok then
+    colors = require("conf.colors")
+end
 
 hl.config({
     general = {

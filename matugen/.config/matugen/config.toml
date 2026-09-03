@@ -1,10 +1,6 @@
 [config]
 reload_apps = false
 
-[templates.hyprland]
-input_path  = "~/.config/matugen/templates/hyprland.conf.mustache"
-output_path = "~/.config/matugen/generated/hyprland-colors.conf"
-
 [templates.ghostty]
 input_path  = "~/.config/matugen/templates/ghostty.conf.mustache"
 output_path = "~/.config/matugen/generated/ghostty-colors.conf"
@@ -33,6 +29,6 @@ output_path = "~/.config/matugen/generated/starship/starship.toml"
 input_path  = "~/.config/matugen/templates/bat.tmTheme.mustache"
 output_path = "~/.config/bat/themes/matugen.tmTheme"
 
-[templates.hyprland-colors]
+[templates.hyprland-lua]
 input_path  = "~/.config/matugen/templates/colors.lua.mustache"
-output_path = "~/dotfiles/hypr/.config/hypr/conf/colors.lua"
+output_path = "~/.config/hypr/generated/colors.lua"

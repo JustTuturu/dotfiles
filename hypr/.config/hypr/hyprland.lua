@@ -10,8 +10,11 @@
 -- 1. Environment variables
 require("conf.environment")
 
--- 2. Colors (Matugen-generated, manual Lua conversion)
-require("conf.colors")
+-- 2. Colors (Matugen-generated, with repository fallback)
+local colors_ok, colors = pcall(require, "generated.colors")
+if not colors_ok then
+    colors = require("conf.colors")
+end
 
 -- 3. Display / monitors
 require("conf.monitors")
