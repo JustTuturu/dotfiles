@@ -59,7 +59,7 @@
     "INI": ["config.ghostty"],
     "JavaScript": ["*.qml"],
     "JSON": ["*.jsonc", "*.json.mustache"],
-    "Shell Script": ["*.conf", ".zshrc", "*.zsh.mustache"],
+    "Shell Script": ["*.conf", ".zshrc", "*.zsh.mustache", "config.ghostty"],
     "TOML": ["*.toml.mustache"],
     "XML": ["*.tmTheme.mustache", "fonts.conf"],
     "YAML": ["*.yml.mustache"],

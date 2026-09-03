@@ -1,7 +1,5 @@
 atim/starship
-atim/lazydocker
 dejan/lazygit
 lihaohong/yazi
 lionheartp/Hyprland
 scottames/ghostty
-che/zed

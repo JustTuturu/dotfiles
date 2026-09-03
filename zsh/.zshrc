@@ -158,6 +158,8 @@ alias yy='y'
 alias s='sudo'
 alias se='sudoedit'
 alias b='bat'
+alias lzd='lazydocker'
+alias lzg='lazygit'
 
 # opencode
 export PATH=/home/suzu/.opencode/bin:$PATH

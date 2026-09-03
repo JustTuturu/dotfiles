@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Installs the Fedora packages and Hyprland components required by these dotfiles.
+# Usage: ./install.sh {full|stow|help}
 # install.sh — Dotfiles & Hyprland installer (Fedora)
 
 set -euo pipefail

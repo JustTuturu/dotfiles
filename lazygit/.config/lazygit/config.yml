@@ -39,8 +39,8 @@ keybinding:
     gotoTop: g
     gotoBottom: G
     toggleCaption: <c-k>
-    nextTab: ]
-    prevTab: [
+    nextTab: <]>
+    prevTab: <[>
     nextScreenMode: <c-s>
     prevScreenMode: <c-s>
     undo: z
@@ -53,6 +53,5 @@ keybinding:
     appendNewline: <a-enter>
     extrasMenu: <c-e>
     toggleWhitespaceInDiffView: <c-w>
-    increaseContextInDiffView: }
-    decreaseContextInDiffView: {
-
+    increaseContextInDiffView: <}>
+    decreaseContextInDiffView: <{>
