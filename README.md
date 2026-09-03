@@ -28,23 +28,24 @@ Home of all my dotfiles
 ```bash
 git clone https://github.com/JustTuturu/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-./install.sh full
+./install-system.sh full
 ```
 
-`install.sh full` handles packages (dnf, COPR, RPM Fusion), system optimizations, stows all configs, and prompts for optional applications. After the first Hyprland login, run the post-install asset step:
+`install-system.sh full` handles packages (dnf, COPR, RPM Fusion), system optimizations, and stows all configs. After the first Hyprland login, run the asset and application installers:
 
 ```bash
-./install-assets.sh all
+./install-assets.sh
+./install-apps.sh
 ```
 
-`install-assets.sh` installs JetBrains Mono Nerd Font, the Tela icon theme, the private cursor theme, Brave Browser, and Zed. Requires an authenticated `gh` CLI.
+`install-assets.sh` installs fonts, icons, cursors, and desktop defaults. `install-apps.sh` installs optional applications and development tools. Fonts and cursors require an authenticated `gh` CLI.
 
 Log out and select **Hyprland** at login.
 
 ## Update dotfiles
 
 My dotfiles are managed by [GNU Stow](https://www.gnu.org/software/stow/).
-For some reason, `stow` is not installed by the script . Install it first.
+The system installer installs `stow` automatically when needed.
 
 ```bash
 sudo dnf install stow
@@ -54,7 +55,7 @@ Then run `stow` to symlink the dotfiles:
 
 ```bash
 cd ~/dotfiles
-./install.sh stow
+./install-system.sh stow
 ```
 
 ## Softwares

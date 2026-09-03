@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# install-assets.sh — Post-install assets: fonts, icons, cursors, Brave, Zed
+# install-assets.sh — Fonts, icons, cursors, and desktop defaults
 #
-# Run AFTER install.sh (which handles dnf packages, Flatpak, Hyprland).
+# Run AFTER install-system.sh.
 #
 # Fonts:
 #   - JetBrains Mono Nerd Font (NF) — terminal/Ghostty (ligatures)
@@ -19,12 +19,6 @@
 #   - Both from JustTuturu/TuturuCursor private repo (requires gh auth)
 #   - Persistent env vars set via Hyprland environment.conf (NOT .zshenv)
 #
-# Brave:
-#   - brave-origin from official Brave RPM repo
-#
-# Zed:
-#   - zed-stable from official Zed IDE
-
 set -euo pipefail
 
 # ========================== COLORS & UTILITIES ==============================
@@ -95,42 +89,6 @@ check_gh() {
     fi
 }
 
-# ========================== BRAVE =============================================
-run_brave() {
-    progress_spinner "Installing Brave Browser" bash -c '
-        sudo dnf install -yq --setopt=debuglevel=0 dnf-plugins-core &&
-        sudo dnf config-manager addrepo https://brave-browser-rpm-release.s3.brave.com          /brave-browser.repo &&
-        sudo dnf install -yq --setopt=debuglevel=0 brave-origin
-    '
-}
-
-# ========================== ZED ===============================================
-run_zed() {
-    info "Installing Zed via official install script"
-
-    if cmd_exists zed; then
-        ok "Zed already installed"
-        return
-    fi
-
-    curl -f https://zed.dev/install.sh | sh || fail "Zed installation failed"
-    ok "Zed installed"
-}
-
-# ========================== HERDR ======================================
-install_herdr() {
-    info "Installing Herdr"
-    curl -fsSL https://herdr.dev/install.sh | sh || fail "Herdr installation failed"
-    ok "Herdr installed"
-}
-
-# ========================== BUN =============================================
-install_bun() {
-    info "Installing Bun"
-    curl -fsSL https://bun.com/install | bash || fail "Bun installation failed"
-    ok "Bun installed"
-}
-
 # ========================== FONTS =============================================
 install_fonts() {
     mkdir -p "${FONT_DIR}"
@@ -189,7 +147,7 @@ install_fonts() {
 }
 
 # ========================== CURSORS ===========================================
-run_cursors() {
+install_cursors() {
     if [[ ! -t 0 ]]; then
         info "Non-interactive shell — skipping cursor install"
         return
@@ -295,71 +253,15 @@ set_defaults() {
 }
 
 # ========================== MAIN ==============================================
-showhelp() {
-    cat << 'EOF'
+if [[ $# -gt 0 ]]; then
+    echo "Usage: ./install-assets.sh"
+    exit 1
+fi
 
-  Asset Installer — Tuturu (Fedora)
+check_gh
+install_fonts
+install_icons
+install_cursors
+set_defaults
 
-  Usage: ./install-assets.sh <command>
-
-  Commands:
-    all             Install fonts, icons, cursors, Brave, and Zed
-    brave           Install Brave Browser (Nightly) only
-    fonts           Install JetBrains Mono Nerd Font only
-    icons           Install Tela icon theme only
-    cursors         Install private cursor theme only
-    defaults        Set cursor/icon defaults only
-    zed             Install Zed only
-    herdr           Install Herdr only
-    bun             Install Bun only
-
-EOF
-}
-
-case "${1:-help}" in
-    all)
-        check_gh
-        install_fonts
-        install_icons
-        run_cursors
-        set_defaults
-        run_brave
-        run_zed
-        run_herdr
-        echo -e "\n${GREEN}${BOLD}=== Assets Installed ===${RESET}"
-        ;;
-    brave)
-        run_brave
-        ;;
-    fonts)
-        check_gh
-        install_fonts
-        ;;
-    icons)
-        install_icons
-        ;;
-    cursors)
-        check_gh
-        run_cursors
-        ;;
-    defaults)
-        set_defaults
-        ;;
-    zed)
-        run_zed
-        ;;
-    herdr)
-        run_herdr
-        ;;
-    bun)
-        install_bun
-        ;;
-    help|--help|-h|"")
-        showhelp
-        ;;
-    *)
-        echo -e "${RED}Unknown command: $1${RESET}"
-        showhelp
-        exit 1
-        ;;
-esac
+echo -e "\n${GREEN}${BOLD}=== Assets Installed ===${RESET}"

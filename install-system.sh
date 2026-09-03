@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installs the Fedora packages and Hyprland components required by these dotfiles.
-# Usage: ./install.sh {full|stow|help}
-# install.sh — Dotfiles & Hyprland installer (Fedora)
+# Usage: ./install-system.sh {full|stow|help}
+# install-system.sh — Dotfiles & Hyprland installer (Fedora)
 
 set -euo pipefail
 
@@ -154,29 +154,6 @@ run_optimizations() {
     fi
 }
 
-# ========================== MODULE: OPTIONAL ==================================
-run_optional() {
-    info "Optional packages available"
-
-    local -a optional_deps
-    read_packages "${PKG_DIR}/optional.txt" optional_deps || return 0
-
-    local to_install=()
-
-    for pkg in "${optional_deps[@]}"; do
-        echo -ne "  Install ${BOLD}${pkg}${RESET}? [y/N] "
-        read -r reply
-        [[ "${reply}" =~ ^[Yy]$ ]] && to_install+=("${pkg}")
-    done
-
-    if [ ${#to_install[@]} -gt 0 ]; then
-        sudo dnf install -yq --setopt=install_weak_deps=False "${to_install[@]}"
-        ok "Optional packages installed"
-    else
-        info "No optional packages selected"
-    fi
-}
-
 # ========================== MODULE: SHELL =====================================
 run_shell() {
     info "Setting up Zsh..."
@@ -246,9 +223,9 @@ run_files() {
     [ "$failed" -gt 0 ] && warn "$failed packages failed to stow"
 
     # Generate initial matugen colors
-    if cmd_exists matugen && [ -f "$HOME/Pictures/Wallpapers/Chisa.jpg" ]; then
+    if cmd_exists matugen && [ -f "$REPO_ROOT/wallpapers/Chisa.jpg" ]; then
         info "Generating initial matugen colors..."
-        matugen image "$HOME/Pictures/Wallpapers/Chisa.jpg" --prefer darkness && ok "matugen colors generated" \
+        matugen image "$REPO_ROOT/wallpapers/Chisa.jpg" --prefer darkness && ok "matugen colors generated" \
             || warn "matugen failed — run manually"
     else
         warn "matugen: run manually after setting wallpaper"
@@ -261,15 +238,15 @@ showhelp() {
 
   Dotfiles Setup — Tuturu (Fedora)
 
-  Usage: ./install.sh <command>
+  Usage: ./install-system.sh <command>
 
   Commands:
     full    Full system setup
     stow    Stow dotfiles only (re-run after pulling updates)
 
   Post-install:
-    Run ./install-assets.sh after logging into Hyprland to install
-    fonts, icons, cursors, and Brave browser.
+    Run ./install-assets.sh for fonts, icons, cursors, and defaults.
+    Run ./install-apps.sh for optional applications and development tools.
 
 EOF
 }
@@ -286,13 +263,12 @@ case "${1:-help}" in
         run_packages && \
         run_appstream && \
         run_optimizations && \
-        run_files && \
-        run_optional && \
         run_shell && \
-        run_hypr
+        run_hypr && \
+        run_files
         echo -e "\n${GREEN}${BOLD}=== Complete! ===${RESET}"
         echo -e "  Log out and select 'Hyprland' at login"
-        echo -e "\n  ${CYAN}[i]${RESET} After first Hyprland login, run: ${BOLD}./install-assets.sh all${RESET}"
+        echo -e "\n  ${CYAN}[i]${RESET} After first Hyprland login, run: ${BOLD}./install-assets.sh${RESET}"
         ;;
     stow)
         info "Stowing dotfiles..."
