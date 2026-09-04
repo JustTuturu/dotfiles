@@ -17,6 +17,8 @@
     "dock": "left"
   },
   "terminal": {
+    "font_family": "JetBrainsMono Nerd Font Mono",
+    "font_size": 20.0,
     "button": false
   },
   "theme": {
@@ -56,10 +58,10 @@
 
   // Map file extensions to Zed languages
   "file_types": {
-    "INI": ["config.ghostty"],
+    "INI": [],
     "JavaScript": ["*.qml"],
     "JSON": ["*.jsonc", "*.json.mustache"],
-    "Shell Script": ["*.conf", ".zshrc", "*.zsh.mustache", "config.ghostty"],
+    "Shell Script": ["*.conf", ".zshrc", "*.zsh.mustache", "config","config.ghostty"],
     "TOML": ["*.toml.mustache"],
     "XML": ["*.tmTheme.mustache", "fonts.conf"],
     "YAML": ["*.yml.mustache"],
