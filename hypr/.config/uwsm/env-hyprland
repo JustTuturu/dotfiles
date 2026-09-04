@@ -2,3 +2,4 @@
 # Keep this absolute because UWSM services do not rely on the login shell's
 # working directory.
 export HYPRLAND_CONFIG="$HOME/.config/hypr/hyprland.lua"
+export CUA_DRIVER_RS_ENABLE_WAYLAND=1
