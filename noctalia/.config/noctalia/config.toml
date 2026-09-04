@@ -126,9 +126,9 @@ capsule_opacity   = 0.4
 
 # Widget lanes
 
-start  = ["launcher", "active_window", "audio_visualizer"]
+start  = ["launcher", "clock", "active_window", "audio_visualizer"]
 center = ["workspaces"]
-end    = ["tray", "volume", "clock", "gpu_usage", "gpu_temp", "status", "notifications",]
+end    = ["tray", "volume", "gpu_usage", "gpu_temp", "status", "notifications",]
 
 # ---------------------------------------------------------------------------
 # Widget definitions
