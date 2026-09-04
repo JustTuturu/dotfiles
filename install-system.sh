@@ -217,6 +217,15 @@ run_files() {
             continue
         fi
 
+        while IFS= read -r -d '' source; do
+            local relative target
+            relative="${source#"$REPO_ROOT/$pkg/"}"
+            target="$HOME/$relative"
+            if [[ -L "$target" ]] && [[ "$(readlink -f "$target")" == "$(readlink -f "$source")" ]]; then
+                unlink "$target"
+            fi
+        done < <(find "$REPO_ROOT/$pkg" -type f -print0)
+
         if stow -t "$HOME" -d "$REPO_ROOT" --no-folding -S "$pkg" 2>/dev/null; then
             ok "$pkg"
             count=$((count + 1))

@@ -5,6 +5,7 @@ qt6-qtwayland qt5-qtwayland xdg-utils
 bluez bluez-libs udisks2
 gnome-keyring
 fcitx5-unikey
+uwsm
 
 # CLI utilities
 ripgrep bat fzf eza zoxide

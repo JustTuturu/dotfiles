@@ -1,0 +1,4 @@
+# Hyprland uses a Lua entrypoint instead of the default hyprland.conf.
+# Keep this absolute because UWSM services do not rely on the login shell's
+# working directory.
+export HYPRLAND_CONFIG="$HOME/.config/hypr/hyprland.lua"

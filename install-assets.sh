@@ -71,6 +71,7 @@ ICON_DIR="${HOME}/.local/share/icons"
 FONT_DIR="${HOME}/.local/share/fonts"
 
 CURSOR_SIZE=24
+SCREENSHOT_DIR="${HOME}/Pictures/Screenshots"
 # Actual theme names (must match index.theme / manifest.hl)
 HYPR_CURSOR="HChisaBLZ"
 X_CURSOR="XChisaBLZ"
@@ -226,6 +227,8 @@ install_icons() {
 # ========================== SET DEFAULTS ======================================
 set_defaults() {
     info "Setting default cursor and icon theme"
+
+    mkdir -p "${SCREENSHOT_DIR}"
 
     if cmd_exists hyprctl && [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
         if [[ -d "${ICON_DIR}/${HYPR_CURSOR}" ]]; then

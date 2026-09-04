@@ -90,14 +90,14 @@ hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -- ═══════════════════════════════════════════════════════════════════
 -- Screenshots
 -- ═══════════════════════════════════════════════════════════════════
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("grimblast --notify copy area"))
-hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd("grimblast --notify copy screen"))
-hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("grimblast --notify copy output"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("uwsm app -- grimblast --notify copy area"))
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd("uwsm app -- grimblast --notify copy screen"))
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("uwsm app -- grimblast --notify copy output"))
 
 -- ═══════════════════════════════════════════════════════════════════
 -- Session controls
 -- ═══════════════════════════════════════════════════════════════════
-hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
+hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("uwsm app -- hyprlock"))
 hl.bind(mainMod .. " + SHIFT + F12", hl.dsp.exit())
 
 -- ═══════════════════════════════════════════════════════════════════

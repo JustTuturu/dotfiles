@@ -1,37 +1,32 @@
 -- Autostart
 hl.on("hyprland.start", function()
+    -- Tell UWSM that the compositor has finished publishing its session
+    -- environment before starting session applications.
+    hl.exec_cmd("uwsm finalize XCURSOR_THEME XCURSOR_SIZE HYPRCURSOR_THEME HYPRCURSOR_SIZE")
+
     -- ============================================
     -- Noctalia Shell (v5 native)
     -- ============================================
     -- Force Noctalia to use hyprqt6engine for Qt6 theming.
-    hl.exec_cmd("env QT_QPA_PLATFORMTHEME=hyprqt6engine noctalia")
+    hl.exec_cmd("uwsm app -- env QT_QPA_PLATFORMTHEME=hyprqt6engine noctalia")
 
     -- Noctalia handles notifications natively; no separate daemon needed
     -- hl.exec_cmd("swaync")
 
     -- NetworkManager tray applet
-    hl.exec_cmd("nm-applet --indicator")
+    hl.exec_cmd("uwsm app -- nm-applet --indicator")
 
     -- ============================================
     -- Input method
     -- ============================================
-    hl.exec_cmd("fcitx5 -d --replace")
+    hl.exec_cmd("uwsm app -- fcitx5 -d --replace")
 
     -- ============================================
-    -- Screen sharing — XDG portals (critical on Fedora)
-    -- ============================================
-    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-    hl.exec_cmd("systemctl --user start hyprland-session.service")
-    hl.exec_cmd("systemctl --user restart xdg-desktop-portal-hyprland")
-    hl.exec_cmd("systemctl --user restart xdg-desktop-portal-gtk")
-    hl.exec_cmd("systemctl --user restart xdg-desktop-portal")
-
     -- ============================================
     -- Clipboard
     -- ============================================
-    hl.exec_cmd("wl-paste --type text --watch cliphist store")
-    hl.exec_cmd("wl-paste --type image --watch cliphist store")
+    hl.exec_cmd("uwsm app -- wl-paste --type text --watch cliphist store")
+    hl.exec_cmd("uwsm app -- wl-paste --type image --watch cliphist store")
 
     -- ============================================
     -- Idle management — lock & sleep

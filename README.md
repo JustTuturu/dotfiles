@@ -40,7 +40,13 @@ cd ~/dotfiles
 
 `install-assets.sh` installs fonts, icons, cursors, and desktop defaults. `install-apps.sh` installs optional applications and development tools. Fonts and cursors require an authenticated `gh` CLI.
 
-Log out and select **Hyprland** at login.
+Log out and select **Hyprland (uwsm-managed)** at login. UWSM owns the
+Hyprland session and launches graphical applications as systemd user units.
+
+For TTY login, the stowed `zsh/.zprofile` starts Hyprland through UWSM
+automatically. If UWSM is unavailable on your Fedora repositories, install it
+from the [upstream project](https://github.com/Vladimir-csp/uwsm) before
+starting the session.
 
 ## Update dotfiles
 
