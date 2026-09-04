@@ -67,6 +67,11 @@
 
   // Python language servers
   "languages": {
+    "Lua": {
+      "language_servers": [
+        "lua-language-server",
+      ],
+    },
     "Python": {
       "language_servers": [
         "basedpyright",
@@ -83,6 +88,15 @@
     },
   },
   "lsp": {
+    "lua-language-server": {
+      "settings": {
+        "Lua": {
+          "diagnostics": {
+            "globals": ["hl"],
+          },
+        },
+      },
+    },
     "basedpyright": {
       "binary": {
         "path": "basedpyright-langserver",
@@ -103,19 +117,32 @@
         "arguments": ["server"],
       },
     },
+    "vscode-css-language-server": {
+      "settings": {
+        "css": {
+          "lint": {
+            "unknownAtRules": "ignore"
+              }
+            },
+        "less": {
+          "lint": {
+            "unknownAtRules": "ignore"
+              }
+            },
+        "scss": {
+          "lint": {
+            "unknownAtRules": "ignore"
+          },
+        },
+      },
+    },
   },
 
   // Agent
   "agent_servers": {
-    "kimi": {
-      "type": "registry"
-    },
-    "cursor": {
-      "type": "registry"
-    },
     "opencode": {
       "default_config_options": {
-        "model": "opencode/x-preview-f-free"
+        "model": "opencode/nemotron-3-ultra-free"
       },
       "type": "registry",
     },
