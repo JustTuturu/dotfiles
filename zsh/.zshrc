@@ -146,8 +146,7 @@ function y() {
 }
 
 # ─── Aliases ─────────────────────────────────────────────────────
-alias e='cd /mnt/sata'
-alias d='cd /mnt/nvme'
+alias disk='z /mnt/EVO990'
 alias zz='z ~'
 alias ls='eza --icons --color=always --group-directories-first'
 alias ll='eza -lh -a --no-filesize --icons --color=always --git --group-directories-first'
@@ -160,6 +159,7 @@ alias se='sudoedit'
 alias b='bat'
 alias lzd='lazydocker'
 alias lzg='lazygit'
+alias spotify='spotify_player'
 
 # opencode
 export PATH=/home/suzu/.opencode/bin:$PATH
