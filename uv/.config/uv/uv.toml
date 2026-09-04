@@ -1,6 +1,24 @@
-# UV config file
-python-preference = "managed"
+# --- UV config file ---
+python-preference = "only-managed"
 python-downloads = "automatic"
 
+resolution = "highest"
+prerelease = "if-necessary-or-explicit"
+
+# --- Caching ---
+no-cache = false
+cache-dir = "~/.cache/uv"
+
 compile-bytecode = true
+
+# --- Pip ---
+# set false to require a virtual environment to installing packages
+[pip]
+system = false
+
+#
 link-mode = "clone"
+
+# --- Security ---
+generate-hashes = false
+require-hashes = false
