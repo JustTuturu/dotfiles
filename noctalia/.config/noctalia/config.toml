@@ -14,7 +14,6 @@ card_borders        = true
 popup_shadows       = true
 
 # Native polkit agent — lets Noctalia approve greeter-sync (and other admin)
-# requests from the desktop instead of relying on the broken hyprpolkitagent
 polkit_agent = true
 
 font_family = "Noto Sans"
@@ -127,43 +126,75 @@ capsule_opacity   = 0.4
 
 # Widget lanes
 
-start  = ["launcher", "clock", "sysmon", "active_window", "audio_visualizer"]
+start  = ["launcher", "active_window", "audio_visualizer"]
 center = ["workspaces"]
-end    = ["tray", "notifications", "volume", "network", "status"]
+end    = ["tray", "volume", "clock", "gpu_usage", "gpu_temp", "status", "notifications",]
 
 # ---------------------------------------------------------------------------
 # Widget definitions
 # ---------------------------------------------------------------------------
-[widget.launcher]
-type = "launcher"
-
-[widget.clock]
-type           = "clock"
-format         = "{:%H:%M} {:%a}, {:%b} {:%d}"   # v4: HH:mm ddd, MMM dd
-tooltip_format = "{:%A, %B %d, %Y}"
-
-[widget.sysmon]
-type             = "sysmon"
-stat             = "cpu_usage"
-visualization    = "none"
-show_value       = true
-show_glyph       = true
-label_show_units = true
-
 [widget.active_window]
 type       = "active_window"
-show_icon  = true
-show_text  = true
-max_width  = 145
-
-[widget.media]
-type               = "media"
-show_album_art     = true
-show_artist_first  = true
-show_progress_ring = true
+title_scroll = "on_hover"
 
 [widget.audio_visualizer]
 type = "audio_visualizer"
+show_when_idle = false
+
+[widget.battery]
+type         = "battery"
+display_mode = "none"
+
+[widget.brightness]
+type         = "brightness"
+show_label = false
+
+[widget.clock]
+type           = "clock"
+format         = "{:%H:%M} {:%a}, {:%b} {:%d}"
+tooltip_format = "{:%A, %B %d, %Y}"
+
+[widget.control-center]
+type = "control-center"
+
+[widget.launcher]
+type = "launcher"
+
+[widget.lock_keys]
+display          = "short"
+show_caps_lock   = true
+show_num_lock    = true
+show_scroll_lock = false
+hide_when_off    = false
+
+[widget.media]
+type            = "media"
+
+[widget.network]
+type = "network"
+
+[widget.notifications]
+type              = "notifications"
+hide_when_no_unread = true
+
+[widget.spacer]
+type   = "spacer"
+length = 24
+
+[widget.gpu_usage]
+type             = "sysmon"
+stat             = "gpu_usage"
+
+[widget.gpu_temp]
+type             = "sysmon"
+stat             = "gpu_temp"
+
+[widget.tray]
+type           = "tray"
+pinned         = ["Unikey", "Keyboard - English (US)", "steam", "Discord"]
+
+[widget.volume]
+type         = "volume"
 
 [widget.workspaces]
 type                      = "workspaces"
@@ -179,34 +210,6 @@ urgent_color              = "error"
 change_color_on_hover     = true
 active_pill_size          = 2.2
 inactive_pill_size        = 1.0
-
-[widget.tray]
-type           = "tray"
-drawer_enabled = true
-pinned         = ["Unikey", "Keyboard - English (US)", "steam", "Discord"]
-
-[widget.notifications]
-type              = "notifications"
-show_unread_badge = true
-
-[widget.battery]
-type         = "battery"
-display_mode = "graphic-clean"
-
-[widget.volume]
-type         = "volume"
-display_mode = "onhover"
-
-[widget.brightness]
-type         = "brightness"
-display_mode = "onhover"
-
-[widget.control-center]
-type = "control-center"
-icon = "noctalia"
-
-[widget.network]
-type = "network"
 
 # ---------------------------------------------------------------------------
 # Dock -v5
