@@ -7,6 +7,7 @@ hl.env("HYPRLAND_CMD", "Hyprland")
 
 hl.env("GDK_BACKEND", "wayland,x11,*")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+-- Use hyprqt6engine for all Qt6 applications, including Noctalia.
 hl.env("QT_QPA_PLATFORMTHEME", "hyprqt6engine")
 hl.env("QT_ICON_THEME", "Tela")
 

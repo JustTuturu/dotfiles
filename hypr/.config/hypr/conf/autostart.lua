@@ -3,7 +3,8 @@ hl.on("hyprland.start", function()
     -- ============================================
     -- Noctalia Shell (v5 native)
     -- ============================================
-    hl.exec_cmd("noctalia")
+    -- Force Noctalia to use hyprqt6engine for Qt6 theming.
+    hl.exec_cmd("env QT_QPA_PLATFORMTHEME=hyprqt6engine noctalia")
 
     -- Noctalia handles notifications natively; no separate daemon needed
     -- hl.exec_cmd("swaync")
