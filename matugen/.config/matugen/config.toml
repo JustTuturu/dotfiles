@@ -32,3 +32,7 @@ output_path = "~/.config/bat/themes/matugen.tmTheme"
 [templates.hyprland-lua]
 input_path  = "~/.config/matugen/templates/colors.lua.mustache"
 output_path = "~/.config/hypr/generated/colors.lua"
+
+[templates.btop]
+input_path  = "~/.config/matugen/templates/btop.theme.mustache"
+output_path = "~/.config/btop/themes/matugen.theme"
