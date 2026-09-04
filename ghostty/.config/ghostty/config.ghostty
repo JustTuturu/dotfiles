@@ -2,9 +2,8 @@
 config-file = ~/.config/matugen/generated/ghostty-colors.conf
 
 # ─── Theme ───────────────────────────────────
-# Fallback theme when matugen has not yet generated colors
 font-family = "JetBrainsMono Nerd Font"
-font-size = 12
+font-size = 14
 cursor-style = block
 
 # ─── Window Size ─────────────────────────────
