@@ -1,4 +1,3 @@
-atim/starship
 dejan/lazygit
 lihaohong/yazi
 lionheartp/Hyprland

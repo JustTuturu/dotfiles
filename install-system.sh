@@ -171,6 +171,14 @@ run_shell() {
         ok "Zsh set as default shell"
     fi
 
+    if ! cmd_exists starship; then
+        info "Installing Starship"
+        curl -sS https://starship.rs/install.sh | sh || fail "Starship installation failed"
+        ok "Starship installed"
+    else
+        ok "Starship already installed"
+    fi
+
     ok "Zinit will auto-install on first zsh launch"
 }
 
