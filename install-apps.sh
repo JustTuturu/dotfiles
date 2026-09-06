@@ -4,9 +4,6 @@
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
-PKG_DIR="${REPO_ROOT}/packages"
-
 RED='\e[31m'; GREEN='\e[32m'; YELLOW='\e[33m'; BLUE='\e[34m'
 BOLD='\e[1m'; RESET='\e[0m'
 
@@ -16,24 +13,19 @@ fail() { echo -e "  ${RED}[✗]${RESET} ${BOLD}$*${RESET}" && exit 1; }
 
 cmd_exists() { command -v "$1" &>/dev/null; }
 
-# ========================== PACKAGE HELPERS ==================================
-read_packages() {
-    local file="$1"
-    local -n arr="$2"
-    arr=()
-    [[ -f "${file}" ]] || { info "Package list not found: ${file}"; return 1; }
-    while IFS= read -r line; do
-        [[ "${line}" =~ ^\s*$ || "${line}" =~ ^\s*# ]] && continue
-        for pkg in ${line}; do arr+=("${pkg}"); done
-    done < "${file}"
+# Keep common DNF behavior in one place.
+DNF_ARGS=(-yq --setopt=install_weak_deps=False)
+
+dnf_install() {
+    sudo dnf install "${DNF_ARGS[@]}" "$@"
 }
 
 # ========================== BRAVE ============================================
 install_brave() {
     info "Installing Brave Browser"
-    sudo dnf install -yq --setopt=debuglevel=0 dnf-plugins-core
+    dnf_install dnf-plugins-core
     sudo dnf config-manager addrepo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
-    sudo dnf install -yq --setopt=debuglevel=0 brave-origin
+    dnf_install brave-origin
     ok "Brave installed"
 }
 
@@ -75,39 +67,77 @@ install_lazydocker() {
     ok "Lazydocker installed"
 }
 
-# ========================== OPTIONAL PACKAGES ================================
-install_optional() {
-    local -a optional_deps
-    read_packages "${PKG_DIR}/optional.txt" optional_deps || return 0
-    info "Optional packages available"
+# ========================== DNF PACKAGE HELPER ===============================
+prompt_dnf_package() {
+    local group="$1"
+    local pkg="$2"
 
-    local -a to_install=()
-    for pkg in "${optional_deps[@]}"; do
-        echo -ne "  Install ${BOLD}${pkg}${RESET}? [y/N] "
-        read -r reply
-        [[ "${reply}" =~ ^[Yy]$ ]] && to_install+=("${pkg}")
-    done
+    info "${group}: ${pkg}"
+    echo -ne "  Install ${BOLD}${pkg}${RESET}? [y/N] "
+    read -r reply
 
-    if [[ ${#to_install[@]} -gt 0 ]]; then
-        sudo dnf install -yq --setopt=install_weak_deps=False "${to_install[@]}"
-        ok "Optional packages installed"
+    if [[ "${reply}" =~ ^[Yy]$ ]]; then
+        dnf_install "${pkg}"
+        ok "${pkg} installed"
     else
-        info "No optional packages selected"
+        info "Skipped ${pkg}"
     fi
 }
 
-# ========================== MAIN =============================================
-if [[ $# -gt 0 ]]; then
-    echo "Usage: ./install-apps.sh"
-    exit 1
-fi
+# ========================== DEV TOOLS ================================
+install_dev_tools() {
+    local -a dev_tools=(gcc gcc-c++ make cmake python3-devel)
 
-install_optional
-install_brave
-install_zed
-install_bun
-install_uv
-install_herdr
-install_lazydocker
+    info "Development tools"
+    echo -ne "  Install all development tools (${dev_tools[*]})? [y/N] "
+    read -r reply
+
+    if [[ "${reply}" =~ ^[Yy]$ ]]; then
+        dnf_install "${dev_tools[@]}"
+        ok "Development tools installed"
+    else
+        info "Skipped development tools"
+    fi
+}
+
+# ========================== OFICIAL APP ============================
+install_obs() { prompt_dnf_package "Installing OBS Studio" obs-studio; }
+install_blender() { prompt_dnf_package "Installing Blender" blender; }
+install_btop() { prompt_dnf_package "Installing btop" btop; }
+install_qt6ct() { prompt_dnf_package "Installing qt6ct" qt6ct; }
+
+
+# ========================== APPLICATIONS ======================================
+install_apps() {
+    install_obs
+    install_blender
+    install_btop
+    install_qt6ct
+    install_discord
+    install_brave
+    install_zed
+    install_bun
+    install_uv
+    install_herdr
+    install_lazydocker
+}
+
+# ========================== MAIN =============================================
+case "${1:-all}" in
+    all)
+        install_dev_tools
+        install_apps
+        ;;
+    dev)
+        install_dev_tools
+        ;;
+    apps)
+        install_apps
+        ;;
+    *)
+        echo "Usage: ./install-apps.sh [dev|apps]"
+        exit 1
+        ;;
+esac
 
 echo -e "\n${GREEN}${BOLD}=== Applications Installed ===${RESET}"
