@@ -86,7 +86,7 @@ prompt_dnf_package() {
 
 # ========================== DEV TOOLS ================================
 install_dev_tools() {
-    local -a dev_tools=(gcc gcc-c++ make cmake python3-devel)
+    local -a dev_tools=(gcc gcc-c++ make cmake python3-devel cargo)
 
     info "Development tools"
     echo -ne "  Install all development tools (${dev_tools[*]})? [y/N] "
