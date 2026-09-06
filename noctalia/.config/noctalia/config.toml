@@ -13,20 +13,6 @@ popup_borders       = true
 card_borders        = true
 popup_shadows       = true
 
-# Native polkit agent — lets Noctalia approve greeter-sync (and other admin)
-polkit_agent = true
-
-font_family = "Noto Sans"
-time_format = "{:%H:%M}"
-date_format = "%A, %x"
-
-avatar_path = "/home/suzu/dotfiles/wallpapers/Chisa.jpg"
-
-# Clipboard via cliphist
-clipboard_enabled        = true
-clipboard_keep_from_closed_apps = true
-clipboard_auto_paste     = "auto"
-
 [shell.shadow]
 direction = "down_right"
 alpha     = 0.55
@@ -36,8 +22,25 @@ enabled = true
 speed   = 1.0
 
 # ---------------------------------------------------------------------------
-# Panels — keep Control Center floating so it renders opaque over the
-# transparent bar; attached panels inherit bar background_opacity (0.0).
+# Native polkit agent — lets Noctalia approve greeter-sync (and other admin)
+# ---------------------------------------------------------------------------
+polkit_agent = true
+
+font_family = "Noto Sans"
+time_format = "{:%H:%M}"
+date_format = "%A, %x"
+
+avatar_path = "/home/suzu/dotfiles/wallpapers/Chisa.jpg"
+
+# ---------------------------------------------------------------------------
+# Cliphist
+# ---------------------------------------------------------------------------
+clipboard_enabled        = true
+clipboard_keep_from_closed_apps = true
+clipboard_auto_paste     = "auto"
+
+# ---------------------------------------------------------------------------
+# Panels
 # ---------------------------------------------------------------------------
 [shell.panel]
 transparency_mode          = "glass"
@@ -212,7 +215,7 @@ active_pill_size          = 2.2
 inactive_pill_size        = 1.0
 
 # ---------------------------------------------------------------------------
-# Dock -v5
+# Dock
 # ---------------------------------------------------------------------------
 [dock]
 enabled             = false
@@ -235,7 +238,7 @@ inactive_scale      = 0.85
 icon_size           = 48
 
 # ---------------------------------------------------------------------------
-# Notifications & OSD — v5
+# Notifications & OSD
 # ---------------------------------------------------------------------------
 [notification]
 background_opacity = 1.0
@@ -249,8 +252,8 @@ monitors           = ["DP-2"]
 
 # ---------------------------------------------------------------------------
 # Noctalia native idle & lockscreen — DISABLED on purpose.
-# We use hypridle + hyprlock (handled by hypridle.conf). Keep these off so
-# Noctalia's own idle/lock don't run alongside hypridle.
+# Alternative idle/lock handling is handled by hypridle/hyprlock.
+# These settings are disable to avoid conflicting with hypridle/hyprlock.
 # ---------------------------------------------------------------------------
 [idle]
 pre_action_fade_seconds = 2.0
