@@ -25,8 +25,6 @@ hl.env("XMODIFIERS", "@im=fcitx")
 hl.env("INPUT_METHOD", "fcitx")
 hl.env("SDL_IM_MODULE", "fcitx")
 
-hl.env("GRIMBLAST_DIR", os.getenv("HOME") .. "/Pictures/Screenshots")
-
 hl.config({
     xwayland = {
         force_zero_scaling = true,

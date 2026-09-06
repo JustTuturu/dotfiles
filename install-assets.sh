@@ -77,7 +77,6 @@ ICON_DIR="${HOME}/.local/share/icons"
 FONT_DIR="${HOME}/.local/share/fonts"
 
 CURSOR_SIZE=24
-SCREENSHOT_DIR="${HOME}/Pictures/Screenshots"
 # Actual theme names (must match index.theme / manifest.hl)
 HYPR_CURSOR="HChisaBLZ"
 X_CURSOR="XChisaBLZ"
@@ -253,8 +252,6 @@ set_cursor_defaults() {
 
 set_defaults() {
     info "Setting default cursor and icon theme"
-
-    mkdir -p "${SCREENSHOT_DIR}"
 
     set_cursor_defaults
     set_icon_default
