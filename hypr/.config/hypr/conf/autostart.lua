@@ -22,7 +22,6 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("uwsm app -- fcitx5 -d --replace")
 
     -- ============================================
-    -- ============================================
     -- Clipboard
     -- ============================================
     hl.exec_cmd("uwsm app -- wl-paste --type text --watch cliphist store")
