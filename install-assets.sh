@@ -3,6 +3,12 @@
 #
 # Run AFTER install-system.sh.
 #
+# Usage:
+#   ./install-assets.sh         Install fonts, Tela icons, and cursors
+#   ./install-assets.sh icons   Install only Tela icons and set the icon theme
+#   ./install-assets.sh fonts   Install only the configured fonts
+#   ./install-assets.sh cursors Install only cursor themes and set cursor defaults
+#
 # Fonts:
 #   - JetBrains Mono Nerd Font (NF) — terminal/Ghostty (ligatures)
 #   - JetBrains Mono Nerd Font Mono (NFM) — Zed IDE, Noctalia (no ligatures)
@@ -203,7 +209,7 @@ install_icons() {
     local repo="https://github.com/vinceliuice/Tela-icon-theme.git"
     local clone_dir="${TEMP_DIR}/tela-icons"
 
-    if [[ -d "${ICON_DIR}/Tela-dark" ]]; then
+    if [[ -f "${ICON_DIR}/Tela-dark/index.theme" ]]; then
         ok "Tela icon theme already installed"
         return
     fi
@@ -217,7 +223,7 @@ install_icons() {
         "'"$clone_dir"'/install.sh"
     '
 
-    if [[ -d "${ICON_DIR}/Tela-dark" ]]; then
+    if [[ -f "${ICON_DIR}/Tela-dark/index.theme" ]]; then
         ok "Tela icon theme → ${ICON_DIR}"
     else
         fail "Tela install failed — ${ICON_DIR}/Tela-dark not found"
@@ -225,11 +231,7 @@ install_icons() {
 }
 
 # ========================== SET DEFAULTS ======================================
-set_defaults() {
-    info "Setting default cursor and icon theme"
-
-    mkdir -p "${SCREENSHOT_DIR}"
-
+set_cursor_defaults() {
     if cmd_exists hyprctl && [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
         if [[ -d "${ICON_DIR}/${HYPR_CURSOR}" ]]; then
             hyprctl setcursor "${HYPR_CURSOR}" "${CURSOR_SIZE}" 2>/dev/null || true
@@ -242,12 +244,20 @@ set_defaults() {
     if cmd_exists gsettings; then
         gsettings set org.gnome.desktop.interface cursor-theme  "${X_CURSOR}"   2>/dev/null || true
         gsettings set org.gnome.desktop.interface cursor-size   "${CURSOR_SIZE}" 2>/dev/null || true
-        gsettings set org.gnome.desktop.interface icon-theme    "Tela-dark"      2>/dev/null || true
-        ok "gsettings: ${X_CURSOR} + Tela-dark"
+        ok "gsettings: ${X_CURSOR}"
     fi
 
     export XCURSOR_THEME="${X_CURSOR}"
     export XCURSOR_SIZE="${CURSOR_SIZE}"
+}
+
+set_defaults() {
+    info "Setting default cursor and icon theme"
+
+    mkdir -p "${SCREENSHOT_DIR}"
+
+    set_cursor_defaults
+    set_icon_default
 
     if cmd_exists flatpak; then
         flatpak override --filesystem=~/.local/share/icons:ro --user 2>/dev/null || true
@@ -255,16 +265,49 @@ set_defaults() {
     fi
 }
 
-# ========================== MAIN ==============================================
-if [[ $# -gt 0 ]]; then
-    echo "Usage: ./install-assets.sh"
-    exit 1
-fi
+set_icon_default() {
+    if ! cmd_exists gsettings; then
+        warn "gsettings is not installed — cannot set the icon theme"
+        return
+    fi
 
-check_gh
-install_fonts
-install_icons
-install_cursors
-set_defaults
+    local current
+    current="$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null || true)"
+    if [[ "${current}" == "'Tela-dark'" ]]; then
+        ok "gsettings: Tela-dark already selected"
+    elif gsettings set org.gnome.desktop.interface icon-theme "Tela-dark" 2>/dev/null; then
+        ok "gsettings: Tela-dark"
+    else
+        warn "Failed to set gsettings icon theme to Tela-dark"
+    fi
+}
+
+# ========================== MAIN ==============================================
+case "${1:-all}" in
+    all)
+        check_gh
+        install_fonts
+        install_icons
+        install_cursors
+        set_defaults
+        ;;
+    icons)
+        install_icons
+        set_icon_default
+        ;;
+    fonts)
+        check_gh
+        install_fonts
+        ;;
+    cursors)
+        check_gh
+        install_cursors
+        set_cursor_defaults
+        ;;
+    *)
+        echo "Usage: ./install-assets.sh [icons|fonts|cursors]"
+        exit 1
+        ;;
+esac
 
 echo -e "\n${GREEN}${BOLD}=== Assets Installed ===${RESET}"
