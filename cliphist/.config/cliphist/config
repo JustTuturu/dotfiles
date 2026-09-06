@@ -1,0 +1,7 @@
+# Cliphist configuration
+#
+# The history database remains in the XDG cache directory by default.
+max-items 1000
+max-dedupe-search 200
+max-store-size 10MiB
+preview-width 100
