@@ -1,6 +1,8 @@
+# Clipboard & Screenshot
 cliphist
 grimblast
 
+# Hyprland
 hyprcursor
 hypridle
 hyprland
