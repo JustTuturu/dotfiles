@@ -1,0 +1,32 @@
+[include]
+    path = ~/.config/git/config.local
+
+[url "https://github.com/"]
+	insteadOf = git@github.com:
+
+[core]
+	hooksPath = /home/suzu/.local/share/ggshield/git-hooks
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[fetch]
+	prune = true
+
+[rerere]
+	enabled = true
+
+[column]
+    ui = auto
+
+[help]
+    autocorrect = prompt
+
+[core]
+	autocrlf = input

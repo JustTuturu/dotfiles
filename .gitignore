@@ -8,3 +8,6 @@
 *.backup.*
 *.log
 .DS_Store
+
+config.local
+*.local
