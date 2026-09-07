@@ -3,7 +3,7 @@ python-preference = "only-managed"
 python-downloads = "automatic"
 
 resolution = "highest"
-prerelease = "if-necessary-or-explicit"
+prerelease = "if-necessary"
 
 # --- Caching ---
 no-cache = false
