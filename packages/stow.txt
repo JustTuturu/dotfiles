@@ -5,6 +5,7 @@ fastfetch
 fcitx5
 fontconfig
 ghostty
+git
 gtk
 hypr
 lazygit
