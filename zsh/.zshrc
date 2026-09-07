@@ -73,14 +73,6 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --icons --color=always --group-
 zstyle ':fzf-tab:complete:ls:*' fzf-preview 'eza --icons --color=always --group-directories-first $realpath'
 zstyle ':fzf-tab:complete:cat:*' fzf-preview 'bat --color=always --style=numbers --line-range=:500 $realpath 2>/dev/null || eza --icons --color=always $realpath'
 
-zinit ice wait'0' lucid
-zinit snippet OMZ::lib/functions.zsh
-zinit snippet OMZ::lib/directories.zsh
-zinit snippet OMZP::extract
-zinit snippet OMZP::sudo
-zinit snippet OMZP::git
-zinit snippet OMZP::cp
-
 # ─── Environment Variables ───────────────────────────────────────
 export EDITOR="zed --wait"
 export VISUAL="zed --wait"
@@ -151,9 +143,6 @@ function y() {
     rm -f -- "$tmp"
 }
 
-# Automatically load env
-eval "$(direnv hook zsh)"
-
 # ─── Aliases ─────────────────────────────────────────────────────
 alias disk='z /mnt/EVO990'
 alias zz='z ~'
@@ -163,8 +152,6 @@ alias la='eza -a --icons --git'
 alias lt='eza --tree --icons'
 alias yz='yazi'
 alias yy='y'
-alias s='sudo'
-alias se='sudoedit'
 alias b='bat'
 alias lzd='lazydocker'
 alias lzg='lazygit'
