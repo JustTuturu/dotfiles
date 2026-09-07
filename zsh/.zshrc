@@ -94,6 +94,18 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 
+# Python cache
+export PYTHONPYCACHEPREFIX=~/.cache/pycache
+
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+# Bun completions
+[ -s "/home/suzu/.bun/_bun" ] && source "/home/suzu/.bun/_bun"
+
+# Opencode
+export PATH=/home/suzu/.opencode/bin:$PATH
+
 # ─── Tool Initializations ────────────────
 # FZF (keybindings + completion)
 eval "$(fzf --zsh)"
@@ -127,14 +139,8 @@ nvm() {
     nvm "$@"
 }
 
-# UV
-[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
-
 # Starship (matugen-generated)
 eval "$(starship init zsh)"
-
-# Python cache
-export PYTHONPYCACHEPREFIX=~/.cache/pycache
 
 # Yazi shell wrapper
 function y() {
@@ -144,6 +150,9 @@ function y() {
     [ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
     rm -f -- "$tmp"
 }
+
+# Automatically load env
+eval "$(direnv hook zsh)"
 
 # ─── Aliases ─────────────────────────────────────────────────────
 alias disk='z /mnt/EVO990'
@@ -161,12 +170,5 @@ alias lzd='lazydocker'
 alias lzg='lazygit'
 alias spotify='spotify_player'
 
-# opencode
-export PATH=/home/suzu/.opencode/bin:$PATH
-
-# bun completions
-[ -s "/home/suzu/.bun/_bun" ] && source "/home/suzu/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+# Add local bin to PATH
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
