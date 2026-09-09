@@ -147,6 +147,10 @@
   // Agent
   "agent_servers": {
     "opencode": {
+      "default_config_options": {
+        "effort": "high",
+        "model": "openrouter/deepseek/deepseek-v4-flash-0731"
+      },
       "type": "registry"
     },
   },
