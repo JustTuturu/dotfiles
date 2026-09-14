@@ -131,7 +131,7 @@ capsule_opacity   = 0.4
 
 start  = ["launcher", "clock", "active_window", "audio_visualizer"]
 center = ["workspaces"]
-end    = ["tray", "volume", "gpu_usage", "gpu_temp", "status", "notifications",]
+end    = ["tray", "volume", "gpu_usage", "gpu_temp", "tailscale", "notifications",]
 
 # ---------------------------------------------------------------------------
 # Widget definitions
