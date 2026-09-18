@@ -22,12 +22,6 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("uwsm app -- fcitx5 -d --replace")
 
     -- ============================================
-    -- Clipboard
-    -- ============================================
-    hl.exec_cmd("uwsm app -- wl-paste --type text --watch cliphist store")
-    hl.exec_cmd("uwsm app -- wl-paste --type image --watch cliphist store")
-
-    -- ============================================
     -- Idle management — lock & sleep
     -- ============================================
     hl.exec_cmd("systemctl --user restart hypridle.service")

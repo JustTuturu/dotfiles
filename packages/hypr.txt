@@ -1,5 +1,4 @@
-# Clipboard & Screenshot
-cliphist
+# Screenshot
 grimblast
 
 # Hyprland

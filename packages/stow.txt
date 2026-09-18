@@ -1,6 +1,5 @@
 bat
 btop
-cliphist
 fastfetch
 fcitx5
 fontconfig

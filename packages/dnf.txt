@@ -10,7 +10,7 @@ uwsm
 # CLI utilities
 ripgrep bat fzf eza zoxide
 fastfetch gh
-cliphist wl-clipboard playerctl grimblast
+wl-clipboard playerctl grimblast
 
 # Archive support + sensors
 unzip 7zip
