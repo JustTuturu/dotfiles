@@ -36,6 +36,16 @@
   // Buffer interaction
   "autosave": "on_focus_change",
 
+  // Open Markdown files directly in the rendered preview
+  "markdown_preview": {
+    "open_markdown_files_in_preview": true,
+  },
+
+  // Animate cursor movement
+  "cursor_animation": {
+    "enabled": true,
+  },
+
   // Inline diagnostics (error lens)
   "diagnostics": {
     "inline": {
@@ -169,9 +179,9 @@
     "favorite_models": [],
     "model_parameters": [],
     "default_model": {
-      "effort": "medium",
+      "effort": "high",
       "provider": "zed.dev",
-      "model": "gpt-5.6-luna",
+      "model": "claude-sonnet-4-6",
       "enable_thinking": true,
     },
   },
