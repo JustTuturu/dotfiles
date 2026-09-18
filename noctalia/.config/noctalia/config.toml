@@ -13,14 +13,6 @@ popup_borders       = true
 card_borders        = true
 popup_shadows       = true
 
-[shell.shadow]
-direction = "down_right"
-alpha     = 0.55
-
-[shell.animation]
-enabled = true
-speed   = 1.0
-
 # ---------------------------------------------------------------------------
 # Native polkit agent — lets Noctalia approve greeter-sync (and other admin)
 # ---------------------------------------------------------------------------
@@ -33,11 +25,26 @@ date_format = "%A, %x"
 avatar_path = "/home/suzu/dotfiles/wallpapers/Chisa.jpg"
 
 # ---------------------------------------------------------------------------
-# Cliphist
+# Clipboard (Noctalia's built-in manager — cliphist is NOT used)
 # ---------------------------------------------------------------------------
 clipboard_enabled        = true
-clipboard_keep_from_closed_apps = true
+clipboard_history_max_entries = 1000
+clipboard_keep_from_closed_apps = false
 clipboard_auto_paste     = "auto"
+
+# ---------------------------------------------------------------------------
+# Shadow
+# ---------------------------------------------------------------------------
+[shell.shadow]
+direction = "down_right"
+alpha     = 0.55
+
+# ---------------------------------------------------------------------------
+# Animations
+# ---------------------------------------------------------------------------
+[shell.animation]
+enabled = true
+speed   = 1.0
 
 # ---------------------------------------------------------------------------
 # Panels
