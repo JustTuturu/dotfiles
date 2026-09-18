@@ -75,8 +75,37 @@ cd ~/dotfiles
 
 ## Theming
 
-Run matugen after changing wallpaper:
+matugen is the single source of truth for the palette. Noctalia owns the
+wallpaper and fires its `[hooks] wallpaper_changed`, which runs
+`~/.config/matugen/scripts/wallpaper-hook.sh`:
+
+```
+wallpaper change -> Noctalia hook -> wallpaper-hook.sh -> matugen image "$NOCTALIA_WALLPAPER_PATH" --prefer darkness
+```
+
+So changing the wallpaper regenerates every template; you never run matugen by
+hand. Noctalia's own template rendering stays disabled (no `builtin_ids`, no
+`community_ids`) so nothing else writes the same files.
+
+The hook fires once per output connector, so `wallpaper-hook.sh` uses `flock`
+plus a stamp file in `~/.local/state/matugen/` to collapse a two-monitor change
+into a single matugen run.
+
+To render manually:
 
 ```bash
-matugen image ~/Pictures/Wallpapers/Chisa.jpg --prefer darkness
+matugen image ~/dotfiles/wallpapers/Chisa.jpg --prefer darkness
 ```
+
+`--prefer` is required: the wallpaper has multiple candidate source colors and
+matugen cannot prompt without a terminal.
+
+Everything re-reads the generated files automatically except three apps, which
+`wallpaper-hook.sh` nudges through `reload-apps.sh`:
+
+- **Hyprland** — `~/.config/hypr/generated/colors.lua` is read when the config is
+  parsed, so it gets `hyprctl reload`.
+- **Ghostty** — does not reload its config on change, so it gets `SIGUSR2`
+  (or a systemd unit reload when it runs as one).
+- **btop** — reads its theme file at startup, so it gets `SIGUSR2`.
+

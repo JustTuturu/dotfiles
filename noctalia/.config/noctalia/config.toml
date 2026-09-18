@@ -280,3 +280,22 @@ pre_action_fade_seconds = 2.0
 
 [lockscreen]
 enabled = false
+
+# ---------------------------------------------------------------------------
+# Hooks — keep matugen as the single source of truth for the palette
+# ---------------------------------------------------------------------------
+# Noctalia owns the wallpaper and fires this on every change, so matugen no
+# longer has to be run by hand: it regenerates every enabled template
+# (ghostty, btop, bat, eza, starship, zsh, hyprlock, brave-origin, ...).
+# Noctalia's own template rendering stays disabled — no builtin_ids and no
+# community_ids — so nothing else writes the same files.
+#
+# Only wallpaper_changed is wired. Deliberately NOT wired:
+#   colors_changed      fires whenever the palette is resolved, including a
+#                       theme/palette change you did not ask for — it would
+#                       re-theme on events other than a wallpaper change.
+#   theme_mode_changed  fires on light/dark switches; you want the wallpaper
+#                       to be the only trigger.
+#   started             would re-render on every login for no reason.
+[hooks]
+wallpaper_changed = '$HOME/.config/matugen/scripts/wallpaper-hook.sh'
