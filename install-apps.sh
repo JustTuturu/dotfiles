@@ -113,7 +113,6 @@ install_apps() {
     install_blender
     install_btop
     install_qt6ct
-    install_discord
     install_brave
     install_zed
     install_bun
