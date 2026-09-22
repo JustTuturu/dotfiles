@@ -55,6 +55,11 @@
 
   },
 
+  // Inlay hints (LSP hints inline in the buffer; enables actionable hints)
+  "inlay_hints": {
+    "enabled": true,
+  },
+
   // Toolbar / panel buttons in the status bar
   "collaboration_panel": {
     "button": false,
