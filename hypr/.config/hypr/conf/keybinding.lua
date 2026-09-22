@@ -40,30 +40,6 @@ hl.bind(mainMod .. " + SHIFT + C", function()
 end)
 hl.bind(mainMod .. " + P", hl.dsp.window.pin())
 
--- ── Minimize (SUPER+X) ────────────────────────────────────────────
--- Mimics "minimize window" via special workspace; single keybind toggles.
-hl.bind(mainMod .. " + X", function()
-    if hl.get_workspace("special:minimized") then
-        hl.dispatch(hl.dsp.window.move({ workspace = hl.get_active_workspace(), window = "tag:minimized" }))
-        hl.dispatch(hl.dsp.window.clear_tags({ window = "tag:minimized" }))
-    else
-        hl.dispatch(hl.dsp.window.tag({ tag = "minimized", window = hl.get_active_window() }))
-        hl.dispatch(hl.dsp.window.move({ workspace = "special:minimized", follow = false }))
-    end
-end)
-
--- ── Scratch terminal (SUPER+Escape) ───────────────────────────────
--- Native Lua toggle on special workspace scratch
-hl.bind(mainMod .. " + Escape", function()
-    local scratch_wins = hl.get_workspace_windows("special:scratch")
-    if scratch_wins and #scratch_wins > 0 then
-        hl.dispatch(hl.dsp.workspace.toggle_special("scratch"))
-    else
-        hl.dispatch(hl.dsp.exec_cmd(vars.terminal, { workspace = "special:scratch" }))
-        hl.dispatch(hl.dsp.workspace.toggle_special("scratch"))
-    end
-end)
-
 -- Swap windows
 hl.bind(mainMod .. " + SHIFT + left", hl.dsp.window.swap({ direction = "l" }))
 hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.swap({ direction = "r" }))
@@ -79,22 +55,11 @@ hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "u" }))
 hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "d" }))
 
 -- ═══════════════════════════════════════════════════════════════════
--- Workspaces (persistent 1-6: 1-3 left, 4-6 right)
--- SUPER+1..3         switch left screen workspaces
--- SUPER+CTRL+1..3     switch right screen workspaces
--- SUPER+SHIFT+1..3    move window to left screen workspace
--- SUPER+CTRL+SHIFT+1..3 move window to right screen workspace
--- ═══════════════════════════════════════════════════════════════════
-for i = 1, 7 do
-    hl.bind(mainMod .. "+" .. i, hl.dsp.focus({ workspace = tostring(i) }))
-    hl.bind(mainMod .. "+SHIFT+" .. i, hl.dsp.window.move({ workspace = tostring(i) }))
-    hl.bind(mainMod .. "+CTRL+" .. i, hl.dsp.focus({ workspace = tostring(i + 7) }))
-    hl.bind(mainMod .. "+CTRL+SHIFT+" .. i, hl.dsp.window.move({ workspace = tostring(i + 7) }))
-end
-
+-- Workspaces (3 per screen: 1-3 left, 4-6 right)
 -- Scroll through workspaces (stays on the current monitor)
-hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "m+1" }))
-hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "m-1" }))
+-- ═══════════════════════════════════════════════════════════════════
+hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "m+1" }))
+hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "m-1" }))
 
 -- ═══════════════════════════════════════════════════════════════════
 -- Layout controls
