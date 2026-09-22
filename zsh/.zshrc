@@ -143,6 +143,10 @@ function y() {
     rm -f -- "$tmp"
 }
 
+# ---- Keymaps ----------------------------------------------------
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+
 # ─── Aliases ─────────────────────────────────────────────────────
 alias disk='z /mnt/EVO990'
 alias zz='z ~'
