@@ -10,19 +10,22 @@
 #   ./install-assets.sh cursors Install only cursor themes and set cursor defaults
 #
 # Fonts:
-#   - JetBrains Mono Nerd Font (NF) — terminal/Ghostty (ligatures)
-#   - JetBrains Mono Nerd Font Mono (NFM) — Zed IDE, Noctalia (no ligatures)
-#   - Only Regular + Bold + Italic + BoldItalic weights (8 files total)
-#   - Downloaded from ryanoasis/nerd-fonts GitHub releases (tar.xz)
-#   - Noto Sans (Latin/CJK) installed via dnf — see packages/dnf.txt
+#   - JetBrains Mono (official, ligatures) — Zed IDE buffer + terminal
+#     Regular + SemiBold, from download.jetbrains.com
+#   - Ghostty ships its own Nerd Font-patched JetBrains Mono, so no
+#     patched Nerd Font is installed
+#   - Inter (UI), Literata (reading), LXGW WenKai Mono (CJK reading) and
+#     Zen Kaku Gothic New (CJK UI) downloaded from upstream (no dnf/sudo)
+#   - Noto Sans + Noto Sans Mono come from Fedora default fonts (no duplicate)
+#   - Noto Sans CJK dropped
 #
 # Icons:
 #   - Tela-icon-theme — GTK/app icon theme, cloned from vinceliuice/Tela-icon-theme
 #
 # Cursors:
-#   - HChisaBLZ (Hyprland native, hyprcursor format)
-#   - XChisaBLZ (X11/XCursor format, for GTK/flatpak apps)
-#   - Both from JustTuturu/TuturuCursor private repo (requires gh auth)
+#   - hyprcursor-ChisaBLZ (Hyprland native, hyprcursor format)
+#   - xcursor-ChisaBLZ (X11/XCursor format, for GTK/flatpak apps)
+#   - Both from the public JustTuturu/Chisa-Hyprcursor releases
 #   - Persistent env vars set via Hyprland environment.conf (NOT .zshenv)
 #
 set -euo pipefail
@@ -77,38 +80,27 @@ ICON_DIR="${HOME}/.local/share/icons"
 FONT_DIR="${HOME}/.local/share/fonts"
 
 CURSOR_SIZE=24
-# Actual theme names (must match index.theme / manifest.hl)
-HYPR_CURSOR="HChisaBLZ"
-X_CURSOR="XChisaBLZ"
-# GitHub release archive names (same installed theme names)
-HYPR_CURSOR_ARCHIVE="HChisaBLZ"
-X_CURSOR_ARCHIVE="XChisaBLZ"
+# Theme names must match index.theme / manifest.hl; release archives use the same names.
+HYPR_CURSOR="hyprcursor-ChisaBLZ"
+X_CURSOR="xcursor-ChisaBLZ"
 
-# ========================== GH CHECK ==========================================
-check_gh() {
-    if ! cmd_exists gh; then
-        fail "gh (GitHub CLI) is required. Install with: sudo dnf install gh"
-    fi
+# ========================== DOWNLOAD HELPER ===================================
+# Fetch an asset from a public GitHub release (no gh CLI or auth required).
+download() {
+    local url="$1" out="$2"
 
-    if ! gh auth status &>/dev/null; then
-        fail "gh is not authenticated. Run: gh auth login"
-    fi
+    cmd_exists curl || fail "curl is required to download assets"
+
+    curl -fsSL --retry 3 -o "$out" "$url"
 }
 
 # ========================== FONTS =============================================
+# Official JetBrains Mono (with ligatures) for the Zed IDE. Ghostty ships its
+# own Nerd Font-patched JetBrains Mono, so no patched Nerd Font is installed.
 install_fonts() {
-    mkdir -p "${FONT_DIR}"
-
-    # Only NF Regular+Bold and NFM (Mono) Regular+Bold weights, with Italic variants
     local -a wanted=(
-        JetBrainsMonoNerdFont-Regular.ttf
-        JetBrainsMonoNerdFont-Bold.ttf
-        JetBrainsMonoNerdFont-Italic.ttf
-        JetBrainsMonoNerdFont-BoldItalic.ttf
-        JetBrainsMonoNerdFontMono-Regular.ttf
-        JetBrainsMonoNerdFontMono-Bold.ttf
-        JetBrainsMonoNerdFontMono-Italic.ttf
-        JetBrainsMonoNerdFontMono-BoldItalic.ttf
+        JetBrainsMono-Regular.ttf
+        JetBrainsMono-SemiBold.ttf
     )
 
     # Check if ALL wanted fonts are already present
@@ -117,28 +109,30 @@ install_fonts() {
         [[ -f "${FONT_DIR}/${f}" ]] || { missing=1; break; }
     done
     if [[ ${missing} -eq 0 ]]; then
-        ok "JetBrains Mono Nerd Font already installed"
+        ok "JetBrains Mono already installed"
         return
     fi
 
-    info "Downloading JetBrains Mono Nerd Font via gh"
-    local archive="${TEMP_DIR}/JetBrainsMono.tar.xz"
+    info "Downloading JetBrains Mono (official, with ligatures)"
+    local archive="${TEMP_DIR}/JetBrainsMono.zip"
 
-    gh release download --repo ryanoasis/nerd-fonts \
-        --pattern "JetBrainsMono.tar.xz" \
-        --output "${archive}" \
-        || fail "Failed to download JetBrains Mono Nerd Font"
+    download \
+        "https://download.jetbrains.com/fonts/JetBrainsMono-2.304.zip" \
+        "${archive}" \
+        || fail "Failed to download JetBrains Mono"
 
-    # Extract only wanted weights (archive contains flat .ttf files)
-    tar -xf "${archive}" -C "${TEMP_DIR}" --wildcards \
-        "${wanted[@]}" || fail "Failed to extract JetBrains Mono Nerd Font"
+    cmd_exists unzip || fail "unzip is required to extract JetBrains Mono"
 
+    mkdir -p "${FONT_DIR}"
+
+    # Official zip nests TTFs under fonts/ttf/ (non-NL = with ligatures)
     local extracted=0
     for f in "${wanted[@]}"; do
-        if [[ -f "${TEMP_DIR}/${f}" ]]; then
-            mv -f "${TEMP_DIR}/${f}" "${FONT_DIR}/"
+        if unzip -p "${archive}" "fonts/ttf/${f}" > "${FONT_DIR}/${f}" 2>/dev/null \
+            && [[ -s "${FONT_DIR}/${f}" ]]; then
             ((extracted++)) || true
         else
+            rm -f "${FONT_DIR}/${f}"
             warn "Missing from archive: ${f}"
         fi
     done
@@ -149,7 +143,59 @@ install_fonts() {
 
     fc-cache -f 2>/dev/null
 
-    ok "JetBrains Mono NF + NFM installed (${extracted} weights)"
+    ok "JetBrains Mono installed (${extracted} weights)"
+}
+
+# ========================== EXTRA FONTS =======================================
+# Downloaded directly from upstream (Google Fonts / GitHub); no dnf/sudo needed.
+install_extra_fonts() {
+    local -a files=(
+        # Inter — Latin UI (variable roman + italic)
+        "Inter[opsz,wght].ttf|https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf"
+        "Inter-Italic[opsz,wght].ttf|https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter-Italic%5Bopsz%2Cwght%5D.ttf"
+        # Literata — Latin long-form reading (variable roman + italic)
+        "Literata[opsz,wght].ttf|https://raw.githubusercontent.com/google/fonts/main/ofl/literata/Literata%5Bopsz%2Cwght%5D.ttf"
+        "Literata-Italic[opsz,wght].ttf|https://raw.githubusercontent.com/google/fonts/main/ofl/literata/Literata-Italic%5Bopsz%2Cwght%5D.ttf"
+        # LXGW WenKai Mono — CJK reading
+        "LXGWWenKaiMono-Regular.ttf|https://github.com/lxgw/LxgwWenKai/releases/latest/download/LXGWWenKaiMono-Regular.ttf"
+        "LXGWWenKaiMono-Medium.ttf|https://github.com/lxgw/LxgwWenKai/releases/latest/download/LXGWWenKaiMono-Medium.ttf"
+        # Zen Kaku Gothic New — CJK UI
+        "ZenKakuGothicNew-Regular.ttf|https://raw.githubusercontent.com/google/fonts/main/ofl/zenkakugothicnew/ZenKakuGothicNew-Regular.ttf"
+        "ZenKakuGothicNew-Medium.ttf|https://raw.githubusercontent.com/google/fonts/main/ofl/zenkakugothicnew/ZenKakuGothicNew-Medium.ttf"
+        "ZenKakuGothicNew-Bold.ttf|https://raw.githubusercontent.com/google/fonts/main/ofl/zenkakugothicnew/ZenKakuGothicNew-Bold.ttf"
+    )
+
+    local missing=0 entry
+    for entry in "${files[@]}"; do
+        [[ -f "${FONT_DIR}/${entry%%|*}" ]] || { missing=1; break; }
+    done
+    if [[ ${missing} -eq 0 ]]; then
+        ok "Extra fonts already installed"
+        return
+    fi
+
+    info "Downloading fonts: Inter + Literata + LXGW WenKai Mono + Zen Kaku Gothic New"
+    mkdir -p "${FONT_DIR}"
+
+    local count=0 name url
+    for entry in "${files[@]}"; do
+        name="${entry%%|*}"
+        url="${entry#*|}"
+        [[ -f "${FONT_DIR}/${name}" ]] && continue
+
+        if download "$url" "${FONT_DIR}/${name}"; then
+            ((count++)) || true
+        else
+            warn "Failed to download ${name}"
+        fi
+    done
+
+    if [[ ${count} -eq 0 ]]; then
+        fail "No extra font files downloaded"
+    fi
+
+    fc-cache -f 2>/dev/null
+    ok "Extra fonts installed (${count} files)"
 }
 
 # ========================== CURSORS ===========================================
@@ -159,20 +205,16 @@ install_cursors() {
         return
     fi
 
-    echo -ne "\n  Install private cursor theme? [y/N] "
+    echo -ne "\n  Install cursor theme? [y/N] "
     read -r reply || reply=""
     if [[ ! "${reply}" =~ ^[Yy]$ ]]; then
         info "Skipping cursor install"
         return
     fi
 
-    local -a themes=() archives=()
-    themes+=("${HYPR_CURSOR}")  archives+=("${HYPR_CURSOR_ARCHIVE}")
-    themes+=("${X_CURSOR}")    archives+=("${X_CURSOR_ARCHIVE}")
+    local -a themes=("${HYPR_CURSOR}" "${X_CURSOR}")
 
-    for i in "${!themes[@]}"; do
-        local theme="${themes[i]}"
-        local archive_name="${archives[i]}"
+    for theme in "${themes[@]}"; do
         local dest="${ICON_DIR}/${theme}"
 
         if [[ -d "${dest}" ]]; then
@@ -180,23 +222,23 @@ install_cursors() {
             continue
         fi
 
-        info "Downloading ${archive_name} → ${theme} from JustTuturu/TuturuCursor"
-        local archive="${TEMP_DIR}/${archive_name}.tar.gz"
+        info "Downloading ${theme} from JustTuturu/Chisa-Hyprcursor"
+        local archive="${TEMP_DIR}/${theme}.tar.gz"
 
-        if ! gh release download --repo "JustTuturu/TuturuCursor" \
-            --pattern "${archive_name}.tar.gz" \
-            --output "${archive}" 2>/dev/null; then
-            warn "Failed to download ${archive_name}"
+        if ! download \
+            "https://github.com/JustTuturu/Chisa-Hyprcursor/releases/latest/download/${theme}.tar.gz" \
+            "${archive}"; then
+            warn "Failed to download ${theme}"
             continue
         fi
 
         mkdir -p "${ICON_DIR}"
         tar -xf "${archive}" -C "${ICON_DIR}" 2>/dev/null \
-            || { warn "Failed to extract ${archive_name}"; continue; }
+            || { warn "Failed to extract ${theme}"; continue; }
 
         # Verify extraction produced the expected theme directory
         if [[ -d "${dest}" ]]; then
-            ok "${archive_name} → ${dest}"
+            ok "${theme} → ${dest}"
         else
             warn "Extracted but expected dir not found: ${dest}"
         fi
@@ -282,8 +324,8 @@ set_icon_default() {
 # ========================== MAIN ==============================================
 case "${1:-all}" in
     all)
-        check_gh
         install_fonts
+        install_extra_fonts
         install_icons
         install_cursors
         set_defaults
@@ -293,11 +335,10 @@ case "${1:-all}" in
         set_icon_default
         ;;
     fonts)
-        check_gh
         install_fonts
+        install_extra_fonts
         ;;
     cursors)
-        check_gh
         install_cursors
         set_cursor_defaults
         ;;

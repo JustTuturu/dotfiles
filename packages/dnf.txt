@@ -22,12 +22,5 @@ imv
 yt-dlp
 ffmpeg
 
-# Fonts
-google-noto-sans-fonts
-google-noto-sans-vf-fonts
-google-noto-sans-mono-fonts
-google-noto-sans-mono-vf-fonts
-google-noto-sans-cjk-fonts
-
 #Matugen
 matugen

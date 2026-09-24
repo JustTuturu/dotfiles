@@ -38,7 +38,7 @@ cd ~/dotfiles
 ./install-apps.sh
 ```
 
-`install-assets.sh` installs fonts, icons, cursors, and desktop defaults. `install-apps.sh` installs optional applications and development tools. Fonts and cursors require an authenticated `gh` CLI.
+`install-assets.sh` installs fonts, icons, cursors, and desktop defaults. `install-apps.sh` installs optional applications and development tools. Fonts and cursors are fetched from public upstream sources (no `gh` CLI or authentication required).
 
 Log out and select **Hyprland (uwsm-managed)** at login. UWSM owns the
 Hyprland session and launches graphical applications as systemd user units.
@@ -67,12 +67,13 @@ cd ~/dotfiles
 ## Softwares
 
 - Terminal: [Ghostty](https://github.com/ghostty/ghostty)
-- Font: [JetBrains Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts) [Noto Sans Mono](https://github.com/googlefonts/noto-fonts)
+- Font: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (terminal/editor) · Inter + Literata (UI/reading) · LXGW WenKai Mono + Zen Kaku Gothic New (CJK)
 - Colorscheme: [Matugen](https://github.com/JustTuturu/matugen)
 - Shell: [Zsh](https://www.zsh.org/)
 - Editor: [Zed](https://zed.dev/)
 - Micro: terminal editor — **headless servers only** (`micro/.config/micro` with Matugen transparent theme; not used on the desktop, where Zed is the editor)
 - Downloader: [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+- IRC: [Halloy](https://halloy.chat/)
 
 ## Theming
 

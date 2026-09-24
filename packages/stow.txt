@@ -6,6 +6,7 @@ fontconfig
 ghostty
 git
 gtk
+halloy
 hypr
 lazygit
 matugen

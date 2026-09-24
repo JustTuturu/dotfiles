@@ -1,7 +1,7 @@
 -- Environment variables
-hl.env("HYPRCURSOR_THEME", "ChisaBLZ-hypr")
+hl.env("HYPRCURSOR_THEME", "hyprcursor-ChisaBLZ")
 hl.env("HYPRCURSOR_SIZE", "24")
-hl.env("XCURSOR_THEME", "ChisaBLZ")
+hl.env("XCURSOR_THEME", "xcursor-ChisaBLZ")
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRLAND_CMD", "Hyprland")
 
