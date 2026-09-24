@@ -1,0 +1,85 @@
+# ─── yt-dlp Config ───────────────────────────────────────────────
+# Global defaults, loaded from ~/.config/yt-dlp/config
+# One option per line, same syntax as the command line.
+# Full docs: https://github.com/yt-dlp/yt-dlp#configuration
+#
+# Per-site rules can live in ~/.config/yt-dlp/config.d/ if you ever
+# split this up. Command-line flags always override this file.
+
+# ── Download location ────────────────────────────────────────────
+# Everything lands in ~/downloads, sorted into per-uploader folders.
+-P "home:~/downloads"
+-o "%(uploader)s/%(title)s [%(id)s].%(ext)s"
+# Use a fast scratch disk for partial downloads, then move to home.
+-P "temp:~/.cache/yt-dlp"
+
+# ── Speed / parallelism ──────────────────────────────────────────
+# Download 4 fragments of a stream at once (the big speedup for
+# DASH/HLS videos like YouTube). Raise to 8 on a fast connection.
+--concurrent-fragments 4
+# Larger HTTP chunks can help throughput on some servers.
+--http-chunk-size 10M
+# Optional cap so downloads can't saturate your link (e.g. for
+# gaming/calls). Uncomment and tune as needed — 0 means unlimited.
+# --limit-rate 10M
+# If the server throttles you below this, yt-dlp backs off and
+# retries, which often restores full speed.
+--throttled-rate 100K
+
+# ── Format selection & merging ───────────────────────────────────
+# Best video + best audio, falling back to best single file.
+-f "bv*+ba/b"
+# Container used when merging separate video/audio streams.
+# mkv holds any codec combo (VP9/AV1/Opus) losslessly; use mp4 only if
+# a specific device needs it.
+--merge-output-format mkv
+
+# ── Metadata, thumbnails, subtitles ──────────────────────────────
+--embed-metadata
+--embed-thumbnail
+--embed-chapters
+--embed-subs
+--sub-langs "en.*,vi.*"
+--convert-subs srt
+
+# ── Quality of life ──────────────────────────────────────────────
+--no-mtime                 # don't touch file mtimes after download
+--no-overwrites            # keep finished files, resume partials
+--continue
+--retries 10
+--fragment-retries 10
+--newline                  # one progress line per update (script-friendly)
+--ignore-errors            # a dead video in a playlist won't abort it
+--trim-filenames 200       # guard against ridiculously long names
+# Keep a record of what's already downloaded to skip re-downloads.
+# Stored in the download folder so its parent always exists.
+--download-archive "~/downloads/.yt-dlp-archive.txt"
+
+# ── SponsorBlock ─────────────────────────────────────────────────
+# Strip sponsor segments, intros and self-promos from videos.
+--sponsorblock-remove "sponsor,selfpromo,interaction"
+
+# ── Cookies (age-gated / members-only) ───────────────────────────
+# Reuses your browser session. Handy, but yt-dlp can't read cookies
+# while the browser is running for some setups — close it or use a
+# cookies.txt export instead. Uncomment and pick your browser.
+# --cookies-from-browser firefox
+
+# ────────────────────────────────────────────────────────────────
+# Popular recipes — uncomment the block you want, or copy a flag
+# onto a single command.
+# ────────────────────────────────────────────────────────────────
+# Music only (best audio, no video), tagged into an album folder:
+# -f "ba/b" -x --audio-format mp3 --audio-quality 0
+#     --embed-metadata --embed-thumbnail
+#     -o "~/downloads/Music/%(uploader)s/%(title)s.%(ext)s"
+
+# Whole playlists into their own folder, in order:
+# -o "%(playlist_title)s/%(playlist_index)02d - %(title)s.%(ext)s"
+#     --yes-playlist
+
+# One-off: download only the first 10 minutes of something:
+# --download-sections "*0:00-10:00" --force-keyframes-at-cuts
+
+# Archive channels without re-downloading anything (needs the
+# download-archive above); combine with a `--dateafter` window.
