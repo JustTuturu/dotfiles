@@ -58,8 +58,8 @@ hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "d" }))
 -- Workspaces (3 per screen: 1-3 left, 4-6 right)
 -- Scroll through workspaces (stays on the current monitor)
 -- ═══════════════════════════════════════════════════════════════════
-hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "m+1" }))
-hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "m-1" }))
+hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "m+1" }))
+hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "m-1" }))
 
 -- ═══════════════════════════════════════════════════════════════════
 -- Layout controls
