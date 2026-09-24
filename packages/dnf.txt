@@ -19,6 +19,8 @@ lm_sensors
 # Media / viewers
 mpv
 imv
+yt-dlp
+ffmpeg
 
 # Fonts
 google-noto-sans-fonts

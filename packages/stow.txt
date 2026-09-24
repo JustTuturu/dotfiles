@@ -12,5 +12,6 @@ matugen
 noctalia
 uv
 yazi
+yt-dlp
 zed
 zsh
