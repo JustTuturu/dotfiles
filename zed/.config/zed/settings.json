@@ -126,8 +126,8 @@
     "lua-language-server": {
       "settings": {
         "Lua": {
-          "diagnostics": {
-            "globals": ["hl"],
+          "workspace": {
+            "library": ["/usr/share/hypr/stubs"],
           },
         },
       },
@@ -138,36 +138,13 @@
         "arguments": ["server"],
       },
     },
-    "vscode-css-language-server": {
-      "settings": {
-        "css": {
-          "lint": {
-            "unknownAtRules": "ignore"
-              }
-            },
-        "less": {
-          "lint": {
-            "unknownAtRules": "ignore"
-              }
-            },
-        "scss": {
-          "lint": {
-            "unknownAtRules": "ignore"
-          },
-        },
-      },
-    },
   },
 
   // Agent
   "agent_servers": {
-    "opencode": {
-      "default_config_options": {
-        "effort": "high",
-        "model": "openrouter/deepseek/deepseek-v4-flash-0731"
-      },
+    "codex-acp": {
       "type": "registry"
-    },
+    }
   },
 
   "agent": {
