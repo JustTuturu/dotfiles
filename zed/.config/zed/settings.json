@@ -19,19 +19,20 @@
   },
   "terminal": {
     "font_family": "JetBrainsMono Nerd Font Mono",
-    "font_size": 20.0,
+    "font_size": 16.0,
     "button": false
   },
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "Catppuccin Mocha",
+    "dark": "Dark Glass",
   },
 
   // UI / buffer fonts
   "icon_theme": "Catppuccin Mocha",
   "ui_font_size": 16,
-  "buffer_font_size": 15,
+  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+  "buffer_font_size": 16,
 
   // Buffer interaction
   "autosave": "on_focus_change",
@@ -45,6 +46,12 @@
   "cursor_animation": {
     "enabled": true,
   },
+
+  // Prediction
+  "edit_predictions": {
+    "mode": "eager"                  // Automatically show (eager) or hold-alt (subtle)
+  },
+  "show_edit_predictions": true,     // Show/hide predictions in editor
 
   // Inline diagnostics (error lens)
   "diagnostics": {

@@ -2,7 +2,6 @@
 config-file = ~/.config/matugen/generated/ghostty-colors.conf
 
 # ─── Theme ───────────────────────────────────
-# JetBrains Mono + Symbols Nerd Font are built into Ghostty — no font-family needed.
 font-size = 14
 cursor-style = block
 

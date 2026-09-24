@@ -18,7 +18,7 @@ popup_shadows       = true
 # ---------------------------------------------------------------------------
 polkit_agent = true
 
-font_family = "Noto Sans"
+font_family = "Inter"
 time_format = "{:%H:%M}"
 date_format = "%A, %x"
 
