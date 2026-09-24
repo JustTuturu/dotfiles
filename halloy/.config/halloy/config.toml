@@ -1,7 +1,49 @@
 # Halloy config.
 #
-# For a complete list of available options,
-# please visit https://halloy.chat/configuration.html
+# Full option reference: https://halloy.chat/configuration.html
+#
+# Theme — "matugen" is regenerated from the wallpaper by matugen
+# (see ~/.config/matugen/config.toml -> [templates.halloy]). Static themes
+# ship in ./themes/ (e.g. "catppuccin-mocha").
+# NOTE: the theme key must stay before any section.
+theme = "matugen"
+
+[font]
+# Halloy does not support variable-weight fonts; the static JetBrains Mono
+# faces are fine.
+family = "JetBrains Mono"
+size = 14
+line_height = 1.3
+
+[sidebar]
+order_by = "config"
+order_channels_by = "config"
+padding = { buffer = [4, 6] }
+spacing = { server = 8 }
+
+[buffer]
+line_spacing = 2
+scroll_position_on_open = "oldest-unread"
+
+[buffer.nickname]
+brackets = { left = "<", right = ">" }
+show_access_levels = "highest"
+hide_consecutive = { enabled = true, show_after_previews = true }
+
+[buffer.timestamp]
+brackets = { left = "[", right = "]" }
+hide_consecutive = { enabled = true }
+
+[buffer.server_messages.condense]
+messages = ["change-nick", "join", "part", "quit"]
+icon = "dot"
+
+[notifications]
+direct_message = { sound = "peck", show_toast = true, show_content = true }
+highlight = { sound = "dong", show_toast = true, show_content = true }
+
+[display]
+nickname = ["display-name"]
 
 [servers.liberachat]
 nickname = "halloy8827"
