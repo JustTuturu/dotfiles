@@ -75,6 +75,25 @@ cd ~/dotfiles
 - Downloader: [yt-dlp](https://github.com/yt-dlp/yt-dlp)
 - IRC: [Halloy](https://halloy.chat/)
 
+## Hyprland keybinds
+
+`SUPER` is the Windows/Super key.
+
+| Keybind | Action |
+| --- | --- |
+| `SUPER + SPACE` | Open Ghostty terminal |
+| `SUPER + B` | Open Brave |
+| `SUPER + Y` | Open Yazi in Ghostty |
+| `SUPER + TAB` | Open the launcher |
+| `SUPER + Q` | Close the focused window |
+| `SUPER + Arrow keys` | Focus a window in that direction |
+| `SUPER + F` | Toggle floating for the focused window |
+| `SUPER + M` | Toggle fullscreen |
+| `SUPER + SHIFT + S` | Copy a selected area screenshot |
+| `SUPER + SHIFT + F` | Copy a screenshot of all screens |
+| `SUPER + SHIFT + W` | Copy a screenshot of the current output |
+| `SUPER + L` | Lock the session |
+
 ## Theming
 
 matugen is the single source of truth for the palette. Noctalia owns the
@@ -110,4 +129,3 @@ Everything re-reads the generated files automatically except three apps, which
 - **Ghostty** — does not reload its config on change, so it gets `SIGUSR2`
   (or a systemd unit reload when it runs as one).
 - **btop** — reads its theme file at startup, so it gets `SIGUSR2`.
-
