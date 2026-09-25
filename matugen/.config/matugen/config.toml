@@ -40,3 +40,7 @@ output_path = "~/.config/btop/themes/matugen.theme"
 [templates.halloy]
 input_path  = "~/.config/matugen/templates/halloy.toml.mustache"
 output_path = "~/.config/halloy/themes/matugen.toml"
+
+[templates.gtk]
+input_path  = "~/.config/matugen/templates/gtk-colors.css.mustache"
+output_path = "~/.config/matugen/generated/gtk-colors.css"
