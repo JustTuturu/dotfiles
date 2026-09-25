@@ -10,5 +10,6 @@ hl.config({
         allow_session_lock_restore = true,
         disable_watchdog_warning = true,
         disable_hyprland_guiutils_check = true,
+        focus_on_activate = true,
     },
 })
