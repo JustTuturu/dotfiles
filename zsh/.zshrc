@@ -159,7 +159,7 @@ alias yy='y'
 alias b='bat'
 alias lzd='lazydocker'
 alias lzg='lazygit'
-alias spotify='spotify_player'
+alias spotify='spotifast'
 
 # Add local bin to PATH
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"

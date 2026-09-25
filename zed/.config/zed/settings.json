@@ -149,6 +149,9 @@
 
   // Agent
   "agent_servers": {
+    "opencode": {
+      "type": "registry"
+    },
     "codex-acp": {
       "type": "registry"
     }
