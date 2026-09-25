@@ -18,7 +18,7 @@
     "dock": "left"
   },
   "terminal": {
-    "font_family": "JetBrainsMono Nerd Font Mono",
+    "font_family": "JetBrains Mono",
     "font_size": 16.0,
     "button": false
   },
@@ -31,7 +31,7 @@
   // UI / buffer fonts
   "icon_theme": "Catppuccin Mocha",
   "ui_font_size": 16,
-  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+  "buffer_font_family": "JetBrains Mono",
   "buffer_font_size": 16,
 
   // Buffer interaction
