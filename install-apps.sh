@@ -67,76 +67,50 @@ install_lazydocker() {
     ok "Lazydocker installed"
 }
 
-# ========================== DNF PACKAGE HELPER ===============================
-prompt_dnf_package() {
-    local group="$1"
-    local pkg="$2"
-
-    info "${group}: ${pkg}"
-    echo -ne "  Install ${BOLD}${pkg}${RESET}? [y/N] "
-    read -r reply
-
-    if [[ "${reply}" =~ ^[Yy]$ ]]; then
-        dnf_install "${pkg}"
-        ok "${pkg} installed"
-    else
-        info "Skipped ${pkg}"
-    fi
+# ========================== LAZYGIT ==========================================
+install_lazygit() {
+    info "Installing Lazygit from source"
+    dnf_install golang || fail "Go installation failed"
+    mkdir -p "$HOME/.local/bin" || fail "Could not create ~/.local/bin"
+    GOBIN="$HOME/.local/bin" go install github.com/jesseduffield/lazygit@latest \
+        || fail "Lazygit source installation failed"
+    ok "Lazygit installed to ~/.local/bin"
 }
 
-# ========================== DEV TOOLS ================================
-install_dev_tools() {
-    local -a dev_tools=(gcc gcc-c++ make cmake python3-devel cargo)
-
-    info "Development tools"
-    echo -ne "  Install all development tools (${dev_tools[*]})? [y/N] "
-    read -r reply
-
-    if [[ "${reply}" =~ ^[Yy]$ ]]; then
-        dnf_install "${dev_tools[@]}"
-        ok "Development tools installed"
-    else
-        info "Skipped development tools"
-    fi
+# ========================== OFFICIAL APPS =====================================
+install_obs() {
+    info "Installing OBS Studio"
+    dnf_install obs-studio || fail "OBS Studio installation failed"
+    ok "OBS Studio installed"
 }
 
-# ========================== OFICIAL APP ============================
-install_obs() { prompt_dnf_package "Installing OBS Studio" obs-studio; }
-install_blender() { prompt_dnf_package "Installing Blender" blender; }
-install_btop() { prompt_dnf_package "Installing btop" btop; }
-install_qt6ct() { prompt_dnf_package "Installing qt6ct" qt6ct; }
+install_blender() {
+    info "Installing Blender"
+    dnf_install blender || fail "Blender installation failed"
+    ok "Blender installed"
+}
 
+install_btop() {
+    info "Installing btop"
+    dnf_install btop || fail "btop installation failed"
+    ok "btop installed"
+}
 
 # ========================== APPLICATIONS ======================================
 install_apps() {
     install_obs
     install_blender
     install_btop
-    install_qt6ct
     install_brave
     install_zed
     install_bun
     install_uv
     install_herdr
     install_lazydocker
+    install_lazygit
 }
 
 # ========================== MAIN =============================================
-case "${1:-all}" in
-    all)
-        install_dev_tools
-        install_apps
-        ;;
-    dev)
-        install_dev_tools
-        ;;
-    apps)
-        install_apps
-        ;;
-    *)
-        echo "Usage: ./install-apps.sh [dev|apps]"
-        exit 1
-        ;;
-esac
+install_apps
 
-echo -e "\n${GREEN}${BOLD}=== Applications Installed ===${RESET}"
+echo -e "\n${GREEN}${BOLD}=== Applications and Tools Installed ===${RESET}"
