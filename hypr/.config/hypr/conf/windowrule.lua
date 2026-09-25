@@ -6,6 +6,18 @@ hl.window_rule({
     no_blur = true,
 })
 
+-- Keep DataGrip on its own workspace
+hl.window_rule({
+    match = { class = "^(jetbrains-datagrip|DataGrip)$" },
+    workspace = "6",
+})
+
+-- Keep Spotify on its own workspace
+hl.window_rule({
+    match = { class = "^(spotifast)$" },
+    workspace = "3",
+})
+
 -- Floating dialogs / utilities
 hl.window_rule({
     match = { class = "^(pavucontrol|blueman-manager|nm-connection-editor|gnome-calculator|qalculate-gtk)$" },
