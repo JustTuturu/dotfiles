@@ -107,11 +107,12 @@ order = ["main"]
 position           = "top"
 enabled            = true
 auto_hide          = false
+smart_auto_hide    = false
 show_on_workspace_switch = true
 reserve_space      = true
 layer              = "top"
 
-thickness          = 28
+thickness          = 24
 
 background_opacity = 0.0
 border             = "outline"
@@ -125,7 +126,9 @@ padding            = 4
 widget_spacing     = 6
 
 font_weight        = 500
+font_family        = "Inter"
 scale              = 1.0
+
 hover_highlight    = true
 
 capsule           = true
