@@ -25,7 +25,7 @@
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "Dark Glass",
+    "dark": "Catppuccin Espresso (Blur) [Light]",
   },
 
   // UI / buffer fonts
