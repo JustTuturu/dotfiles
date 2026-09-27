@@ -212,19 +212,16 @@ install_cursors() {
         return
     fi
 
-    local -a themes=("${HYPR_CURSOR}" "${X_CURSOR}")
+    mkdir -p "${ICON_DIR}"
+    local -a themes=("${X_CURSOR}" "${HYPR_CURSOR}")
 
     for theme in "${themes[@]}"; do
-        local dest="${ICON_DIR}/${theme}"
-
-        if [[ -d "${dest}" ]]; then
-            ok "${theme} already installed"
-            continue
-        fi
+        local archive="${TEMP_DIR}/${theme}.tar.gz"
+        local source="${TEMP_DIR}/${theme}"
+        local user_dest="${ICON_DIR}/${theme}"
+        local system_dest="/usr/share/icons/${theme}"
 
         info "Downloading ${theme} from JustTuturu/Chisa-Hyprcursor"
-        local archive="${TEMP_DIR}/${theme}.tar.gz"
-
         if ! download \
             "https://github.com/JustTuturu/Chisa-Hyprcursor/releases/latest/download/${theme}.tar.gz" \
             "${archive}"; then
@@ -232,15 +229,29 @@ install_cursors() {
             continue
         fi
 
-        mkdir -p "${ICON_DIR}"
-        tar -xf "${archive}" -C "${ICON_DIR}" 2>/dev/null \
-            || { warn "Failed to extract ${theme}"; continue; }
+        if ! tar -xf "${archive}" -C "${TEMP_DIR}" 2>/dev/null; then
+            warn "Failed to extract ${theme}"
+            continue
+        fi
 
-        # Verify extraction produced the expected theme directory
-        if [[ -d "${dest}" ]]; then
-            ok "${theme} → ${dest}"
+        if [[ ! -d "${source}" ]]; then
+            warn "Extracted but expected directory not found: ${source}"
+            continue
+        fi
+
+        if cp -a "${source}" "${ICON_DIR}/"; then
+            ok "${theme} copied to ${user_dest}"
         else
-            warn "Extracted but expected dir not found: ${dest}"
+            warn "Failed to copy ${theme} to ${ICON_DIR}"
+            continue
+        fi
+
+        if sudo cp -a "${source}" /usr/share/icons/ \
+            && sudo chown -R root:root "${system_dest}" \
+            && sudo chmod -R a+rX "${system_dest}"; then
+            ok "${theme} copied to ${system_dest} (root:root, a+rX)"
+        else
+            warn "Failed to install ${theme} system-wide"
         fi
     done
 }

@@ -95,6 +95,9 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Bun completions
 [ -s "/home/suzu/.bun/_bun" ] && source "/home/suzu/.bun/_bun"
 
+# Cargo
+export PATH="$HOME/.cargo/bin:$PATH"
+
 # Opencode
 export PATH=/home/suzu/.opencode/bin:$PATH
 
