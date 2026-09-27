@@ -34,7 +34,7 @@ require("conf.appearance")
 -- 8. Layout
 require("conf.layout")
 
--- 9. Keybindings (uses vars.terminal, vars.browser, etc.)
+-- 9. Keybindings
 require("conf.keybinding")
 
 -- 10. Window rules
