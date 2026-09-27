@@ -1,7 +1,7 @@
 [mgr]
 keymap = [
     # Essential controls
-    { on = "<Esc>",    run = "escape",          desc = "Cancel filter/search or clear current mode" },
+    { on = "<Esc>",    run = "escape --all",     desc = "Cancel modes and clear selection" },
     { on = "<F1>",    run = "help",             desc = "Open keymap help" },
 
     # Navigation
