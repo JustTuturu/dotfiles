@@ -27,12 +27,8 @@
 --throttled-rate 100K
 
 # ── Format selection & merging ───────────────────────────────────
-# Best video + best audio, falling back to best single file.
--f "bv*+ba/b"
-# Container used when merging separate video/audio streams.
-# mkv holds any codec combo (VP9/AV1/Opus) losslessly; use mp4 only if
-# a specific device needs it.
---merge-output-format mkv
+# Prefer MP4-compatible H.264/AAC streams and remux the result to MP4.
+-t mp4
 
 # ── Metadata, thumbnails, subtitles ──────────────────────────────
 --embed-metadata

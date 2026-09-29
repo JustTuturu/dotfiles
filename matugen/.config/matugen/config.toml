@@ -9,10 +9,6 @@ output_path = "~/.config/matugen/generated/ghostty-colors.conf"
 input_path  = "~/.config/matugen/templates/zsh-highlight.zsh.mustache"
 output_path = "~/.config/matugen/generated/zsh-highlight.zsh"
 
-[templates.zsh-fzf]
-input_path  = "~/.config/matugen/templates/zsh-fzf-colors.zsh.mustache"
-output_path = "~/.config/matugen/generated/zsh-fzf-colors.zsh"
-
 [templates.hyprlock]
 input_path  = "~/.config/matugen/templates/hyprlock.conf.mustache"
 output_path = "~/.config/matugen/generated/hyprlock-colors.conf"

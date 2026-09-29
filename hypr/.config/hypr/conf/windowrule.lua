@@ -12,6 +12,13 @@ hl.window_rule({
     workspace = "6",
 })
 
+-- Center JetBrains Toolbox as a floating window
+hl.window_rule({
+    match = { class = "^(jetbrains-toolbox|jetbrains-toolbox-app)$" },
+    float = true,
+    center = true,
+})
+
 -- Keep Spotify on its own workspace
 hl.window_rule({
     match = { class = "^(spotifast)$" },
