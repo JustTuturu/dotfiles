@@ -6,13 +6,11 @@ fontconfig
 ghostty
 git
 gtk
-halloy
 hypr
 lazygit
 matugen
 noctalia
 uv
 yazi
-yt-dlp
 zed
 zsh

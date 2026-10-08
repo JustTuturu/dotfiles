@@ -161,6 +161,9 @@
   },
 
   "agent": {
+    "threads_sidebar": {
+      "position": "right"
+    },
     "profiles": {
 
     },
@@ -170,7 +173,6 @@
       "tools": {}
     },
     "dock": "right",
-    "sidebar_side": "right",
     "favorite_models": [],
     "model_parameters": [],
     "default_model": {

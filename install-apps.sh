@@ -58,15 +58,6 @@ install_uv() {
     curl -LsSf https://astral.sh/uv/install.sh | sh || fail "UV installation failed"
     ok "UV installed"
 }
-
-# ========================== LAZYDOCKER =======================================
-install_lazydocker() {
-    info "Installing Lazydocker"
-    curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash \
-        || fail "Lazydocker installation failed"
-    ok "Lazydocker installed"
-}
-
 # ========================== LAZYGIT ==========================================
 install_lazygit() {
     info "Installing Lazygit from source"
@@ -106,7 +97,6 @@ install_apps() {
     install_bun
     install_uv
     install_herdr
-    install_lazydocker
     install_lazygit
 }
 

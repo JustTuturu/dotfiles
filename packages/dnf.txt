@@ -23,7 +23,6 @@ cargo
 # Media / viewers
 mpv
 imv
-yt-dlp
 ffmpeg
 
 #Matugen
