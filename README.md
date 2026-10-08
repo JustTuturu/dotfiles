@@ -4,17 +4,18 @@
 
 ## Install
 
+Fresh machine (no clone needed):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/JustTuturu/dotfiles/main/install.sh | bash
+```
+
+Or from a clone:
+
 ```bash
 git clone https://github.com/JustTuturu/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-./install-system.sh full
-```
-
-After the first Hyprland login:
-
-```bash
-./install-assets.sh
-./install-apps.sh
+./install.sh
 ```
 
 Log out and select **Hyprland (uwsm-managed)** at login.
@@ -23,7 +24,7 @@ Log out and select **Hyprland (uwsm-managed)** at login.
 
 ```bash
 cd ~/dotfiles
-./install-system.sh stow
+./install.sh stow
 ```
 
 ## Software
