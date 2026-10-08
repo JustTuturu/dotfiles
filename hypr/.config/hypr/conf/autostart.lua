@@ -10,9 +10,6 @@ hl.on("hyprland.start", function()
     -- Force Noctalia to use hyprqt6engine for Qt6 theming.
     hl.exec_cmd("uwsm app -- env QT_QPA_PLATFORMTHEME=hyprqt6engine noctalia")
 
-    -- Noctalia handles notifications natively; no separate daemon needed
-    -- hl.exec_cmd("swaync")
-
     -- NetworkManager tray applet
     hl.exec_cmd("uwsm app -- nm-applet --indicator")
 
@@ -26,4 +23,8 @@ hl.on("hyprland.start", function()
     -- ============================================
     hl.exec_cmd("systemctl --user restart hypridle.service")
     hl.exec_cmd("systemctl --user start hyprpolkitagent")
+    -- ============================================
+    -- Browser
+    -- ============================================
+    hl.exec_cmd("brave-origin")
 end)
