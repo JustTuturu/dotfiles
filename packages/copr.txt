@@ -1,3 +1,4 @@
+dejan/lazygit
 lihaohong/yazi
 lionheartp/Hyprland
 scottames/ghostty

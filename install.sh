@@ -550,16 +550,6 @@ install_uv() {
     curl -LsSf https://astral.sh/uv/install.sh | sh || fail "UV installation failed"
     ok "UV installed"
 }
-
-install_lazygit() {
-    info "Installing Lazygit from source"
-    dnf_install golang || fail "Go installation failed"
-    mkdir -p "$HOME/.local/bin" || fail "Could not create ~/.local/bin"
-    GOBIN="$HOME/.local/bin" go install github.com/jesseduffield/lazygit@latest \
-        || fail "Lazygit source installation failed"
-    ok "Lazygit installed to ~/.local/bin"
-}
-
 install_obs() {
     info "Installing OBS Studio"
     dnf_install obs-studio || fail "OBS Studio installation failed"
@@ -587,7 +577,6 @@ install_apps() {
     install_bun
     install_uv
     install_herdr
-    install_lazygit
 }
 
 # ========================== PHASES ============================================

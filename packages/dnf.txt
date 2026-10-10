@@ -18,7 +18,7 @@ lm_sensors
 inih-devel ninja meson scdoc
 gcc gcc-c++ make cmake
 python3-devel gtk4-devel gtk3-devel qt6-qtbase
-cargo
+cargo rust-src rustfmt cargo-clippy
 
 # Media / viewers
 mpv
