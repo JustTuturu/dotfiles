@@ -25,7 +25,7 @@
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "Catppuccin Espresso (Blur) [Light]",
+    "dark": "Catppuccin Espresso (Blur) [Heavy]",
   },
 
   // UI / buffer fonts
@@ -36,9 +36,14 @@
 
   // Buffer interaction
   "autosave": "on_focus_change",
+  "format_on_save": "on",
 
   // Open Markdown files directly in the rendered preview
   "markdown_preview": {
+    "max_width": 1400.0,
+    "limit_content_width": true,
+    "code_font_family": "Adwaita Mono",
+    "font_size": 16.0,
     "open_markdown_files_in_preview": true,
   },
 
@@ -149,9 +154,6 @@
 
   // Agent
   "agent_servers": {
-    "opencode": {
-      "type": "registry"
-    },
     "codex-acp": {
       "default_config_options": {
         "reasoning_effort": "high"

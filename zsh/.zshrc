@@ -30,7 +30,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 # ─── FZF colors ─────────────────────────────────────────────────
 # Shared palette for fzf and fzf-tab.
-export FZF_DEFAULT_OPTS="--no-border --color=bg+:#29292f --color=fg:#e4e1e9 --color=fg+:#e4e1e9 --color=hl:#ffb4ab --color=hl+:#ffb4ab --color=header:#ffb4ab --color=info:#e0e0f9 --color=prompt:#e0e0f9 --color=pointer:#dfe0ff --color=spinner:#dfe0ff --color=marker:#e0e0f9 --color=label:#e4e1e9 --color=preview-fg:#e4e1e9"
+export FZF_DEFAULT_OPTS="--scheme=path +i --tiebreak=length,index --no-border --color=bg+:#29292f --color=fg:#e4e1e9 --color=fg+:#e4e1e9 --color=hl:#ffb4ab --color=hl+:#ffb4ab --color=header:#ffb4ab --color=info:#e0e0f9 --color=prompt:#e0e0f9 --color=pointer:#dfe0ff --color=spinner:#dfe0ff --color=marker:#e0e0f9 --color=label:#e4e1e9 --color=preview-fg:#e4e1e9"
 export FZF_TAB_COLORS="fg:#e4e1e9,bg+:rgba(255,255,255,0.05),hl:#ffb4ab,fg+:#e4e1e9,hl+:#ffb4ab,info:#e0e0f9,prompt:#e0e0f9,pointer:#dfe0ff,marker:#ffb4ab,header:#ffb4ab"
 
 # Core plugin installation
@@ -79,7 +79,7 @@ export PYTHONPYCACHEPREFIX="$HOME/.cache/pycache"
 
 # ─── Tool Initialization ─────────────────────────────────────────
 eval "$(fzf --zsh)"
-export FZF_DEFAULT_COMMAND='find . -maxdepth 2 -not -path "*/.*"'
+export FZF_DEFAULT_COMMAND='find . -maxdepth 2 -not -path "*/.*" | awk "{ print length, \$0 }" | sort -n | cut -d" " -f2-'
 
 export YAZI_ZOXIDE_OPTS="--no-border --no-scrollbar --color=bg+:#29292f --color=fg:#e4e1e9 --color=fg+:#e4e1e9 --color=hl:#ffb4ab --color=hl+:#ffb4ab --color=header:#ffb4ab --color=info:#e0e0f9 --color=prompt:#e0e0f9 --color=pointer:#dfe0ff --color=spinner:#dfe0ff --color=marker:#e0e0f9"
 
