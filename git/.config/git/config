@@ -3,10 +3,6 @@
 
 [url "https://github.com/"]
 	insteadOf = git@github.com:
-
-[core]
-	hooksPath = /home/suzu/.local/share/ggshield/git-hooks
-
 [init]
 	defaultBranch = main
 
@@ -30,3 +26,4 @@
 
 [core]
 	autocrlf = input
+	hooksPath = ~/.local/share/ggshield/git-hooks

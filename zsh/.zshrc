@@ -67,8 +67,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "/home/suzu/.bun/_bun" ] && source "/home/suzu/.bun/_bun"
 
 export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
-export PATH=/home/suzu/.opencode/bin:$PATH
 
 # ─── Environment ─────────────────────────────────────────────────
 export EDITOR="zed --wait"

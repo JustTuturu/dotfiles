@@ -7,20 +7,18 @@
   "language_models": {
     "opencode": {
       "show_go_models": true,
-      "show_zen_models": false
-    }
+      "show_zen_models": false,
+    },
   },
   "proxy": "",
-  "context_servers": {
-
-  },
+  "context_servers": {},
   "debugger": {
-    "dock": "left"
+    "dock": "left",
   },
   "terminal": {
     "font_family": "JetBrains Mono",
     "font_size": 16.0,
-    "button": false
+    "button": false,
   },
   "theme": {
     "mode": "dark",
@@ -54,9 +52,9 @@
 
   // Prediction
   "edit_predictions": {
-    "mode": "eager"                  // Automatically show (eager) or hold-alt (subtle)
+    "mode": "eager", // Automatically show (eager) or hold-alt (subtle)
   },
-  "show_edit_predictions": true,     // Show/hide predictions in editor
+  "show_edit_predictions": true, // Show/hide predictions in editor
 
   // Inline diagnostics (error lens)
   "diagnostics": {
@@ -64,7 +62,6 @@
       "enabled": true,
       "max_severity": null,
     },
-
   },
 
   // Inlay hints (LSP hints inline in the buffer; enables actionable hints)
@@ -89,7 +86,13 @@
     "INI": [],
     "JavaScript": ["*.qml"],
     "JSON": ["*.jsonc", "*.json.mustache"],
-    "Shell Script": ["*.conf", ".zshrc", "*.zsh.mustache", "config","config.ghostty"],
+    "Shell Script": [
+      "*.conf",
+      ".zshrc",
+      "*.zsh.mustache",
+      "config",
+      "config.ghostty",
+    ],
     "TOML": ["*.toml.mustache"],
     "XML": ["*.tmTheme.mustache", "fonts.conf"],
     "YAML": ["*.yml.mustache"],
@@ -98,15 +101,10 @@
   // Python language servers
   "languages": {
     "Lua": {
-      "language_servers": [
-        "lua-language-server",
-      ],
+      "language_servers": ["lua-language-server"],
     },
     "Python": {
-      "language_servers": [
-        "basedpyright",
-        "ruff",
-      ],
+      "language_servers": ["basedpyright", "ruff"],
       "code_actions_on_format": {
         "source.organizeImports.ruff": true,
       },
@@ -117,7 +115,7 @@
       },
     },
     "Typst": {
-          "soft_wrap": "none",
+      "soft_wrap": "none",
     },
   },
   "lsp": {
@@ -125,7 +123,7 @@
       "initialization_options": {
         "preview": {
           "background": {
-            "enabled": true
+            "enabled": true,
           },
         },
       },
@@ -154,25 +152,25 @@
 
   // Agent
   "agent_servers": {
-    "codex-acp": {
+    "opencode": {
       "default_config_options": {
-        "reasoning_effort": "high"
+        "effort": "max",
+        "model": "opencode-go/deepseek-v4.1-flash",
       },
-      "type": "registry"
-    }
+      "type": "custom",
+      "command": "opencode",
+      "args": ["acp"],
+    },
   },
 
   "agent": {
     "threads_sidebar": {
-      "position": "right"
+      "position": "right",
     },
-    "profiles": {
-
-    },
-    "terminal_init_command": "codex --profile openrouter",
+    "profiles": {},
     "tool_permissions": {
       "default": "confirm",
-      "tools": {}
+      "tools": {},
     },
     "dock": "right",
     "favorite_models": [],
@@ -198,7 +196,7 @@
     },
   ],
   "telemetry": {
-      "diagnostics": false,
-      "metrics": false
+    "diagnostics": false,
+    "metrics": false,
   },
 }
