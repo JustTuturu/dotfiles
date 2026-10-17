@@ -148,6 +148,12 @@
         "arguments": ["server"],
       },
     },
+    "esbonio": {
+      "binary": {
+        "path": "esbonio",
+        "arguments": ["server"],
+      },
+    },
   },
 
   // Agent
