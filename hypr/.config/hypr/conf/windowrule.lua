@@ -6,12 +6,6 @@ hl.window_rule({
     no_blur = true,
 })
 
--- Keep DataGrip on its own workspace
-hl.window_rule({
-    match = { class = "^(jetbrains-datagrip|DataGrip)$" },
-    workspace = "6",
-})
-
 -- Keep Spotify on its own workspace
 hl.window_rule({
     match = { class = "^(spotifast)$" },
@@ -30,5 +24,11 @@ hl.window_rule({
 -- Steam: only float dialogs/popups, keep main window tiled
 hl.window_rule({
     match = { class = "^(Steam)$", title = "negative:^(Steam)$" },
+    float = true,
+})
+
+-- Blender: float dialog/utility windows (open/save browser, preferences, render), keep the main window tiled
+hl.window_rule({
+    match = { class = "^(blender|Blender)$", title = "^(Blender File View|Blender (User )?Preferences|Blender Render.*)$" },
     float = true,
 })
