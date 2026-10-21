@@ -7,16 +7,11 @@
 # ---------------------------------------------------------------------------
 [shell]
 corner_radius_scale = 1.0
-button_borders      = true
-input_borders       = true
-popup_borders       = true
-card_borders        = true
-popup_shadows       = true
-
-# ---------------------------------------------------------------------------
-# Native polkit agent — lets Noctalia approve greeter-sync (and other admin)
-# ---------------------------------------------------------------------------
-polkit_agent = true
+button_borders = true
+input_borders = true
+popup_borders = true
+card_borders = true
+popup_shadows = true
 
 font_family = "Inter"
 time_format = "{:%H:%M}"
@@ -27,10 +22,10 @@ avatar_path = "/home/suzu/dotfiles/wallpapers/Chisa.jpg"
 # ---------------------------------------------------------------------------
 # Clipboard (Noctalia's built-in manager — cliphist is NOT used)
 # ---------------------------------------------------------------------------
-clipboard_enabled        = true
+clipboard_enabled = true
 clipboard_history_max_entries = 1000
 clipboard_keep_from_closed_apps = false
-clipboard_auto_paste     = "auto"
+clipboard_auto_paste = "auto"
 
 # ---------------------------------------------------------------------------
 # Laucher
@@ -44,23 +39,23 @@ layout = "simple"
 # ---------------------------------------------------------------------------
 [shell.shadow]
 direction = "down_right"
-alpha     = 0.55
+alpha = 0.55
 
 # ---------------------------------------------------------------------------
 # Animations
 # ---------------------------------------------------------------------------
 [shell.animation]
 enabled = true
-speed   = 1.0
+speed = 1.0
 
 # ---------------------------------------------------------------------------
 # Panels
 # ---------------------------------------------------------------------------
 [shell.panel]
-transparency_mode          = "glass"
-control_center_placement   = "floating"
-control_center_position    = "auto"
-launcher_placement         = "floating"
+transparency_mode = "glass"
+control_center_placement = "floating"
+control_center_position = "auto"
+launcher_placement = "floating"
 
 # ---------------------------------------------------------------------------
 # Noctalia Greeter — keep the login screen synced (wallpaper, palette, font)
@@ -72,10 +67,10 @@ auto_sync = true
 # Theme / palette
 # ---------------------------------------------------------------------------
 [theme]
-mode             = "dark"
-source           = "wallpaper"
+mode = "dark"
+source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
-pure_black_dark  = false
+pure_black_dark = false
 
 # ---------------------------------------------------------------------------
 # Location & weather
@@ -84,17 +79,17 @@ pure_black_dark  = false
 auto_locate = true
 
 [weather]
-enabled  = true
-effects  = true
-unit     = "metric"
+enabled = true
+effects = true
+unit = "metric"
 
 # ---------------------------------------------------------------------------
 # Wallpaper
 # ---------------------------------------------------------------------------
 [wallpaper]
-enabled             = true
-directory           = "/home/suzu/dotfiles/wallpapers"
-fill_mode           = "crop"
+enabled = true
+directory = "/home/suzu/dotfiles/wallpapers"
+fill_mode = "crop"
 transition_duration = 1500
 transition_on_startup = false
 
@@ -111,161 +106,133 @@ path = "/home/suzu/dotfiles/wallpapers/Chisa.jpg"
 order = ["main"]
 
 [bar.main]
-position           = "top"
-enabled            = true
-auto_hide          = false
-smart_auto_hide    = false
+position = "top"
+enabled = true
+auto_hide = false
+smart_auto_hide = false
 show_on_workspace_switch = true
-reserve_space      = true
-layer              = "top"
+reserve_space = true
+layer = "top"
 
-thickness          = 24
+thickness = 24
 
 background_opacity = 0.0
-border             = "outline"
-border_width       = 0.0
-shadow             = false
-radius             = 12
+border = "outline"
+border_width = 0.0
+shadow = false
+radius = 12
 
-margin_ends        = 10
-margin_edge        = 4
-padding            = 4
-widget_spacing     = 6
+margin_ends = 10
+margin_edge = 4
+padding = 4
+widget_spacing = 6
 
-font_weight        = 500
-font_family        = "Inter"
-scale              = 1.0
+font_weight = 500
+font_family = "Inter"
+scale = 1.0
 
-hover_highlight    = true
+hover_highlight = true
 
-capsule           = true
-capsule_fill      = "surface_variant"
+capsule = true
+capsule_fill = "surface_variant"
 capsule_thickness = 0.76
-capsule_radius    = 8.0
-capsule_opacity   = 0.4
+capsule_radius = 8.0
+capsule_opacity = 0.4
 
 # Widget lanes
 
-start  = ["launcher", "clock", "active_window", "audio_visualizer"]
+start = ["launcher", "clock", "active_window", "audio_visualizer"]
 center = ["workspaces"]
-end    = ["tray", "volume", "gpu_usage", "gpu_temp", "tailscale", "notifications",]
+end = ["tray", "volume", "gpu_usage", "gpu_temp", "tailscale", "notifications"]
 
 # ---------------------------------------------------------------------------
 # Widget definitions
 # ---------------------------------------------------------------------------
 [widget.active_window]
-type       = "active_window"
+type = "active_window"
 title_scroll = "on_hover"
 
 [widget.audio_visualizer]
 type = "audio_visualizer"
 show_when_idle = false
 
-[widget.battery]
-type         = "battery"
-display_mode = "none"
-
-[widget.brightness]
-type         = "brightness"
-show_label = false
-
 [widget.clock]
-type           = "clock"
-format         = "{:%H:%M} {:%a}, {:%b} {:%d}"
+type = "clock"
+format = "{:%H:%M} {:%a}, {:%b} {:%d}"
 tooltip_format = "{:%A, %B %d, %Y}"
-
-[widget.control-center]
-type = "control-center"
 
 [widget.launcher]
 type = "launcher"
 
-[widget.lock_keys]
-display          = "short"
-show_caps_lock   = true
-show_num_lock    = true
-show_scroll_lock = false
-hide_when_off    = false
-
-[widget.media]
-type            = "media"
-
-[widget.network]
-type = "network"
-
 [widget.notifications]
-type              = "notifications"
+type = "notifications"
 hide_when_no_unread = true
 
-[widget.spacer]
-type   = "spacer"
-length = 24
-
 [widget.gpu_usage]
-type             = "sysmon"
-stat             = "gpu_usage"
+type = "sysmon"
+stat = "gpu_usage"
 
 [widget.gpu_temp]
-type             = "sysmon"
-stat             = "gpu_temp"
+type = "sysmon"
+stat = "gpu_temp"
 
 [widget.tray]
-type           = "tray"
-pinned         = ["Unikey", "Keyboard - English (US)", "steam", "Discord"]
+type = "tray"
+pinned = ["Unikey", "Keyboard - English (US)", "steam", "Discord"]
 
 [widget.volume]
-type         = "volume"
+type = "volume"
 
 [widget.workspaces]
-type                      = "workspaces"
-style                     = "regular"
-show_labels               = true
-label_source              = "name"
-max_label_chars           = 3
+type = "workspaces"
+style = "regular"
+show_labels = true
+label_source = "name"
+max_label_chars = 3
 labels_only_when_occupied = true
-focused_color             = "primary"
-occupied_color            = "secondary"
-empty_color               = "surface_variant"
-urgent_color              = "error"
-change_color_on_hover     = true
-active_pill_size          = 2.2
-inactive_pill_size        = 1.0
+focused_color = "primary"
+occupied_color = "secondary"
+empty_color = "surface_variant"
+urgent_color = "error"
+change_color_on_hover = true
+active_pill_size = 2.2
+inactive_pill_size = 1.0
 
 # ---------------------------------------------------------------------------
 # Dock
 # ---------------------------------------------------------------------------
 [dock]
-enabled             = false
-position            = "bottom"
-show_running        = true
-magnification       = true
+enabled = false
+position = "bottom"
+show_running = true
+magnification = true
 magnification_scale = 1.45
-background_opacity  = 0.88
-radius              = 16
-border              = "outline"
-border_width        = 0.0
-shadow              = true
-auto_hide           = false
-smart_auto_hide     = false
-reserve_space       = true
-active_opacity      = 1.0
-inactive_opacity    = 0.85
-active_scale        = 1.0
-inactive_scale      = 0.85
-icon_size           = 48
+background_opacity = 0.88
+radius = 16
+border = "outline"
+border_width = 0.0
+shadow = true
+auto_hide = false
+smart_auto_hide = false
+reserve_space = true
+active_opacity = 1.0
+inactive_opacity = 0.85
+active_scale = 1.0
+inactive_scale = 0.85
+icon_size = 48
 
 # ---------------------------------------------------------------------------
 # Notifications & OSD
 # ---------------------------------------------------------------------------
 [notification]
 background_opacity = 1.0
-position           = "top_right"
-monitors           = ["DP-2"]
+position = "top_right"
+monitors = ["DP-2"]
 
 [osd]
-enabled            = true
-position           = "top_right"
-monitors           = ["DP-2"]
+enabled = true
+position = "top_right"
+monitors = ["DP-2"]
 
 # ---------------------------------------------------------------------------
 # Noctalia native idle & lockscreen — DISABLED on purpose.
@@ -275,18 +242,18 @@ monitors           = ["DP-2"]
 [idle]
 pre_action_fade_seconds = 2.0
 
-    [idle.behavior.lock]
-    action  = "lock"
-    enabled = false
-    timeout = 600.0
+[idle.behavior.lock]
+action = "lock"
+enabled = false
+timeout = 600.0
 
-    [idle.behavior.screen-off]
-    action  = "screen_off"
-    enabled = false
+[idle.behavior.screen-off]
+action = "screen_off"
+enabled = false
 
-    [idle.behavior.lock-and-suspend]
-    action  = "lock_and_suspend"
-    enabled = false
+[idle.behavior.lock-and-suspend]
+action = "lock_and_suspend"
+enabled = false
 
 [lockscreen]
 enabled = false
