@@ -12,12 +12,20 @@ hl.window_rule({
     workspace = "3",
 })
 
--- Strata always opens as a floating window
+-- Yazi opens in its own floating Ghostty window.
 hl.window_rule({
-    match = { class = "^(io\\.github\\.lgse\\.Strata)$" },
+    match = { class = "^(com\\.mitchellh\\.ghostty)$", title = "^(Yazi)$" },
     float = true,
     center = true,
-    size = "1200 800",
+    size = "1600 900",
+})
+
+-- File chooser (xdg-desktop-portal-termfilechooser) floats like Super+E Yazi.
+hl.window_rule({
+    match = { class = "^(com\\.mitchellh\\.ghostty)$", title = "^(termfilechooser)$" },
+    float = true,
+    center = true,
+    size = "1600 900",
 })
 
 -- Floating dialogs / utilities

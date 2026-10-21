@@ -36,7 +36,3 @@ output_path = "~/.config/btop/themes/matugen.theme"
 [templates.gtk]
 input_path  = "~/.config/matugen/templates/gtk-colors.css.mustache"
 output_path = "~/.config/matugen/generated/gtk-colors.css"
-
-[templates.strata]
-input_path  = "~/.config/matugen/templates/strata.toml.mustache"
-output_path = "~/.config/strata/themes/matugen.toml"
