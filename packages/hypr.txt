@@ -13,10 +13,9 @@ hyprpolkitagent
 hyprqt6engine
 hyprland-guiutils
 
-# Notification + network + clipboard
+# Notification + network
 dbus-tools
 network-manager-applet
-wl-clipboard
 
 wlr-randr
 xdg-desktop-portal-hyprland
