@@ -32,24 +32,26 @@ cd ~/dotfiles
 - Terminal: [Ghostty](https://github.com/ghostty/ghostty)
 - Shell: [Zsh](https://www.zsh.org/)
 - Editor: [Zed](https://zed.dev/)
+- Screenshots: [grim](https://gitlab.freedesktop.org/emersion/grim) + [slurp](https://github.com/emersion/slurp), [grimblast](https://github.com/hyprwm/contrib/tree/main/grimblast) for window picking
 - Colorscheme: [Matugen](https://github.com/JustTuturu/matugen)
 
 ## Keybinds
 
 `SUPER` is the Windows key.
 
-| Keybind | Action |
-| --- | --- |
-| `SUPER + SPACE` | Terminal |
-| `SUPER + B` | Browser |
-| `SUPER + E` | Strata |
-| `SUPER + TAB` | Launcher |
-| `SUPER + Q` | Close window |
-| `SUPER + Arrows` | Focus window |
-| `SUPER + F` | Toggle floating |
-| `SUPER + M` | Toggle fullscreen |
-| `SUPER + SHIFT + S` | Area screenshot |
-| `SUPER + L` | Lock |
+| Keybind             | Action                                    |
+| ------------------- | ----------------------------------------- |
+| `SUPER + SPACE`     | Terminal                                  |
+| `SUPER + B`         | Browser                                   |
+| `SUPER + E`         | Yazi                                      |
+| `SUPER + TAB`       | Launcher                                  |
+| `SUPER + Q`         | Close window                              |
+| `SUPER + Arrows`    | Focus window                              |
+| `SUPER + F`         | Toggle floating                           |
+| `SUPER + M`         | Toggle fullscreen                         |
+| `SUPER + SHIFT + S` | Screenshot area → clipboard               |
+| `SUPER + SHIFT + F` | Pick a window or drag an area → clipboard |
+| `SUPER + L`         | Lock                                      |
 
 ## Theming
 
