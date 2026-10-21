@@ -10,6 +10,7 @@ hypr
 lazygit
 matugen
 noctalia
+strata
 uv
 yazi
 zed

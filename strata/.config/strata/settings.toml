@@ -1,0 +1,5 @@
+# Strata preferences.
+# mode = "theme" uses the selected theme; theme IDs come from
+# ~/.config/strata/themes/<id>.toml or a bundled catalog entry.
+mode = "theme"
+theme = "matugen"
