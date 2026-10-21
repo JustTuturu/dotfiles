@@ -42,7 +42,7 @@ keybinding:
     nextTab: <]>
     prevTab: <[>
     nextScreenMode: <c-s>
-    prevScreenMode: <c-s>
+    prevScreenMode: <a-s>
     undo: z
     redo: <c-z>
     filteringMenu: <c-f>
