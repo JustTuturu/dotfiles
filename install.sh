@@ -276,8 +276,17 @@ run_files() {
 
     if cmd_exists matugen && [ -f "$REPO_ROOT/wallpapers/Chisa.jpg" ]; then
         info "Generating initial matugen colors..."
-        matugen image "$REPO_ROOT/wallpapers/Chisa.jpg" --prefer darkness && ok "matugen colors generated" \
-            || warn "matugen failed — run manually"
+        if matugen image "$REPO_ROOT/wallpapers/Chisa.jpg" --prefer darkness; then
+            ok "matugen colors generated"
+
+            if cmd_exists bat; then
+                info "Rebuilding bat theme cache..."
+                bat cache --build >/dev/null 2>&1 && ok "bat theme cache rebuilt" \
+                    || warn "bat cache build failed"
+            fi
+        else
+            warn "matugen failed — run manually"
+        fi
     else
         warn "matugen: run manually after setting wallpaper"
     fi
