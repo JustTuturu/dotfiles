@@ -47,7 +47,7 @@ zinit light Aloxaf/fzf-tab
 # ─── fzf-tab ────────────────────────────────────────────────────
 zstyle ':fzf-tab:*' fzf-flags --height=40% --no-border
 zstyle ':fzf-tab:*' switch-group ',' "'"
-zstyle ':completion:*:descriptions' format '%F{pink}%B%S ■ %s%b%f'
+zstyle ':completion:*:descriptions' format '%F{magenta}%B%S ■ %s%b%f'
 zstyle ':fzf-tab:*' preview-window right:50%:border-rounded
 zstyle ':fzf-tab:complete:_zoxide:*' preview-window hidden
 
@@ -108,9 +108,7 @@ alias lt='eza --tree --icons'
 alias yz='yazi'
 alias yy='y'
 alias b='bat'
-alias lzd='lazydocker'
 alias lzg='lazygit'
-alias spotify='spotifast'
 
 # Add local bin to PATH
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
