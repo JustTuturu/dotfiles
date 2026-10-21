@@ -75,7 +75,6 @@ hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -- ═══════════════════════════════════════════════════════════════════
 -- Screenshots
 -- ═══════════════════════════════════════════════════════════════════
--- Screenshots: S = area (grim + slurp), F = window/area picker (grimblast)
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd('geo="$(slurp -d)" && grim -g "$geo" - | wl-copy'))
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd("uwsm app -- grimblast copy area"))
 
