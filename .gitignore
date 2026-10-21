@@ -1,13 +1,7 @@
-# Generated matugen output (regenerated at runtime)
-.config/matugen/generated/
-
-# Stow metadata
-.stow-local-ignore
+# Local-only overrides (e.g. git/.config/git/config.local)
+*.local
 
 # Misc
 *.backup.*
 *.log
 .DS_Store
-
-config.local
-*.local
