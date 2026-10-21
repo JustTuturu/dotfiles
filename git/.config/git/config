@@ -26,4 +26,3 @@
 
 [core]
 	autocrlf = input
-	hooksPath = ~/.local/share/ggshield/git-hooks
