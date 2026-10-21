@@ -8,8 +8,7 @@ local ipc = vars.ipc
 -- ═══════════════════════════════════════════════════════════════════
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(vars.terminal))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(vars.browser))
-hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(vars.terminal .. " -e yazi"))
-hl.bind(mainMod .. " + SHIFT + Y", hl.dsp.exec_cmd(vars.terminal .. " -e sudo yazi"))
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(vars.filemanager))
 
 -- ═══════════════════════════════════════════════════════════════════
 -- Noctalia integration

@@ -12,6 +12,14 @@ hl.window_rule({
     workspace = "3",
 })
 
+-- Strata always opens as a floating window
+hl.window_rule({
+    match = { class = "^(io\\.github\\.lgse\\.Strata)$" },
+    float = true,
+    center = true,
+    size = "1200 800",
+})
+
 -- Floating dialogs / utilities
 hl.window_rule({
     match = { class = "^(nm-connection-editor)$" },

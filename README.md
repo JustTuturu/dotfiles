@@ -42,7 +42,7 @@ cd ~/dotfiles
 | --- | --- |
 | `SUPER + SPACE` | Terminal |
 | `SUPER + B` | Browser |
-| `SUPER + Y` | Yazi |
+| `SUPER + E` | Strata |
 | `SUPER + TAB` | Launcher |
 | `SUPER + Q` | Close window |
 | `SUPER + Arrows` | Focus window |
