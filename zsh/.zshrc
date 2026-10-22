@@ -53,10 +53,10 @@ zstyle ':fzf-tab:complete:_zoxide:*' preview-window hidden
 
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --icons --color=always --group-directories-first $realpath'
 zstyle ':fzf-tab:complete:ls:*' fzf-preview 'eza --icons --color=always --group-directories-first $realpath'
-zstyle ':fzf-tab:complete:cat:*' fzf-preview 'bat --color=always --style=numbers --line-range=:500 $realpath 2>/dev/null || eza --icons --color=always $realpath'
+zstyle ':fzf-tab:complete:cat:*' fzf-preview 'sed -n "1,500p" $realpath'
 
 # ─── Tool Paths ──────────────────────────────────────────────────
-export PNPM_HOME="/home/suzu/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME/bin:"*) ;;
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
@@ -64,7 +64,7 @@ esac
 
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-[ -s "/home/suzu/.bun/_bun" ] && source "/home/suzu/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 export PATH="$HOME/.cargo/bin:$PATH"
 
@@ -106,7 +106,6 @@ alias ll='eza -lh -a --no-filesize --icons --color=always --git --group-director
 alias la='eza -a --icons --git'
 alias lt='eza --tree --icons'
 alias yy='y'
-alias b='bat'
 alias lzg='lazygit'
 
 # Add local bin to PATH

@@ -278,12 +278,6 @@ run_files() {
         info "Generating initial matugen colors..."
         if matugen image "$REPO_ROOT/wallpapers/Chisa.jpg" --prefer darkness; then
             ok "matugen colors generated"
-
-            if cmd_exists bat; then
-                info "Rebuilding bat theme cache..."
-                bat cache --build >/dev/null 2>&1 && ok "bat theme cache rebuilt" \
-                    || warn "bat cache build failed"
-            fi
         else
             warn "matugen failed — run manually"
         fi

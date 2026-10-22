@@ -14,41 +14,70 @@ max_height = 900
 
 [opener]
 edit = [
-    { run = '/home/suzu/.local/bin/zed --wait %s', block = true, for = "linux", desc = "Edit (zed)" },
+    { run = '~/.local/bin/zed --wait %s', block = true, for = "linux", desc = "Edit (zed)" },
 ]
 open = [
-    { run = 'xdg-open %s1', desc = "Open", for = "linux" },
+    { run = 'xdg-open %s1', desc = "Open (system default)", for = "linux" },
+]
+imv = [
+    { run = 'imv %s', desc = "Image (imv)", orphan = true, for = "linux" },
+]
+mpv = [
+    { run = 'mpv %s', desc = "Media (mpv)", orphan = true, for = "linux" },
+]
+blender = [
+    { run = 'blender %s1', desc = "Blender", orphan = true, for = "linux" },
+]
+prismlauncher = [
+    { run = 'prismlauncher --import %s1', desc = "Prism Launcher (import)", orphan = true, for = "linux" },
 ]
 
 [open]
 rules = [
-    { mime = "text/*",          use = "edit" },
-    { url  = "*.json",          use = "edit" },
-    { url  = "*.jsonc",         use = "edit" },
-    { url  = "*.yaml",          use = "edit" },
-    { url  = "*.yml",           use = "edit" },
-    { url  = "*.toml",          use = "edit" },
-    { url  = "*.lua",           use = "edit" },
-    { url  = "*.sh",            use = "edit" },
-    { url  = "*.py",            use = "edit" },
-    { url  = "*.js",            use = "edit" },
-    { url  = "*.ts",            use = "edit" },
-    { url  = "*.tsx",           use = "edit" },
-    { url  = "*.css",           use = "edit" },
-    { url  = "*.html",          use = "edit" },
-    { url  = "*.xml",           use = "edit" },
-    { url  = "*.lock",          use = "edit" },
-    { url  = "*.conf",          use = "edit" },
-    { mime = "application/zip",              use = "extract" },
-    { mime = "application/gzip",             use = "extract" },
-    { mime = "application/x-tar",             use = "extract" },
-    { mime = "application/x-bzip2",           use = "extract" },
-    { mime = "application/x-xz",              use = "extract" },
-    { mime = "application/x-7z-compressed",   use = "extract" },
-    { mime = "application/vnd.rar",           use = "extract" },
-    { mime = "application/x-rar",             use = "extract" },
-    { mime = "image/*",         use = "open" },
-    { mime = "video/*",         use = "open" },
-    { mime = "application/pdf", use = "open" },
-    { mime = "*",               use = "open" },
+    # ── 3D / Blender ───────────────────────────────────────────────────
+    # Yazi strips the "x-" prefix from MIME types (application/x-tar → application/tar),
+    # so extension globs are more reliable than MIME for 3D formats.
+    { mime = "application/blender",   use = [ "blender", "open" ] },
+    { url  = "*.blend",               use = [ "blender", "open" ] },
+    { url  = "*.glb",                 use = [ "blender", "open" ] },
+    { url  = "*.gltf",                use = [ "blender", "open" ] },
+    { url  = "*.obj",                 use = [ "blender", "open" ] },
+    { url  = "*.stl",                 use = [ "blender", "open" ] },
+    { url  = "*.fbx",                 use = [ "blender", "open" ] },
+
+    # ── Images / media ─────────────────────────────────────────────────
+    { mime = "image/*",               use = [ "imv", "open" ] },        # imv has libRSVG → .svg works
+    { mime = "video/*",               use = [ "mpv", "open" ] },
+    { mime = "audio/*",               use = [ "mpv", "open" ] },
+
+    # ── Modpacks ───────────────────────────────────────────────────────
+    { url  = "*.mrpack",              use = [ "prismlauncher", "open" ] },
+
+    # ── Text / code ────────────────────────────────────────────────────
+    # Extension rules first: most code files are content-sniffed as text/plain,
+    # so a broad text/* rule above them would swallow these before they are reached.
+    { mime = "text/html",             use = "open" },                  # browser (matches mimeapps.list)
+    { url  = "*.json",                use = "edit" },                  # application/json
+    { url  = "*.jsonc",               use = "edit" },
+    { url  = "*.yaml",                use = "edit" },                  # text/plain
+    { url  = "*.yml",                 use = "edit" },
+    { url  = "*.toml",                use = "edit" },                  # text/plain
+    { url  = "*.ts",                  use = "edit" },                   # text/plain, not video/mp2t
+    { url  = "*.tsx",                 use = "edit" },
+    { url  = "*.xml",                 use = "edit" },
+    { url  = "*.lock",                use = "edit" },
+    { mime = "text/*",                use = "edit" },                  # .md .py .sh .js .lua .css .conf …
+
+    # ── Archives ───────────────────────────────────────────────────────
+    # Names as Yazi reports them (x- stripped) — these are verified with `spot` (Tab).
+    { mime = "application/zip",             use = "extract" },
+    { mime = "application/gzip",            use = "extract" },
+    { mime = "application/tar",             use = "extract" },
+    { mime = "application/bzip2",           use = "extract" },
+    { mime = "application/xz",              use = "extract" },
+    { mime = "application/7z-compressed",   use = "extract" },
+    { mime = "application/rar",             use = "extract" },
+
+    # ── Fallback ───────────────────────────────────────────────────────
+    { mime = "*",                     use = "open" },
 ]

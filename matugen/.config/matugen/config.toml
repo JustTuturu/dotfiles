@@ -21,10 +21,6 @@ output_path = "~/.config/matugen/generated/eza/theme.yml"
 input_path  = "~/.config/matugen/templates/starship.toml.mustache"
 output_path = "~/.config/matugen/generated/starship/starship.toml"
 
-[templates.bat]
-input_path  = "~/.config/matugen/templates/bat.tmTheme.mustache"
-output_path = "~/.config/bat/themes/matugen.tmTheme"
-
 [templates.hyprland-lua]
 input_path  = "~/.config/matugen/templates/colors.lua.mustache"
 output_path = "~/.config/hypr/generated/colors.lua"
@@ -32,7 +28,3 @@ output_path = "~/.config/hypr/generated/colors.lua"
 [templates.btop]
 input_path  = "~/.config/matugen/templates/btop.theme.mustache"
 output_path = "~/.config/btop/themes/matugen.theme"
-
-[templates.gtk]
-input_path  = "~/.config/matugen/templates/gtk-colors.css.mustache"
-output_path = "~/.config/matugen/generated/gtk-colors.css"

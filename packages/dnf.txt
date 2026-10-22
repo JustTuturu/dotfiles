@@ -8,7 +8,7 @@ fcitx5-unikey
 uwsm
 
 # CLI utilities
-ripgrep bat fzf eza zoxide
+ripgrep fzf eza zoxide
 fastfetch gh
 wl-clipboard playerctl
 

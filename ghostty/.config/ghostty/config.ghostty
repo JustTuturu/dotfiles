@@ -6,8 +6,6 @@ font-size = 14
 cursor-style = block
 
 # ─── Window Size ─────────────────────────────
-# Window size in character cells (not pixels)
-# This sets startup window to 120 columns × 35 rows
 window-width = 120
 window-height = 35
 background-opacity = 0.5

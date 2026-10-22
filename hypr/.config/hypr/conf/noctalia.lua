@@ -1,8 +1,8 @@
 -- Noctalia settings
 hl.config({
     general = {
-        gaps_in = 5,
-        gaps_out = 10,
+        gaps_in = 3,
+        gaps_out = 0,
     },
     decoration = {
         rounding = 20,

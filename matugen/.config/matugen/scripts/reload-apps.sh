@@ -14,8 +14,6 @@
 #              built-in ghostty template.
 #   btop     — reads its theme file at startup; SIGUSR2 is its reload signal.
 #              Same as Noctalia's built-in btop template.
-#   bat      — reads a compiled theme cache, not the .tmTheme file directly, so
-#              its cache has to be rebuilt after matugen rewrites the theme.
 #   hyprland — reads ~/.config/hypr/generated/colors.lua while parsing its
 #              config, so it genuinely needs a reload. Noctalia does not do this
 #              — there is no hyprctl call anywhere in the binary.
@@ -66,18 +64,6 @@ reload_btop() {
     fi
 }
 
-reload_bat() {
-    if ! command -v bat >/dev/null 2>&1; then
-        log "bat: not installed"
-        return 0
-    fi
-    if bat cache --build >/dev/null 2>&1; then
-        log "bat: theme cache rebuilt"
-    else
-        log "bat: theme cache rebuild failed"
-    fi
-}
-
 reload_hyprland() {
     if ! command -v hyprctl >/dev/null 2>&1; then
         log "hyprland: hyprctl not found"
@@ -92,7 +78,6 @@ reload_hyprland() {
 
 reload_ghostty
 reload_btop
-reload_bat
 reload_hyprland
 
 exit 0

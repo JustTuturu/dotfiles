@@ -23,6 +23,7 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"), { lo
 hl.bind(mainMod .. " + TAB", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(ipc .. "panel-toggle clipboard"))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(ipc .. "panel-toggle wallpaper"))
 hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd(ipc .. "settings-toggle"))
 hl.bind("ALT + Tab", hl.dsp.exec_cmd(ipc .. "window-switcher"))
 
@@ -54,7 +55,6 @@ hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "u" }))
 hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "d" }))
 
 -- ═══════════════════════════════════════════════════════════════════
--- Workspaces (3 per screen: 1-3 left, 4-6 right)
 -- Scroll through workspaces (stays on the current monitor)
 -- ═══════════════════════════════════════════════════════════════════
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "m+1" }))

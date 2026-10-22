@@ -189,18 +189,6 @@
     },
   },
 
-  // Remote connections (~/.ssh + host alias `sv`)
-  "ssh_connections": [
-    {
-      "host": "sv",
-      "args": [],
-      "projects": [
-        {
-          "paths": ["/home/suzu"],
-        },
-      ],
-    },
-  ],
   "telemetry": {
     "diagnostics": false,
     "metrics": false,
