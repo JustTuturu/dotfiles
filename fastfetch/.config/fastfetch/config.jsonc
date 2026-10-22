@@ -1,13 +1,13 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
   "logo": {
-    "type": "kitty", 
+    "type": "kitty",
     "source": "~/.config/fastfetch/logo.png",
-    "width": 28,
-    "height": 12,
+    "width": 33,
     "padding": {
-      "top": 2,
-      "left": 2
+      "top": 0,
+      "left": 2,
+      "right": 2
     }
   },
   "display": {
@@ -76,8 +76,8 @@
     },
     "break",
     {
-        "type": "colors",
-        "symbol": "circle"
+      "type": "colors",
+      "symbol": "circle"
     }
   ]
 }
