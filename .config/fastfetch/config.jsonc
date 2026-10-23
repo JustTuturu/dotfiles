@@ -17,6 +17,8 @@
     }
   },
   "modules": [
+    "break",
+    "break",
     "title",
     {
       "type": "separator",

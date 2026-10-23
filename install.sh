@@ -3,20 +3,105 @@
 #
 # Run straight on a fresh machine
 #   curl -fsSL https://raw.githubusercontent.com/JustTuturu/dotfiles/main/install.sh | bash
-#   curl -fsSL .../install.sh | bash -s -- stow
+#   curl -fsSL .../install.sh | bash -s -- dotfiles
 
 set -euo pipefail
+
+# ========================== FLAGS ============================================
+ASSUME_YES=0
+_args=()
+for _arg in "$@"; do
+    case "${_arg}" in
+        -y|--yes) ASSUME_YES=1 ;;
+        *) _args+=("${_arg}") ;;
+    esac
+done
+if (( ${#_args[@]} )); then set -- "${_args[@]}"; else set --; fi
+unset _arg _args
 
 # ========================== COLORS & UTILITIES ==============================
 RED='\e[31m'; GREEN='\e[32m'; YELLOW='\e[33m'; BLUE='\e[34m'
 BOLD='\e[1m'; RESET='\e[0m'
 
-info()  { echo -e "\n  ${BLUE}[i]${RESET} ${BOLD}$*${RESET}"; }
-ok()    { echo -e "  ${GREEN}[✓]${RESET} ${BOLD}$*${RESET}"; }
-warn()  { echo -e "  ${YELLOW}[!]${RESET} ${BOLD}$*${RESET}"; }
-fail()  { echo -e "  ${RED}[✗]${RESET} ${BOLD}$*${RESET}" && exit 1; }
-
 cmd_exists() { command -v "$1" &>/dev/null; }
+
+# ========================== UI: GUM (OPTIONAL) ==============================
+# Every helper falls back to plain ANSI output when gum is missing or there is
+# no terminal, so `curl ... | bash` and CI runs keep working unchanged.
+HAVE_GUM=0
+HAVE_TTY=0
+cmd_exists gum && HAVE_GUM=1
+( : </dev/tty ) 2>/dev/null && HAVE_TTY=1
+
+ui_style()    { [[ ${HAVE_GUM} -eq 1 && -t 1 ]]; }
+# gum draws its widgets on /dev/tty, so prompts also work inside $(...).
+ui_interact() { [[ ${HAVE_GUM} -eq 1 && ${HAVE_TTY} -eq 1 ]]; }
+
+info() {
+    if ui_style; then
+        gum style --foreground 4 --bold --margin "1 0 0 0" "  [i] $*"
+    else
+        echo -e "\n  ${BLUE}[i]${RESET} ${BOLD}$*${RESET}"
+    fi
+}
+ok() {
+    if ui_style; then
+        gum style --foreground 2 --bold "  [✓] $*"
+    else
+        echo -e "  ${GREEN}[✓]${RESET} ${BOLD}$*${RESET}"
+    fi
+}
+warn() {
+    if ui_style; then
+        gum style --foreground 3 --bold "  [!] $*"
+    else
+        echo -e "  ${YELLOW}[!]${RESET} ${BOLD}$*${RESET}"
+    fi
+}
+fail() {
+    if ui_style; then
+        gum style --foreground 1 --bold "  [✗] $*"
+    else
+        echo -e "  ${RED}[✗]${RESET} ${BOLD}$*${RESET}"
+    fi
+    exit 1
+}
+
+# Styled section heading
+title() {
+    if ui_style; then
+        gum style --border rounded --border-foreground 5 --foreground 5 \
+            --padding "0 2" --margin "1 0" "$*"
+    else
+        echo -e "\n${BOLD}=== $* ===${RESET}"
+    fi
+}
+
+# Confirm an action. -y/--yes and non-interactive runs proceed silently.
+ui_confirm() {
+    local prompt="$1" default="${2:-no}"
+    [[ ${ASSUME_YES} -eq 1 ]] && return 0
+    ui_interact || return 0
+    gum confirm --default="${default}" "${prompt}"
+}
+
+# Pick one option from a list; returns 1 when no interactive gum is available.
+ui_choose() {
+    local header="$1"; shift
+    ui_interact || return 1
+    gum choose --header="${header}" --height=8 "$@"
+}
+
+# Run a normally-silent command behind a spinner.
+ui_spin() {
+    local title="$1"; shift
+    [[ "${1:-}" == "--" ]] && shift
+    if ui_interact; then
+        gum spin --spinner dot --title "${title}" --show-error -- "$@"
+    else
+        "$@"
+    fi
+}
 
 all_present() {
     local dir="$1"; shift
@@ -28,7 +113,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 
 # ========================== SELF-BOOTSTRAP ===================================
 # When piped via curl there is no local repo — clone it and re-exec.
-if [[ ! -f "${REPO_ROOT}/packages/stow.txt" ]]; then
+if [[ ! -f "${REPO_ROOT}/packages/dnf.txt" ]]; then
     info "No local dotfiles found — bootstrapping..."
     if ! cmd_exists git; then
         info "Installing git"
@@ -231,52 +316,76 @@ run_hypr() {
     ok "Hyprland ecosystem ready"
 }
 
-# ========================== MODULE: FILES (STOW) ==============================
+# ========================== MODULE: FILES (COPY) ==============================
 run_files() {
-    info "Stowing dotfiles..."
+    info "Copying dotfiles..."
 
-    if ! cmd_exists stow; then
-        dnf_install stow || { fail "Could not install stow"; return 1; }
-    fi
-
-    local -a stow_packages
-    read_packages "${PKG_DIR}/stow.txt" stow_packages || fail "Missing packages/stow.txt"
-
+    local cfg="${XDG_CONFIG_HOME:-$HOME/.config}"
+    local source_config="$REPO_ROOT/.config"
+    local source_zshrc="$REPO_ROOT/zsh/.zshrc"
+    local backup_dir=""
     local count=0
     local failed=0
+    local source relative destination
 
-    for pkg in "${stow_packages[@]}"; do
-        if [ ! -d "$REPO_ROOT/$pkg" ]; then
-            warn "$pkg not found in dotfiles"
+    if [[ ! -d "$source_config" ]]; then
+        fail "Missing $source_config"
+    fi
+
+    backup_file() {
+        local file="$1" target="$2" backup_relative
+        [[ -e "$target" && ! -L "$target" ]] || return 0
+        if [[ -f "$target" ]] && cmp -s -- "$file" "$target"; then
+            return 0
+        fi
+        if [[ -z "$backup_dir" ]]; then
+            backup_dir="$(mktemp -d "$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)-XXXXXX")"
+        fi
+        backup_relative="${target#"$HOME"/}"
+        mkdir -p "$backup_dir/$(dirname -- "$backup_relative")"
+        cp -a -- "$target" "$backup_dir/$backup_relative"
+    }
+
+    copy_file() {
+        local file="$1" target="$2" dir tmp
+        dir="$(dirname -- "$target")"
+        mkdir -p "$dir"
+        if ! tmp="$(mktemp "$dir/.copy.XXXXXX")"; then
+            warn "Could not create a temporary file in $dir"
             failed=$((failed + 1))
-            continue
+            return
         fi
-
-        while IFS= read -r -d '' source; do
-            local relative target
-            relative="${source#"$REPO_ROOT/$pkg/"}"
-            target="$HOME/$relative"
-            if [[ -L "$target" ]] && [[ "$(readlink -f "$target")" == "$(readlink -f "$source")" ]]; then
-                unlink "$target"
-            fi
-        done < <(find "$REPO_ROOT/$pkg" -type f -print0)
-
-        if stow -t "$HOME" -d "$REPO_ROOT" --no-folding -S "$pkg" 2>/dev/null; then
-            ok "$pkg"
+        if cp -a -- "$file" "$tmp" && mv -f -- "$tmp" "$target"; then
             count=$((count + 1))
-            continue
+        else
+            rm -f -- "$tmp"
+            warn "Could not copy $file"
+            failed=$((failed + 1))
         fi
+    }
 
-        warn "$pkg — could not stow"
+    while IFS= read -r -d '' source; do
+        relative="${source#"$source_config/"}"
+        destination="$cfg/$relative"
+        backup_file "$source" "$destination"
+        copy_file "$source" "$destination"
+    done < <(find "$source_config" -type f -print0)
+
+    if [[ -f "$source_zshrc" ]]; then
+        backup_file "$source_zshrc" "$HOME/.zshrc"
+        copy_file "$source_zshrc" "$HOME/.zshrc"
+    else
+        warn "Missing $source_zshrc"
         failed=$((failed + 1))
-    done
+    fi
 
-    info "Stowed $count packages"
-    [ "$failed" -gt 0 ] && warn "$failed packages failed to stow"
+    ok "Copied $count files to $cfg and $HOME/.zshrc"
+    [[ -n "$backup_dir" ]] && warn "Changed files backed up to $backup_dir"
+    [ "$failed" -gt 0 ] && warn "$failed file(s) failed to copy"
 
     if cmd_exists matugen && [ -f "$REPO_ROOT/wallpapers/Chisa.jpg" ]; then
         info "Generating initial matugen colors..."
-        if matugen image "$REPO_ROOT/wallpapers/Chisa.jpg" --prefer darkness; then
+        if ui_spin "Generating matugen colors" -- matugen image "$REPO_ROOT/wallpapers/Chisa.jpg" --prefer darkness; then
             ok "matugen colors generated"
         else
             warn "matugen failed — run manually"
@@ -302,7 +411,7 @@ install_fonts() {
     info "Downloading JetBrains Mono (official, with ligatures)"
     local archive="${TEMP_DIR}/JetBrainsMono.zip"
 
-    download \
+    ui_spin "Downloading JetBrains Mono" -- download \
         "https://download.jetbrains.com/fonts/JetBrainsMono-2.304.zip" \
         "${archive}" \
         || fail "Failed to download JetBrains Mono"
@@ -370,7 +479,7 @@ install_extra_fonts() {
         url="${entry#*|}"
         [[ -f "${FONT_DIR}/${name}" ]] && continue
 
-        if download "$url" "${FONT_DIR}/${name}"; then
+        if ui_spin "Downloading ${name}" -- download "$url" "${FONT_DIR}/${name}"; then
             ((count++)) || true
         else
             warn "Failed to download ${name}"
@@ -400,7 +509,7 @@ install_cursor_theme() {
     fi
 
     info "Downloading ${theme} from JustTuturu/Chisa-Hyprcursor"
-    if ! download \
+    if ! ui_spin "Downloading ${theme}" -- download \
         "https://github.com/JustTuturu/Chisa-Hyprcursor/releases/latest/download/${theme}.tar.gz" \
         "${archive}"; then
         warn "Failed to download ${theme}"
@@ -459,8 +568,8 @@ install_icons() {
     fi
 
     info "Installing Tela icon theme"
-    git clone --depth 1 "$repo" "$clone_dir" \
-        && "$clone_dir/install.sh"
+    ui_spin "Cloning Tela icon theme" -- git clone --depth 1 "$repo" "$clone_dir" \
+        && ui_spin "Installing Tela icon theme" -- "$clone_dir/install.sh"
 
     if [[ -f "${ICON_DIR}/Tela-dark/index.theme" ]]; then
         ok "Tela icon theme → ${ICON_DIR}"
@@ -609,11 +718,15 @@ showhelp() {
 
   Dotfiles Setup — Tuturu (Fedora)
 
-  Usage: ./install.sh [command]
+  Usage: ./install.sh [command] [-y|--yes]
 
   Commands:
-    full    Full setup: system + assets + apps (default)
-    stow    Stow dotfiles only (re-run after pulling updates)
+    full      Full setup: system + assets + apps (default)
+    dotfiles  Copy dotfiles only (re-run after pulling updates)
+    menu      Pick a task in a gum menu (interactive)
+
+  Options:
+    -y, --yes Skip confirmation prompts
 
   Fresh machine (no clone needed):
     curl -fsSL https://raw.githubusercontent.com/JustTuturu/dotfiles/main/install.sh | bash
@@ -624,25 +737,36 @@ EOF
 clear
 prevent_root
 
-case "${1:-full}" in
+COMMAND="${1:-full}"
+if [[ "${COMMAND}" == "menu" ]]; then
+    if ! ui_interact; then
+        warn "menu needs an interactive terminal with gum installed"
+        showhelp
+        exit 1
+    fi
+    COMMAND="$(ui_choose "Tuturu dotfiles — what should run?" full dotfiles)" || exit 0
+fi
+
+case "${COMMAND}" in
     full)
+        title "Full System Setup"
+        ui_confirm "Run the full setup (system + assets + apps)?" yes || { echo "Aborted."; exit 0; }
         sudo_init_keepalive
-        echo -e "${GREEN}${BOLD}=== Full System Setup ===${RESET}\n"
         run_system
         run_assets
         install_apps
-        echo -e "\n${GREEN}${BOLD}=== Complete! ===${RESET}"
+        title "Complete!"
         echo -e "  Log out and select 'Hyprland' at login"
         ;;
-    stow)
+    dotfiles)
         run_files
-        ok "Dotfiles stowed"
+        ok "Dotfiles copied"
         ;;
     help|--help|-h)
         showhelp
         ;;
     *)
-        echo -e "${RED}Unknown command: $1${RESET}"
+        echo -e "${RED}Unknown command: ${COMMAND}${RESET}"
         showhelp
         exit 1
         ;;

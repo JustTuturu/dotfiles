@@ -20,7 +20,7 @@ hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURC
 hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. "brightness-up"), { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"), { locked = true, repeating = true })
 
-hl.bind(mainMod .. " + TAB", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"))
+hl.bind(mainMod .. " + SUPER_L", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"), { release = true })
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(ipc .. "panel-toggle clipboard"))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(ipc .. "panel-toggle wallpaper"))
@@ -73,10 +73,9 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- ═══════════════════════════════════════════════════════════════════
--- Screenshots
+-- Screenshots: click a window to copy it, or drag to copy a region
 -- ═══════════════════════════════════════════════════════════════════
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd('geo="$(slurp -d)" && grim -g "$geo" - | wl-copy'))
-hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd("uwsm app -- grimblast copy area"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("uwsm app -- grimblast copy area"))
 
 -- ═══════════════════════════════════════════════════════════════════
 -- Session controls

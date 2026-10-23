@@ -1,5 +1,5 @@
 # Screenshot (grimblast)
-grimblast
+grimblast grim slurp
 
 # Hyprland
 hyprcursor

@@ -18,14 +18,18 @@ cd ~/dotfiles
 ./install.sh
 ```
 
+Prefer picking a task instead? `./install.sh menu` opens a [gum](https://github.com/charmbracelet/gum) menu (gum is part of the package set). Pass `-y` to skip the confirmation prompt.
+
 Log out and select **Hyprland (uwsm-managed)** at login.
 
 ## Update
 
 ```bash
 cd ~/dotfiles
-./install.sh stow
+./install.sh dotfiles
 ```
+
+Dotfiles are copied into `~/.config` and `~/.zshrc` (not symlinked). Re-run the command after pulling updates. Files that differ from the repo are backed up to `~/.dotfiles-backup-<timestamp>/` first.
 
 ## Software
 
@@ -49,8 +53,7 @@ cd ~/dotfiles
 | `SUPER + Arrows`    | Focus window                              |
 | `SUPER + F`         | Toggle floating                           |
 | `SUPER + M`         | Toggle fullscreen                         |
-| `SUPER + SHIFT + S` | Screenshot area → clipboard               |
-| `SUPER + SHIFT + F` | Pick a window or drag an area → clipboard |
+| `SUPER + SHIFT + S` | Click a window or drag an area → clipboard |
 | `SUPER + L`         | Lock                                      |
 
 ## Theming

@@ -1,5 +1,5 @@
 # Noctalia v5 config
-# Lives in ~/.config/noctalia/config.toml (stowed via dotfiles)
+# Lives in ~/.config/noctalia/config.toml (copied from dotfiles)
 # Load order: defaults -> this file -> ~/.local/state/noctalia/settings.toml (GUI, wins)
 
 # ---------------------------------------------------------------------------
