@@ -5,7 +5,7 @@ hl.config({
         gaps_out = 0,
     },
     decoration = {
-        rounding = 20,
+        rounding = 0,
         rounding_power = 2,
         shadow = {
             enabled = true,
