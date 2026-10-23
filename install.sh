@@ -321,7 +321,9 @@ run_files() {
     info "Copying dotfiles..."
 
     local cfg="${XDG_CONFIG_HOME:-$HOME/.config}"
+    local data="${XDG_DATA_HOME:-$HOME/.local/share}"
     local source_config="$REPO_ROOT/.config"
+    local source_data="$REPO_ROOT/.local/share"
     local source_zshrc="$REPO_ROOT/zsh/.zshrc"
     local backup_dir=""
     local count=0
@@ -379,7 +381,23 @@ run_files() {
         failed=$((failed + 1))
     fi
 
-    ok "Copied $count files to $cfg and $HOME/.zshrc"
+    if [[ -d "$source_data" ]]; then
+        while IFS= read -r -d '' source; do
+            relative="${source#"$source_data/"}"
+            destination="$data/$relative"
+            backup_file "$source" "$destination"
+            copy_file "$source" "$destination"
+        done < <(find "$source_data" -type f -print0)
+    fi
+
+    if cmd_exists update-desktop-database && [[ -d "$data/applications" ]]; then
+        update-desktop-database "$data/applications" >/dev/null 2>&1 || true
+    fi
+    if cmd_exists gtk-update-icon-cache && [[ -d "$data/icons/hicolor" ]]; then
+        gtk-update-icon-cache -f -t "$data/icons/hicolor" >/dev/null 2>&1 || true
+    fi
+
+    ok "Copied $count files to $cfg, $HOME/.zshrc, and $data"
     [[ -n "$backup_dir" ]] && warn "Changed files backed up to $backup_dir"
     [ "$failed" -gt 0 ] && warn "$failed file(s) failed to copy"
 

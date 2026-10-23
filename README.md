@@ -29,7 +29,7 @@ cd ~/dotfiles
 ./install.sh dotfiles
 ```
 
-Dotfiles are copied into `~/.config` and `~/.zshrc` (not symlinked). Re-run the command after pulling updates. Files that differ from the repo are backed up to `~/.dotfiles-backup-<timestamp>/` first.
+Dotfiles are copied into `~/.config`, `~/.local/share` (launcher entries and icons), and `~/.zshrc` (not symlinked). Re-run the command after pulling updates. Files that differ from the repo are backed up to `~/.dotfiles-backup-<timestamp>/` first.
 
 ## Software
 

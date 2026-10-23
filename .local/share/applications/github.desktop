@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=GitHub
+GenericName=Code Hosting
+Comment=Open GitHub in Brave
+Exec=/usr/bin/brave-origin-stable https://github.com
+Icon=github
+Terminal=false
+Categories=Network;WebBrowser;
+Keywords=git;code;repository;brave;
+StartupNotify=true
+StartupWMClass=brave-origin

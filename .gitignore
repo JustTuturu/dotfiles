@@ -1,5 +1,6 @@
 # Local-only overrides (e.g. git/.config/git/config.local)
 *.local
+!.local/
 
 # Misc
 *.backup.*
