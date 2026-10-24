@@ -17,7 +17,7 @@ font_family = "Inter"
 time_format = "{:%H:%M}"
 date_format = "%A, %x"
 
-avatar_path = "~/dotfiles/wallpapers/Chisa.jpg"
+avatar_path = "~/wallpapers/Chisa.jpg"
 
 # ---------------------------------------------------------------------------
 # Clipboard (Noctalia's built-in manager)
@@ -88,16 +88,16 @@ unit = "metric"
 # ---------------------------------------------------------------------------
 [wallpaper]
 enabled = true
-directory = "~/dotfiles/wallpapers"
+directory = "~/wallpapers"
 fill_mode = "crop"
 transition_duration = 1500
 transition_on_startup = false
 
 [wallpaper.monitors.DP-2]
-path = "~/dotfiles/wallpapers/Chisa.jpg"
+path = "~/wallpapers/Chisa.jpg"
 
 [wallpaper.monitors.HDMI-A-1]
-path = "~/dotfiles/wallpapers/Chisa.jpg"
+path = "~/wallpapers/Chisa.jpg"
 
 # ---------------------------------------------------------------------------
 # Bars

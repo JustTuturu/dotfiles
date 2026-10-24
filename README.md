@@ -29,7 +29,7 @@ cd ~/dotfiles
 ./install.sh dotfiles
 ```
 
-Dotfiles are copied into `~/.config`, `~/.local/share` (launcher entries and icons), and `~/.zshrc` (not symlinked). Re-run the command after pulling updates. Files that differ from the repo are backed up to `~/.dotfiles-backup-<timestamp>/` first.
+Dotfiles are copied into `~/.config`, `~/.local/share` (launcher entries and icons), `~/wallpapers`, and `~/.zshrc` (not symlinked). Re-run the command after pulling updates. Files that differ from the repo are backed up to `~/.dotfiles-backup-<timestamp>/` first.
 
 ## Software
 
@@ -61,5 +61,5 @@ Dotfiles are copied into `~/.config`, `~/.local/share` (launcher entries and ico
 Wallpaper change (via Noctalia) regenerates all colors with matugen. To render manually:
 
 ```bash
-matugen image ~/dotfiles/wallpapers/Chisa.jpg --prefer darkness
+matugen image ~/wallpapers/Chisa.jpg --prefer darkness
 ```

@@ -27,9 +27,3 @@ hl.window_rule({
     center = true,
     size = "1600 900",
 })
-
--- Floating dialogs / utilities
-hl.window_rule({
-    match = { class = "^(nm-connection-editor)$" },
-    float = true,
-})

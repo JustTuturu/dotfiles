@@ -10,9 +10,6 @@ hl.on("hyprland.start", function()
     -- Force Noctalia to use hyprqt6engine for Qt6 theming.
     hl.exec_cmd("uwsm app -- env QT_QPA_PLATFORMTHEME=hyprqt6engine noctalia")
 
-    -- NetworkManager tray applet
-    hl.exec_cmd("uwsm app -- nm-applet --indicator")
-
     -- ============================================
     -- Input method
     -- ============================================
